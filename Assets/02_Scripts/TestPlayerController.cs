@@ -7,10 +7,17 @@ public class TestPlayerController : MonoBehaviour
     public float moveSpeed = 5.0f;
     public float inputX;
     public float inputY;
+
     Rigidbody2D rb;
+    SpriteRenderer spriteRenderer;
+
+    Animator anim;
+    private static readonly int moveHash = Animator.StringToHash("Speed");
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Update()
     {
@@ -19,5 +26,18 @@ public class TestPlayerController : MonoBehaviour
         
         rb.velocity = new Vector2 (inputX * moveSpeed, inputY * moveSpeed);
 
+        if(inputX != 0)
+        {
+            if(inputX < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+            }            
+        }
+        float speed = new Vector2(inputX, inputY).sqrMagnitude;
+        anim.SetFloat(moveHash,speed);
     }
 }
