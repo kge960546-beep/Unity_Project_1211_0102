@@ -42,4 +42,8 @@ public class PlayerHp : MonoBehaviour
 
         onPlayerDeadEvent?.Invoke();
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(isDead) return;
+    }
 }
