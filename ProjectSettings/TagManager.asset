@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Area
   - Ground
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -15,14 +16,14 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Boss
+  - PlayerProjectile
+  - EnemyProjectile
+  - Ground
+  - DestructibleItem
+  - IndestructibleItem
   - 
   - 
   - 
