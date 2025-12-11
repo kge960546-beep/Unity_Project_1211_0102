@@ -1,43 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerHp : MonoBehaviour
 {
+    public static event Action onPlayerDeadEvent;
+    public event Action<int, int> OnTakeDamage;
+
     [SerializeField] private int maxHp = 100;
     private int currentHp;
-
-    private Animator anim;
-    private PlayerDeadSubject deadSubject;
-
     private bool isDead = false;
+
+    private Animator anim;   
+
     private void Awake()
     {
         currentHp = maxHp;
 
         anim = GetComponent<Animator>();
-        deadSubject = GetComponent<PlayerDeadSubject>();
+        
     }
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
-        currentHp -= damage;
+        int finalDamage = Mathf.Max(damage, 0);
 
-        if (currentHp <= 0)
-        {
-            currentHp = 0;
-            Die();
-        }
+        currentHp = Mathf.Max(currentHp - finalDamage, 0);
+        //히트 이펙트 있으면 여기서 재생        
+
+        OnTakeDamage?.Invoke(finalDamage, currentHp);
+
+        if (currentHp <= 0) { Die(); }
     }
     private void Die()
     {
         if(isDead) return;
 
         isDead = true;
-        anim.SetTrigger("Dead");
+        if(anim != null)
+            anim.SetTrigger("isDead");
 
-        if(deadSubject != null)
-            deadSubject.NotifyPlayerDead();
+        onPlayerDeadEvent?.Invoke();
     }
 }

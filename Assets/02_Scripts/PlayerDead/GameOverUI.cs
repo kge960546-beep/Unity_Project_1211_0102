@@ -2,30 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameOverUI : MonoBehaviour, IPlayerDead
+public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
-
-    private PlayerDeadSubject deadSubject;
-   
-    private void Start()
+    
+    private void OnEnable()
     {
-        if(gameOverUI)
-            gameOverUI.SetActive(false);
-
-        deadSubject = FindObjectOfType<PlayerDeadSubject>();
-
-        if(deadSubject != null)
-            deadSubject.RegisterObserver(this);
+        PlayerHp.onPlayerDeadEvent += OnPlayerDead;
     }
-    public void OnDestroy()
+    private void OnDisable()
     {
-        if(deadSubject != null)
-            deadSubject.UnregisterObserver(this);
+        PlayerHp.onPlayerDeadEvent -= OnPlayerDead;
     }
-    public void OnPlayerDead()
+    private void OnPlayerDead()
     {
         if(gameOverUI)
             gameOverUI.SetActive(true);
-    }   
+    }
 }
