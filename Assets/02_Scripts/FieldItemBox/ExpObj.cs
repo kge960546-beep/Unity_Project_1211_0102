@@ -27,7 +27,7 @@ public class ExpObj : MonoBehaviour
         if(isMagnetOn && target != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
-        }
+        }        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
