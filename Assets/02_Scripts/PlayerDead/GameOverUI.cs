@@ -5,14 +5,15 @@ using UnityEngine;
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
-    
+    PlayerHp playerHp;
+
     private void OnEnable()
     {
-        PlayerHp.onPlayerDeadEvent += OnPlayerDead;
+        playerHp.SubscribePlayerDeadEvent(OnPlayerDead);
     }
     private void OnDisable()
     {
-        PlayerHp.onPlayerDeadEvent -= OnPlayerDead;
+        playerHp.UnsubscribePlayerDeadEvent(OnPlayerDead);
     }
     private void OnPlayerDead()
     {
