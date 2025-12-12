@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (null != eventSystem) DontDestroyOnLoad(eventSystem);
 
+        registeredServices = new Dictionary<Type, IGameManagementService>();
         foreach (GameManagementServiceWrapper svcWrapper in serviceDefinitions)
         {
             Type t = svcWrapper.type;
