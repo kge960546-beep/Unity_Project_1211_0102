@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Service")]
     [Tooltip("List of 'service' MonoBehaviours to be created for globally unique 'singleton' GameObject. Requires to extend IGameManagementService.")]
-    [SerializeField] private List<IGameManagementService> serviceDefinitions;
+    [SerializeField] private List<MonoBehaviour> serviceDefinitions;
     private Dictionary<Type, IGameManagementService> registeredServices;
 
     [Header("Misc")]
@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (null != eventSystem) DontDestroyOnLoad(eventSystem);
 
-        foreach (IGameManagementService svc in serviceDefinitions)
+        foreach (MonoBehaviour svc in serviceDefinitions)
         {
-            if (svc is not MonoBehaviour) continue;
+            if (svc is not IGameManagementService) continue;
             registeredServices.Add(svc.GetType(), gameObject.AddComponent(svc.GetType()) as IGameManagementService);
         }
     }
