@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [Header("Service")]
     [Tooltip("List of 'service' MonoBehaviours to be created for globally unique 'singleton' GameObject. Requires to extend IGameManagementService.")]
     [SerializeField] private List<IGameManagementService> serviceDefinitions;
-    public Dictionary<Type, IGameManagementService> registeredServices { get; private set; }
+    private Dictionary<Type, IGameManagementService> registeredServices;
 
     [Header("Misc")]
     [Tooltip("Base event system for UGUI to be converted into a singleton object. Required for additive scene loading.")]
