@@ -15,7 +15,7 @@ public class MapUpDownScrolling : MonoBehaviour
 
     void Start()
     {
-        if(!camera)
+        if(camera == null)
         {
             camera = Camera.main.transform;
         }        
