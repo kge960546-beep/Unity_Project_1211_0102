@@ -1,36 +1,141 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum EnemyType
+{
+    Normal,
+    Elite,
+    Boss
+}
 public class EnemyHp : MonoBehaviour
 {
+    /// <summary>
+    /// 적의 타입, 적의 죽은 위치, 떨어뜨릴 아이템 갯수
+    /// </summary>
+    private event Action<EnemyType, Vector3, int> onEnemyDeadEvent; //적이 죽었을때 적 타입과 위치를 전달
+    /// <summary>
+    /// 피격 이벤트: 얼마나 데미지가 주어졌는지(finalDamage), 현재 체력이 얼마나 남았는지 currentHp
+    /// </summary>
+    private event Action<int, int> onEnemyTakeDamageEvent;
+
+    [Header("Enemy Setting")]
+    [SerializeField] private EnemyType enemyType = EnemyType.Normal; //적 타입
     [SerializeField] private int maxHp = 100;
+    [SerializeField] private int dropExp = 1;
+
+    //임시 레이어 지정
+    [Header("Layer")]
+    [SerializeField] int itemLayer;
+    [SerializeField] int itemLayers;
+
     private int currentHp;
-    private Animator anim;
-    private EnemyDeadSubject deadSubject;
     private bool isDead = false;
+
+    private Animator anim;
     private void Awake()
     {
-        currentHp = maxHp;
         anim = GetComponent<Animator>();
-        deadSubject = GetComponent<EnemyDeadSubject>();
+        itemLayer = LayerMask.NameToLayer("Item");
+        itemLayers = LayerMask.NameToLayer("Player");
+    }
+    #region EnemyDeadEvent
+    /// <summary>
+    /// 적 죽음 구독 해지
+    /// </summary>
+    /// <param name="action"></param>
+    public void SubscribeEnemyDeadEvent(Action<EnemyType, Vector3, int> action)
+    {
+            
+        onEnemyDeadEvent += action;
+    }
+    public void UnsubscribeEnemyDeadEvent(Action<EnemyType, Vector3, int> action)
+    {
+        onEnemyDeadEvent -= action;
+    }
+    #endregion
+    #region EnemyTakeDamageEvent
+    /// <summary>
+    /// 적 피격 구독 해지
+    /// </summary>
+    /// <param name="action"></param>
+    public void SubscribeEnemyTakeDamageEvent(Action<int, int> action)
+    {       
+        onEnemyTakeDamageEvent += action;
+    }
+    public void UnsubscribeEnemyTakeDamageEvent(Action<int, int> action)
+    {
+        onEnemyTakeDamageEvent -= action;
+    }
+    #endregion
+     
+    private void OnEnable()
+    {        
+        currentHp = maxHp;
+        isDead = false;
+        StopAllCoroutines();
+
+        if(EnemyDead.instance != null)
+        {
+            EnemyDead.instance.RegisterEnemy(this);
+        }
+    }
+    private void OnDisable()
+    {
+        if (EnemyDead.instance != null)
+        {
+            EnemyDead.instance.UnregisterEnemy(this);
+        }
+
+        //풀링시 남아있는 구독자가 있을수 있으니 강제 제거
+        onEnemyDeadEvent = null;
+        onEnemyTakeDamageEvent = null;
     }
     public void TakeDamage(int damage)
     {
         if (isDead) return;
-        currentHp -= damage;
+
+        int finalDamage = Mathf.Max(damage, 0);
+        currentHp = Mathf.Max(currentHp - finalDamage, 0);
+        // TODO: 히트 이펙트 있으면 여기서 재생        
+
+        onEnemyTakeDamageEvent?.Invoke(finalDamage, currentHp);
+
         if (currentHp <= 0)
         {
-            currentHp = 0;
             Die();
         }
     }
     private void Die()
     {
-        if(isDead) return;
+        if (isDead) return;
+
         isDead = true;
-        anim.SetTrigger("Dead");
-        if(deadSubject != null)
-            deadSubject.NotifyEnemyDead();
+
+        if (anim != null)
+            anim.SetTrigger("isDead");
+
+        onEnemyDeadEvent?.Invoke(enemyType, transform.position, dropExp);
+
+        StartCoroutine(DeadTime());
+    }
+    IEnumerator DeadTime()
+    {
+        yield return new WaitForSeconds(2f);
+        gameObject.SetActive(false);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("콜리이더가 잘 작동 합니다");
+        if (isDead) return;
+        
+        //TODO: 레이어 정의하면 수정
+        
+        int layer = collision.gameObject.layer;
+        if (layer == itemLayer || layer == itemLayers)
+        {
+            //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
+            TakeDamage(20);
+        }
     }
 }

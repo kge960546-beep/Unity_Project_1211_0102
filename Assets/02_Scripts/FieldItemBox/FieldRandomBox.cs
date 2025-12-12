@@ -16,6 +16,7 @@ public class FieldRandomBox : MonoBehaviour
         if(!player) return;
         //플레이어와 너무 멀어지면 파괴
         float dist = Vector2.Distance(player.position, transform.position);
+
         if(dist > destroyDistance)
         {
             Destroy(gameObject);
