@@ -45,13 +45,12 @@ public class MapReposition : MonoBehaviour
                 newPos.y = Mathf.Round(newPos.y * 100f) / 100f;
 
                 transform.position = newPos;
-
                 break;
 
             case "Enemy":
                 if (coll.enabled)
                 {
-
+                    //너무 멀어진 적 다시 근처로 이동시키기 위한 로직
                     Vector3 dist = playerPos - myPos;
                     Vector3 ran = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
                     transform.Translate(ran + dist * 2);
