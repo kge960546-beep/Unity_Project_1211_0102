@@ -1,23 +1,34 @@
 using UnityEngine;
 
-public class CircleBoundaryLimiter : MonoBehaviour, IBoundaryLimiter
+public class CircleBoundaryLimiter : MonoBehaviour
 {
     public Transform center;
     public float radius = 20f;
 
-    public void LimitPosition(Transform target)
+    private void FixedUpdate()
+    {
+        GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
+
+        LimitPosition(gcs.Player.transform);
+        LimitPosition(gcs.BossMonster.transform);
+    }
+
+    private void LimitPosition(Transform target)
     {
         Vector2 pos = target.position;
         Vector2 c = center.position;
 
-        float dist = Vector2.Distance(pos, c);
-        float max = radius * 0.98f;
+        float maxRadius = radius * 0.98f;
 
-        if (dist > max)
+        Vector2 offset = pos - c;
+        float dist = offset.magnitude;
+
+        if (dist > maxRadius)
         {
-            Vector2 dir = (pos - c).normalized;
-            target.position = c + dir * max;
+            Vector2 clampedPos = c + offset.normalized * maxRadius;
+            target.position = clampedPos;
         }
     }
 }
+
 

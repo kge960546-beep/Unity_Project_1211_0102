@@ -20,6 +20,8 @@ public class BossBearWalkState : IBossBearState
             return;
         }
 
+        Debug.Log("나 걸어갈게");
+
         // 플레이어 방향으로 이동
         Vector2 dir = (boss.player.position - boss.transform.position).normalized;
 

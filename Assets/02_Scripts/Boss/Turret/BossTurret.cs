@@ -30,6 +30,7 @@ public class BossTurret : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
+        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
     }
 
     private void Start()

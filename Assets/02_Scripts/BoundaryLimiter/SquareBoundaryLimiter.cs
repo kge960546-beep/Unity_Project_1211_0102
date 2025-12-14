@@ -1,12 +1,19 @@
 using UnityEngine;
 
-public class SquareBoundaryLimiter : MonoBehaviour, IBoundaryLimiter
+public class SquareBoundaryLimiter : MonoBehaviour
 {
     public Transform center;
     public float width = 50f;
     public float height = 30f;
 
-    public void LimitPosition(Transform target)
+    public void FixedUpdate()
+    {
+        GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
+        LimitPostion(gcs.Player.transform);
+        LimitPostion(gcs.BossMonster.transform);
+    }
+
+    private void LimitPostion(Transform target) 
     {
         Vector2 pos = target.position;
         Vector2 c = center.position;
@@ -18,6 +25,7 @@ public class SquareBoundaryLimiter : MonoBehaviour, IBoundaryLimiter
         pos.y = Mathf.Clamp(pos.y, c.y - halfH, c.y + halfH);
 
         target.position = pos;
+
     }
 }
 

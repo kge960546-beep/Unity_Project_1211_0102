@@ -15,7 +15,7 @@ public class BossBear : MonoBehaviour
 
     [Header("Rush Settings")]
     public float rushSpeed = 13.0f;
-    public float rushDistance = 15.0f;
+    public float rushDuration = 5.0f;
     public float rushRange = 20.0f;
     public float rushCooldown = 8.0f;
     public float rushDelay = 5.0f;
@@ -38,6 +38,7 @@ public class BossBear : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
+        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
     }
 
     private void Start()
@@ -54,7 +55,7 @@ public class BossBear : MonoBehaviour
             return;
         }
 
-        currentState?.UpdateState(this);
+        currentState.UpdateState(this);
 
         float dist = Vector2.Distance(transform.position, player.position);
 
@@ -65,10 +66,13 @@ public class BossBear : MonoBehaviour
                 Time.time >= lastRushTime + rushCooldown &&
                 dist < rushRange && dist > closeFlipStopRange)
             {
-                lastRushTime = Time.time;
-                ChangeState(new BossBearRushState(rushSpeed, rushDistance));
+                ChangeState(new BossBearRushState(rushSpeed, rushDuration));
                 return;
             }
+        }
+        else
+        {
+            lastRushTime = Time.time;
         }
 
         // 플레이어와 가까우면 이동 멈춤
@@ -112,8 +116,8 @@ public class BossBear : MonoBehaviour
     {
         if (currentState is BossBearRushState)
         {
-            // "Barrier" 레이어의 벽에 부딪히면 돌진 종료 후 추격으로 전환
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Barricade"))
+            // "Enemy" 레이어의 벽에 부딪히면 돌진 종료 후 추격으로 전환
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 StopMove();
                 ChangeState(new BossBearChaseState());

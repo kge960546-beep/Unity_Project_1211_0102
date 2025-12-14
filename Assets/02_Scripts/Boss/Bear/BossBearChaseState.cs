@@ -10,10 +10,11 @@ public class BossBearChaseState : IBossBearState
     public void UpdateState(BossBear boss)
     {
         if (boss.isDead) return;
-
+     
         Vector2 dir = (boss.player.position - boss.transform.position).normalized;
 
         boss.SetMove(dir, boss.chaseSpeed);
+
     }
 
     public void ExitState(BossBear boss)

@@ -18,6 +18,7 @@ public class TestPlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        GameManager.Instance.GetService<GameContextService>().RegisterPlayerObject(gameObject);
     }
     void Update()
     {

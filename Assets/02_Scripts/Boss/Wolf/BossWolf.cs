@@ -15,7 +15,7 @@ public class BossWolf : MonoBehaviour
 
     [Header("Rush Settings")]
     public float rushSpeed = 13.0f;
-    public float rushDistance = 15.0f;
+    public float rushDuration = 5.0f;
     public float rushRange = 20.0f;
     public float rushCooldown = 8.0f;
     public float rushDelay = 5.0f;
@@ -39,6 +39,7 @@ public class BossWolf : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
+        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
     }
 
     private void Start()
@@ -66,10 +67,13 @@ public class BossWolf : MonoBehaviour
                 Time.time >= lastRushTime + rushCooldown &&
                 dist < rushRange && dist > closeFlipStopRange)
             {
-                lastRushTime = Time.time;
-                ChangeState(new BossWolfRushState(rushSpeed, rushDistance));
+                ChangeState(new BossWolfRushState(rushSpeed, rushDuration));
                 return;
             }
+        }
+        else 
+        {
+            lastRushTime = Time.time;
         }
 
         // 플레이어와 가까우면 이동 멈춤
@@ -106,6 +110,20 @@ public class BossWolf : MonoBehaviour
     {
         moveDirection = Vector2.zero;
         moveSpeed = 0f;
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (currentState is BossWolfRushState)
+        {
+            // "Enemy" 레이어의 벽에 부딪히면 돌진 종료 후 추격으로 전환
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                StopMove();
+                ChangeState(new BossWolfChaseState());
+            }
+        }
     }
 
     protected virtual void OnDrawGizmosSelected()
