@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8830701014202135206}
   - component: {fileID: 1364587485254797600}
   - component: {fileID: 2198302126427555671}
+  - component: {fileID: 5702804809288159649}
   m_Layer: 0
   m_Name: RandomItemBox
   m_TagString: Untagged
@@ -105,3 +106,50 @@ MonoBehaviour:
   drop: 0.5
   player: {fileID: 1010370825851419075, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}
   destroyDistance: 30
+  playerTag: Player
+  weaponTag: WeaponTag
+--- !u!61 &5702804809288159649
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7345183642421116605}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.19444445}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 0.5555556, y: 0.3888889}
+    newSize: {x: 0.2, y: 0.14}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5555556, y: 0.3888889}
+  m_EdgeRadius: 0

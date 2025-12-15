@@ -1,24 +1,41 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ExpObj : MonoBehaviour
 {
-    public static List<ExpObj> expObjList = new List<ExpObj>();
-
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private Transform target;
     private bool isMagnetOn = false;
-    private void OnEnable()
+
+    private CircleCollider2D circleCollider;
+
+    private void Awake()
     {
-        expObjList.Add(this);
+        circleCollider = GetComponent<CircleCollider2D>();
+
+        if (circleCollider != null) return;
+
+        if(circleCollider == null)
+        {
+            circleCollider.gameObject.AddComponent<CircleCollider2D>();
+        }
+        circleCollider.isTrigger = true;
+    }
+
+    private void OnEnable()
+    {       
+        FieldMagnet.onMagnet += StartMagnet;
     }
     private void OnDisable()
     {
-        expObjList.Remove(this);
+        FieldMagnet.onMagnet -= StartMagnet;
     }
     public void StartMagnet(Transform player)
     {
+        if (isMagnetOn) return;
+
         target = player;
         isMagnetOn = true;
     }
@@ -33,7 +50,8 @@ public class ExpObj : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            // 경험치 획득 로직 추가
+            //TODO: 경험치 획득 로직 추가
+            //TODO: 풀링할시 SetActive(false)로 변경
             Destroy(gameObject);
         }
     }
