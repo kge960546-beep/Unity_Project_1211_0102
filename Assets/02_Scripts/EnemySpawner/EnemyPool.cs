@@ -46,7 +46,7 @@ public class EnemyPool : MonoBehaviour
             // pool »ý¼º
             for(int i = 0; i<data.poolCount; i++)
             {
-                GameObject enemy = Instantiate(data.enemyPrefab);
+                GameObject enemy = Instantiate(data.enemyPrefab, transform);
                 enemy.SetActive(false);
                 pools[id].Enqueue(enemy);
             }

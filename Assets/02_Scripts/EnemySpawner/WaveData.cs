@@ -15,7 +15,8 @@ public struct WaveInfo
     public float startTime;         // 스폰이 시작하는 시간
     public float endTime;           // 스폰이 끝나는 시간
     public float tick;              // 스폰 주기
-    public int maxEnemySpawnLimit;  // 동시에 스폰해 있을 수 있는 최대 수 
+    public int spawnCount;          // 동시에 스폰 수 (수정필요)
+    public float radius;            // 스폰 범위
     public int enemyID;             // 적 ID
-    public int spawnPointID;        // 스폰위치 ID
+    public SpawnPatternSO shape;    // 스폰 패턴
 }
