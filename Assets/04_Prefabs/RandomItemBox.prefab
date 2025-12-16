@@ -102,6 +102,9 @@ MonoBehaviour:
   - {fileID: 576026299582583433, guid: 28c0ace2624cf844ca0bba8c9f0e28d1, type: 3}
   - {fileID: 4761750969509355320, guid: 0c0c3a4b420a7dd4dac2c777c41bcbaf, type: 3}
   - {fileID: 6052296439669198012, guid: 60107524924ceb744aedc8e2bbe3170f, type: 3}
+  - {fileID: 6377509416705521859, guid: 06f68eb8fcef4ed4aa5605bb7387a27e, type: 3}
+  - {fileID: 1076951460487789384, guid: 96b059e1591b4ed4d83b4c545ca493f1, type: 3}
+  - {fileID: 1446529393574218148, guid: d2a682637f2f0e64db18680883438681, type: 3}
   health: 1
   drop: 0.5
   player: {fileID: 1010370825851419075, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}

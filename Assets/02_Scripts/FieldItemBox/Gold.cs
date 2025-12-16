@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+public enum GoldType
+{
+    gold_1,
+    gold_5,
+    gold_10
+}
 public class Gold : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GoldType goldType;
+    private string playerTag = "Player";   
+    
+   
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-    }
+        if (!collision.CompareTag(playerTag)) return;
 
-    // Update is called once per frame
-    void Update()
-    {
+        if(GoldService.instance != null)
+        {
+            GoldService.instance.GetGold(goldType);
+        }
         
-    }
+        Destroy(gameObject);
+    }   
 }
