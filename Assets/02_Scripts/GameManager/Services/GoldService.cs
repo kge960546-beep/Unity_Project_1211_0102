@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GoldService : MonoBehaviour, IGameManagementService
 {
@@ -28,9 +29,11 @@ public class GoldService : MonoBehaviour, IGameManagementService
             Destroy(gameObject);
             return;
         }
-        instance = this;       
+        instance = this;
 
         LoadGold();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     public void SubscribeGoldAmountChanged(Action<int, int> action)
     {
@@ -82,14 +85,14 @@ public class GoldService : MonoBehaviour, IGameManagementService
             SaveGold();
         }
     }
-    private void OnDisable()
-    {
-        SaveGold();
-    }
     void SaveGold()
     {
         if (instance != this) return;
         SaveEncryptedData("MyGold", savedGold.ToString());
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SaveGold();
     }
     void LoadGold()
     {
