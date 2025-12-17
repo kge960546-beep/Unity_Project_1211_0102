@@ -21,8 +21,6 @@ public class BossWolfDeadState : IBossWolfState
         Collider2D col = boss.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
     }
-
     public void UpdateState(BossWolf boss) { }
-
     public void ExitState(BossWolf boss) { }
 }
