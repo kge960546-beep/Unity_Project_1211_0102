@@ -1,19 +1,21 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Game/Stage/SpawnPattern/SpawnPattern SO")]
-public abstract class SpawnPatternSO : ScriptableObject
+[CreateAssetMenu(menuName = "Game/Stage/SpawnPattern/SpawnPattern SO",fileName = "SpawnPattern")]
+public class SpawnPatternSO : ScriptableObject
 {
-    public int enemyID;
+    [Header("Spawn Type")]
+    public EnemyData enemyData;
     public SpawnShapeSO shape;
 
-    [Header("SpawnTimer")]
+    [Header("Spawn Timer")]
     public float startTime;
     public float endTime;
     public float tick;
 
+    [Header("Spawn Info")]
     public float radius;
     public int spawnCount;
 
+    [Header("control")]
     public bool isAllowParallel;
-    public abstract ISpawnShape CreateShape();
 }

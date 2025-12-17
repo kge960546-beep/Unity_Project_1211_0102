@@ -1,9 +1,10 @@
 using UnityEngine;
 
 //원형 벽 스폰 패턴 모양
-public class CircleWallShape : ISpawnShape
+[CreateAssetMenu(menuName = "Game/Stage/SpawnShape/CircleWallShape",fileName = "CircleWallShape")]
+public class CircleWallShape : SpawnShapeSO
 {
-    public Vector3[] GetSpawnPositions(SpawnContext context)
+    public override Vector3[] GetSpawnPositions(SpawnContext context)
     {
         Vector3[] result = new Vector3[context.spawnCount];
         float wallStep = 360f / context.spawnCount;

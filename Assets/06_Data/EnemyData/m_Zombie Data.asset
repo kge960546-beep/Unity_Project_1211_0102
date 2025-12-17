@@ -10,10 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
-  m_Name: m_Flower Data
+  m_Name: m_Zombie Data
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3690089456573174553, guid: b28943321434ceb4fb355e9bca427915, type: 3}
-  name: Flower01
-  enemyID: 1
+  enemyPrefab: {fileID: 5020774484692232255, guid: f6da98ea028e55c4bab0eb9ac0bdd8a1, type: 3}
+  enemyName: Zombie
   poolCount: 250
-  hp: 10

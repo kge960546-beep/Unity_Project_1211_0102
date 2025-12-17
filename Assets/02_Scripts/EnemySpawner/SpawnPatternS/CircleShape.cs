@@ -1,9 +1,10 @@
 using UnityEngine;
 
 //기본 스폰 패턴
-public class CircleShape : ISpawnShape
+[CreateAssetMenu(menuName = "Game/Stage/SpawnShape/CircleShape",fileName = "CircleShape")]
+public class CircleShape : SpawnShapeSO
 {
-    public Vector3[] GetSpawnPositions(SpawnContext context)
+    public override Vector3[] GetSpawnPositions(SpawnContext context)
     {
         Vector3[] result = new Vector3[context.spawnCount];
         {

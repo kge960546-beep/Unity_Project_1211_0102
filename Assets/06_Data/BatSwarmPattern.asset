@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36b301e60017c80488e8ebd2d2c3eda9, type: 3}
-  m_Name: SwarmPattern
+  m_Name: BatSwarmPattern
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
-  shape: {fileID: 11400000, guid: d9cacf97c455b4141a2148717b6d333e, type: 2}
+  shape: {fileID: 11400000, guid: 87e7451d9ceb861489c07aa2148b06e5, type: 2}
   startTime: 5
-  endTime: 6
-  tick: 0
-  radius: 15
-  spawnCount: 30
+  endTime: 13
+  tick: 2
+  radius: 0
+  spawnCount: 20
   isAllowParallel: 0

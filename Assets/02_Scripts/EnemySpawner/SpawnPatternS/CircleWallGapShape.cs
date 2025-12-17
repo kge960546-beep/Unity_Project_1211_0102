@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class CicleWallGapShape : ISpawnShape
+[CreateAssetMenu(menuName = "Game/Stage/SpawnShape/CircleWallGapShape")]
+public class CircleWallGapShape : SpawnShapeSO
 {
     [Range(0f, 1f)] public float gapRatio = 0.2f;
 
-    public Vector3[] GetSpawnPositions(SpawnContext context)
+    public override Vector3[] GetSpawnPositions(SpawnContext context)
     {
         int gapCount = Mathf.RoundToInt(context.spawnCount *  gapRatio);
         int realCount = context.spawnCount - gapCount;

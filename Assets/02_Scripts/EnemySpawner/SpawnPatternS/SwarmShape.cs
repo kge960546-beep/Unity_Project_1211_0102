@@ -1,9 +1,10 @@
 using UnityEngine;
 
 //박쥐 스폰 패턴 모양 
-public class SwarmShape : ISpawnShape
+[CreateAssetMenu(menuName = "Game/Stage/SpawnShape/SwarmShape", fileName = "SwarmShape")]
+public class SwarmShape : SpawnShapeSO
 {
-    public Vector3[] GetSpawnPositions(SpawnContext context)
+    public override Vector3[] GetSpawnPositions(SpawnContext context)
     {
         Vector3[] result = new Vector3[context.spawnCount];
 

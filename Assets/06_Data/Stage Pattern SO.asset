@@ -10,10 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bb827c3f96875f41b61e16d322cd77e, type: 3}
-  m_Name: StagePattern
+  m_Name: Stage Pattern SO
   m_EditorClassIdentifier: 
   patterns:
-  - {fileID: 11400000, guid: d051c0f39b99b7247a7dac3d8ef0fa2b, type: 2}
-  - {fileID: 11400000, guid: 6fd90f495a61e434dabbb4d66feb177d, type: 2}
-  - {fileID: 11400000, guid: 8820c4ad25b29a445ab3538017d0ed2e, type: 2}
-  - {fileID: 11400000, guid: 040f46d04de83d14dadafa9ff9d00c4b, type: 2}
+  - {fileID: 11400000, guid: 09b87c147b1ef8f43a10aa95f314b46d, type: 2}
+  - {fileID: 11400000, guid: 09b87c147b1ef8f43a10aa95f314b46d, type: 2}

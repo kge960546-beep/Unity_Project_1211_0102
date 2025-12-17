@@ -11,7 +11,6 @@ public struct SpawnContext
     public float patternTime;
     public int spawnCount;
     public float radius;
-
-    public float difficultyMultipiler;
+    //public float difficultyMultipiler;
 }
 

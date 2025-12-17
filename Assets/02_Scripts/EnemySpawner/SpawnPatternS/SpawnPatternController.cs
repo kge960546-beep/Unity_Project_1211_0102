@@ -6,31 +6,33 @@ public class SpawnPatternController : MonoBehaviour
 {
     [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private EnemySpawner enemySpawner;
-    private DifficultyEvaluator difficulty = new DifficultyEvaluator();
 
     private Coroutine stageRoutine;
     TimeService ts;
 
+    private void Awake()
+    {     
+        ts = GameManager.Instance.GetService<TimeService>();
+
+        if (ts == null)
+            Debug.LogError("TimeService not found");
+    }
     void Start()
     {
         stageRoutine = StartCoroutine(RunStage());
     }
     IEnumerator RunStage()
     {
-        float startTime = ts.accumulatedFixedDeltaTime;
-
         foreach(var pattern in stagePattern.patterns)
         {
-            float playTime = ts.accumulatedDeltaTime - startTime;
-
-            pattern.spawnCount = Mathf.CeilToInt(pattern.spawnCount * difficulty.CurrentDifficulty);
-
             if (pattern.isAllowParallel)
             {
                 enemySpawner.RunPattern(pattern);
             }
             else
+            {
                 yield return enemySpawner.RunPattern(pattern);
+            }
         }
     }
     void OnStageComplete()

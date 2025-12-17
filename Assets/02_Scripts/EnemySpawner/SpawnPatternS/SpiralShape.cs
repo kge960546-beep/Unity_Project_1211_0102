@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class SpiralShape : ISpawnShape
+[CreateAssetMenu(menuName = "Game/Stage/SpawnShape/SpiralShape",fileName = "SpiralShape")]
+public class SpiralShape : SpawnShapeSO
 {
     public float rotateSpeed = 2f;
 
-    public Vector3[] GetSpawnPositions(SpawnContext context)
+    public override Vector3[] GetSpawnPositions(SpawnContext context)
     {
         Vector3[] result = new Vector3[context.spawnCount];
 

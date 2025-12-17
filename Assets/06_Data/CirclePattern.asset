@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 184793e6d62cb1444aacbcf64f09fcd3, type: 3}
-  m_Name: BasicSpawnPattern
+  m_Script: {fileID: 11500000, guid: 36b301e60017c80488e8ebd2d2c3eda9, type: 3}
+  m_Name: CirclePattern
   m_EditorClassIdentifier: 
-  enemyID: 0
-  shape: {fileID: 0}
+  enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
+  shape: {fileID: 11400000, guid: aa6bdba29feeddd4da98c3bb535cd5ab, type: 2}
   startTime: 0
-  endTime: 100
-  tick: 0.2
+  endTime: 20
+  tick: 1
   radius: 13
-  spawnCount: 20
-  isAllowParallel: 1
+  spawnCount: 15
+  isAllowParallel: 0

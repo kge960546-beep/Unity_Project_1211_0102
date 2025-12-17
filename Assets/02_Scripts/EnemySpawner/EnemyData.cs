@@ -4,9 +4,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public GameObject enemyPrefab;
-    public string name;
-    public int enemyID;
+    public string enemyName;
     public int poolCount;
-    public int hp;
 }
     

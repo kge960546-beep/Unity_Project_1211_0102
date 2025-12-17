@@ -4,31 +4,26 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private List<Coroutine> runningPatterns = new List<Coroutine>();
-
-    [SerializeField] private WaveData currentWave;
     [SerializeField] private EnemyPool enemyPool;
-
-    //스폰 위치
-    //public Transform[] spawnPoint;
-    [SerializeField] private SpawnPoint spawnPos;
-
-    private float timer;
-    //public int selection;
-    private int waveCount;
-    
+    [SerializeField] private Transform spawnPos;
+    [SerializeField] private Rigidbody2D playerRb;
+  
+    private List<Coroutine> runningPatterns = new();
 
     TimeService ts;
-    TimeService TS
+    TimeService TS => ts ??= GameManager.Instance?.GetService<TimeService>();
+
+    void Awake()
     {
-        get
-        {
-            if(ts == null && GameManager.Instance != null)
-            {
-                ts = GameManager.Instance.GetService<TimeService>();
-            }
-            return ts;
-        }
+        if (spawnPos == null)
+            spawnPos = GameObject.FindWithTag("Player").transform;
+    }
+    private void Start()
+    {
+        if (enemyPool == null)
+            Debug.LogError("EnemySpawner : EnemyPool 미할당");
+        if (spawnPos == null)
+            Debug.LogError("EnemySpawner : SpawnPos 미할당");
     }
     public Coroutine RunPattern(SpawnPatternSO pattern)
     {
@@ -40,11 +35,10 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator RunPatternRoutine(SpawnPatternSO pattern)
     {
         float startTime = TS.accumulatedFixedDeltaTime;
-        ISpawnShape shape = pattern.CreateShape();
 
         while (TS.accumulatedFixedDeltaTime < pattern.endTime)
         {
-            if (TS.accumulatedFixedDeltaTime >= pattern.startTime)
+            if (TS.accumulatedFixedDeltaTime < pattern.startTime)
             {
                 yield return null;
                 continue;
@@ -54,24 +48,27 @@ public class EnemySpawner : MonoBehaviour
             SpawnContext context = new SpawnContext
             {
                 playerPosition = spawnPos.transform.position,
-                playerVelocity = Vector3.zero,
-                patternTime = patternTime,
+                playerVelocity = playerRb != null ? playerRb.velocity : Vector3.zero,
                 spawnCount = pattern.spawnCount,
-                radius = pattern.radius
+                radius = pattern.radius,
+                patternTime = patternTime
             };
-            Spawn(pattern, shape, context);
+
+            Vector3[] positions = pattern.shape.GetSpawnPositions(context);
+
+            Spawn(pattern, positions , context);
 
             yield return new WaitForSeconds(pattern.tick);
         }
     }
     //적 스폰 
-    void Spawn(SpawnPatternSO pattern, ISpawnShape shape, SpawnContext context)
+    void Spawn(SpawnPatternSO pattern, Vector3[] positions, SpawnContext context)
     {
-        Vector3[] positions = shape.GetSpawnPositions(context);
-
         foreach(var pos in positions)
         {
-            GameObject enemy = enemyPool.GetQueue(pattern.enemyID);
+            GameObject enemy = enemyPool.GetQueue(pattern.enemyData);
+            if(enemy == null) continue;
+
             enemy.transform.position = pos;
             enemy.SetActive(true);
         }
