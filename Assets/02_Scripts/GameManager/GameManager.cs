@@ -7,6 +7,7 @@ using UnityEngine;
 /// Singleton game manager.
 /// Services are separated into parts and can be accessed using their types as keys.
 /// </summary>
+[DefaultExecutionOrder(-50)]
 public class GameManager : MonoBehaviour
 {
     [Header("Service")]

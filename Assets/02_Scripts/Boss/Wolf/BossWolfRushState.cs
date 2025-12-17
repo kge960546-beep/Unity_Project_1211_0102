@@ -13,7 +13,6 @@ public class BossWolfRushState : IBossWolfState
         rushSpeed = speed;
         rushDuration = duration;
     }
-
     public void EnterState(BossWolf boss)
     {
         boss.anim.Play("Wolf_Walk");
@@ -27,7 +26,6 @@ public class BossWolfRushState : IBossWolfState
         // 돌진 시작 시각 저장 
         rushStartTime = GameManager.Instance.GetService<TimeService>().accumulatedFixedDeltaTime;
     }
-
     public void UpdateState(BossWolf boss)
     {
         if (boss.isDead) return;
@@ -41,12 +39,11 @@ public class BossWolfRushState : IBossWolfState
         {
             boss.ChangeState(new BossWolfChaseState());
         }
-
     }
-
     public void ExitState(BossWolf boss)
     {
         boss.StopMove();
+        boss.lastRushTime = Time.time;
     }
 }
 
