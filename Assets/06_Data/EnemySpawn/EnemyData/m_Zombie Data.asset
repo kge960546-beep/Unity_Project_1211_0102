@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
   m_Name: m_Zombie Data
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 5020774484692232255, guid: f6da98ea028e55c4bab0eb9ac0bdd8a1, type: 3}
+  enemyPrefab: {fileID: 1863781869232388785, guid: 17797c4d09a91b94193e87ebd7de34e8, type: 3}
   enemyName: Zombie
   poolCount: 250
