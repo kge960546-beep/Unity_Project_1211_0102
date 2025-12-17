@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BossFlower : MonoBehaviour
 {
-    protected IBossFlowerState currentState;
+    [HideInInspector] public IBossFlowerState currentState;
 
     [Header("Target")]
     public Transform player;
@@ -11,47 +11,60 @@ public class BossFlower : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D boxcol;
+    public BossBaseDataSO bbData;
 
     [Header("Status")]
     public bool isDead = false;
+    public int maxHp;
+    public int currentHp;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
-        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        }
     }
-
     private void Start()
     {
         ChangeState(new BossFlowerIdleState());
     }
-
     private void Update()
     {
-        if (isDead && !(currentState is BossFlowerDeadState))
-        {
-            ChangeState(new BossFlowerDeadState());
-            return;
-        }
+        if (isDead) return;
 
         currentState?.UpdateState(this);
-
-        // 플레이어의 이동경로 쪽으로 플립 
-        if (player != null)
+    }
+    private void OnEnable()
+    {
+        if(bbData == null)
         {
-            float dir = player.position.x - transform.position.x;
+            Debug.Log("참조할 데이터가 없습니다");
+            return;
+        }
+        isDead = false;
+        maxHp = bbData.bossHp;
+        currentHp = maxHp;
+    }
+    public void TakeDamage(int damage)
+    {
+        if(isDead) return;
 
-            if (Mathf.Abs(dir) > 0.1f)
-            {
-                transform.localScale = new Vector3(dir > 0 ? 1 : -1, 1, 1);
-            }
+        int finalDamage = Mathf.Max(damage, 0);
+        currentHp = Mathf.Max(currentHp - finalDamage, 0);
+
+        if (currentHp <= 0)
+        {
+            isDead = true;
+            ChangeState(new BossFlowerDeadState());
         }
     }
-
     public void ChangeState(IBossFlowerState newState)
     {
+        if (isDead && !(newState is BossFlowerDeadState)) return;
         currentState?.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
