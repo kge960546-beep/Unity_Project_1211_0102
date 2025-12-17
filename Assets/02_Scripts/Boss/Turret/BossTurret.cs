@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BossTurret : MonoBehaviour
 {
-    protected IBossTurretState currentState;
+    [HideInInspector] public IBossTurretState currentState;
 
     [Header("Target")]
     public Transform player;
@@ -17,12 +17,15 @@ public class BossTurret : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D boxcol;
+    public BossBaseDataSO bbData;
 
     [Header("Status")]
     public bool isDead = false;
+    public int maxHp;
+    public int currentHp;
 
-    protected Vector2 moveDirection;
-    protected float moveSpeed;
+    [HideInInspector] public Vector2 moveDirection;
+    [HideInInspector] public float moveSpeed;
 
 
     private void Awake()
@@ -30,68 +33,69 @@ public class BossTurret : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
-        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        }        
     }
-
     private void Start()
     {
         ChangeState(new BossTurretWalkState());
     }
-
     private void Update()
     {
-        // 사망 체크
-        if (isDead && !(currentState is BossTurretDeadState))
-        {
-            ChangeState(new BossTurretDeadState());
-            return;
-        }
-
+        if (isDead) return;
         currentState?.UpdateState(this);
-
-        float dist = Vector2.Distance(transform.position, player.position);
-
-        // 너무 가까우면 멈추기
-        if (dist <= closeFlipStopRange)
-        {
-            StopMove();
-        }
-
-        // 이동 방향 기준 플립
-        if (Mathf.Abs(moveDirection.x) > 0.05f && dist > closeFlipStopRange)
-        {
-            transform.localScale = new Vector3(moveDirection.x > 0 ? 1 : -1, 1, 1);
-        }
     }
-
     private void FixedUpdate()
     {
-        transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
+        if (isDead) return;
+        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
     }
+    private void OnEnable()
+    {
+        if(bbData == null)
+        {
+            Debug.Log("참조항 데이터가 없습니다");
+            return;
+        }
+        isDead = false;
+        maxHp = bbData.bossHp;
+        currentHp = maxHp;
+    }
+    public void TakeDamage(int damage)
+    {
+        if (isDead) return;
 
+        int finalDamage = Mathf.Max(damage, 0);
+        currentHp = Mathf.Max(currentHp - finalDamage, 0);
 
+        if (currentHp <= 0)
+        {
+            isDead = true;
+            StopMove();
+            ChangeState(new BossTurretDeadState());
+        }
+    }    
     public void ChangeState(IBossTurretState newState)
     {
+        if (isDead && !(newState is BossTurretDeadState)) return;
         currentState?.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
     }
-
-
     public void SetMove(Vector2 direction, float speed)
     {
         moveDirection = direction.normalized;
         moveSpeed = speed;
     }
-
     public void StopMove()
     {
         moveDirection = Vector2.zero;
         moveSpeed = 0f;
 
     }
-
-
     protected virtual void OnDrawGizmosSelected()
     {
         if (player == null) return;

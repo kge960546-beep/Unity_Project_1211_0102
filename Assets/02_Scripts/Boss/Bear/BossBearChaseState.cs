@@ -33,6 +33,12 @@ public class BossBearChaseState : IBossBearState
             Vector2 dir = (boss.player.position - boss.transform.position).normalized;
             boss.SetMove(dir, boss.chaseSpeed);
         }
+
+        //ÁÂ¿ì ¹ÝÀü
+        if (Mathf.Abs(boss.moveDirection.x) > 0.05f && dist > boss.closeFlipStopRange)
+        {
+            boss.transform.localScale = new Vector3(boss.moveDirection.x > 0 ? 1 : -1, 1, 1);
+        }
     }
     public void ExitState(BossBear boss)
     {

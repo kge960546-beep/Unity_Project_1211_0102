@@ -60,6 +60,7 @@ public class BossWolf : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (isDead) return;
         rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
         //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
     }

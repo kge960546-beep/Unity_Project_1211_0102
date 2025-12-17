@@ -6,7 +6,6 @@ public class BossTurretWalkState : IBossTurretState
     {
         boss.anim.Play("Turret_Walk");
     }
-
     public void UpdateState(BossTurret boss)
     {
         if (boss.isDead) return;
@@ -25,8 +24,11 @@ public class BossTurretWalkState : IBossTurretState
 
         boss.SetMove(dir, boss.walkSpeed);
 
+        if(Mathf.Abs(boss.moveDirection.x) > 0.05f && distance > boss.closeFlipStopRange)
+        {
+            boss.transform.localScale = new Vector3(boss.moveDirection.x > 0 ? 1 : -1, 1, 1);
+        }
     }
-
     public void ExitState(BossTurret boss)
     {
         boss.StopMove();
