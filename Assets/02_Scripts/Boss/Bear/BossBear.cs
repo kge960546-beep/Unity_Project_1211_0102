@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BossBear : MonoBehaviour
 {
-    protected IBossBearState currentState;
+    [HideInInspector] public IBossBearState currentState;
 
     [Header("Target")]
     public Transform player;
@@ -19,16 +19,19 @@ public class BossBear : MonoBehaviour
     public float rushRange = 20.0f;
     public float rushCooldown = 8.0f;
     public float rushDelay = 5.0f;
-    protected float lastRushTime = -99f;
-    protected float spawnTime;
+    [HideInInspector] public float lastRushTime = -99f;
+    [HideInInspector] public float spawnTime;
 
     [Header("Components")]
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D boxcol;
+    public BossBaseDataSO bbData;
 
     [Header("Status")]
     public bool isDead = false;
+    public int maxHp;
+    public int currentHp;
 
     public Vector2 moveDirection;
     protected float moveSpeed;
@@ -38,82 +41,76 @@ public class BossBear : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
-        GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
+        }        
     }
-
     private void Start()
     {
-        spawnTime = Time.time;
+        spawnTime = Time.time;        
         ChangeState(new BossBearWalkState());
     }
-
     private void Update()
     {
-        if (isDead && !(currentState is BossBearDeadState))
-        {
-            ChangeState(new BossBearDeadState());
-            return;
-        }
+        if (isDead)  return;
 
-        currentState.UpdateState(this);
-
-        float dist = Vector2.Distance(transform.position, player.position);
-
-        // Rush 조건
-        if (!(currentState is BossBearRushState))
-        {
-            if (Time.time >= spawnTime + rushDelay &&
-                Time.time >= lastRushTime + rushCooldown &&
-                dist < rushRange && dist > closeFlipStopRange)
-            {
-                ChangeState(new BossBearRushState(rushSpeed, rushDuration));
-                return;
-            }
-        }
-        else
-        {
-            lastRushTime = Time.time;
-        }
-
-        // 플레이어와 가까우면 이동 멈춤
-        if (dist <= closeFlipStopRange)
-            StopMove();
-
-        // 좌우 반전 (돌진 상태일 때는 회전하지 않음)
-        if (!(currentState is BossBearRushState))
-        {
-            if (Mathf.Abs(moveDirection.x) > 0.05f && dist > closeFlipStopRange)
-                transform.localScale = new Vector3(moveDirection.x > 0 ? 1 : -1, 1, 1);
-        }
+        currentState?.UpdateState(this);       
     }
-
     private void FixedUpdate()
     {
-        transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
+        if (isDead) return;
+        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
     }
+    private void OnEnable()
+    {
+        if(bbData == null)
+        {
+            Debug.Log("참조할 데이터가 없습니다");
+            return;
+        }
+        isDead = false;
+        maxHp = bbData.bossHp;
+        currentHp = maxHp;
+    }
+    public void TakeDamage(int damage)
+    {    
+        if (isDead) return;
 
+        int finalDamage = Mathf.Max(damage, 0);
+        currentHp = Mathf.Max(currentHp - finalDamage, 0);
+        // TODO: 히트 이펙트 있으면 여기서 재생
+
+        if (currentHp <= 0)
+        {
+            isDead = true;
+            StopMove();
+            ChangeState(new BossBearDeadState());
+        }
+    }
     public void ChangeState(IBossBearState newState)
     {
+        if (isDead && !(newState is BossBearDeadState)) return;
+
         currentState?.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
     }
-
     public void SetMove(Vector2 direction, float speed)
     {
         moveDirection = direction.normalized;
         moveSpeed = speed;
     }
-
     public void StopMove()
     {
         moveDirection = Vector2.zero;
         moveSpeed = 0f;
     }
-
     // 벽 충돌 감지
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isDead) return;
         if (currentState is BossBearRushState)
         {
             // "Enemy" 레이어의 벽에 부딪히면 돌진 종료 후 추격으로 전환
@@ -123,8 +120,7 @@ public class BossBear : MonoBehaviour
                 ChangeState(new BossBearChaseState());
             }
         }
-    }
-
+    } 
     protected virtual void OnDrawGizmosSelected()
     {
         if (player == null) return;

@@ -18,7 +18,8 @@ public class TestPlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        //GameManager.Instance.GetService<GameContextService>().RegisterPlayerObject(gameObject);
+        //TODO: 실행순서로 인한 null버그 있음 Start로 바꿔 볼 예정
+        GameManager.Instance.GetService<GameContextService>().RegisterPlayerObject(gameObject);
     }
     void Update()
     {

@@ -6,16 +6,38 @@ public class BossWolfChaseState : IBossWolfState
     {
         boss.anim.Play("Wolf_Walk");
     }
-
     public void UpdateState(BossWolf boss)
     {
         if (boss.isDead) return;
 
-        Vector2 dir = (boss.player.position - boss.transform.position).normalized;
+        float dist = Vector2.Distance(boss.transform.position, boss.player.position);
 
-        boss.SetMove(dir, boss.chaseSpeed);
+        // Rush 조건        
+        if (Time.time >= boss.spawnTime + boss.rushDelay &&
+            Time.time >= boss.lastRushTime + boss.rushCooldown &&
+            dist < boss.rushRange && dist > boss.closeFlipStopRange)
+        {
+            boss.ChangeState(new BossWolfRushState(boss.rushSpeed, boss.rushDuration));
+            return;
+        }
+
+        // 플레이어와 가까우면 이동 멈춤
+        if (dist <= boss.closeFlipStopRange)
+        {
+            boss.StopMove();
+        }
+        else
+        {
+            Vector2 dir = (boss.player.position - boss.transform.position).normalized;
+            boss.SetMove(dir, boss.chaseSpeed);
+        }
+
+        //좌우 반전
+        if (Mathf.Abs(boss.moveDirection.x) > 0.05f && dist > boss.closeFlipStopRange)
+        {
+            boss.transform.localScale = new Vector3(boss.moveDirection.x > 0 ? 1 : -1, 1, 1);
+        }
     }
-
     public void ExitState(BossWolf boss)
     {
         boss.StopMove();

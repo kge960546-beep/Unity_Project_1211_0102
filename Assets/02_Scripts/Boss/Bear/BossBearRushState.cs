@@ -46,6 +46,7 @@ public class BossBearRushState : IBossBearState
     public void ExitState(BossBear boss)
     {
         boss.StopMove();
+        boss.lastRushTime = Time.time;
     }
 }
 
