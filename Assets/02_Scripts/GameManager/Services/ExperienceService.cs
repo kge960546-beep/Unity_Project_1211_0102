@@ -21,15 +21,12 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
     public void GetExp(int amount)
     {
         exp += amount;
-        Debug.Log($"Current Exp : {exp}");
 
         if(exp >= nextLevelExp)
         {
             exp -= nextLevelExp;
             level++;
             nextLevelExp = nextLevelExp * 2;
-
-            Debug.Log($"Level Up! Lv.{level}");
         }
     }
 }
