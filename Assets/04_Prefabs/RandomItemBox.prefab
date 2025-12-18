@@ -110,7 +110,9 @@ MonoBehaviour:
   player: {fileID: 1010370825851419075, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}
   destroyDistance: 30
   playerTag: Player
-  weaponTag: WeaponTag
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!61 &5702804809288159649
 BoxCollider2D:
   m_ObjectHideFlags: 0

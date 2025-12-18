@@ -12,7 +12,7 @@ public class ExpUI : MonoBehaviour
 
     private void Awake()
     {
-        es = GameManager.Instance.GetService<ExperienceService>();
+        es = GameManager.Instance.GetService<ExperienceService>();        
     }
 
     private void LateUpdate()
