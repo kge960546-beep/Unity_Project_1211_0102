@@ -38,7 +38,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
     {
         anim = GetComponent<Animator>();
         itemLayer = LayerMask.NameToLayer("Item");
-        itemLayers = LayerMask.NameToLayer("Player");
+        itemLayers = LayerMask.NameToLayer("PlayerProjectile");
     }
     private void Start()
     {
@@ -144,18 +144,19 @@ public class EnemyHp : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(0.6f);
         gameObject.SetActive(false);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("콜리이더가 잘 작동 합니다");
         if (isDead) return;
-        
+
         //TODO: 레이어 정의하면 수정
-        
+
         int layer = collision.gameObject.layer;
         if (layer == itemLayer || layer == itemLayers)
         {
             //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
+            Debug.Log("데미지가 들어갔냐?");
             TakeDamage(20);
         }
-    }
+    }   
 }

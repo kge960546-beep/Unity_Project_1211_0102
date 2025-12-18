@@ -896,6 +896,8 @@ MonoBehaviour:
   serviceDefinitions:
   - name: GameContextService
   - name: GoldService
+  - name: ExperienceService
+  - name: LayerService
   eventSystem: {fileID: 0}
 --- !u!4 &495692369
 Transform:

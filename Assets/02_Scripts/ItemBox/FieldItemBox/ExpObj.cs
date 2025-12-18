@@ -10,9 +10,12 @@ public class ExpObj : MonoBehaviour
     private bool isMagnetOn = false;
 
     private CircleCollider2D circleCollider;
+    ExperienceService es;
 
     private void Awake()
     {
+        es = GameManager.Instance.GetService<ExperienceService>();
+
         circleCollider = GetComponent<CircleCollider2D>();
 
         if (circleCollider != null) return;
@@ -22,8 +25,12 @@ public class ExpObj : MonoBehaviour
             circleCollider.gameObject.AddComponent<CircleCollider2D>();
         }
         circleCollider.isTrigger = true;
+        if(es == null)
+        {
+            Debug.Log("아 없다고");
+            return;
+        }        
     }
-
     private void OnEnable()
     {       
         FieldMagnet.onMagnet += StartMagnet;
@@ -50,8 +57,10 @@ public class ExpObj : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
+            es.GetExp(10);
             //TODO: 경험치 획득 로직 추가
             //TODO: 풀링할시 SetActive(false)로 변경
+            //ExperienceService GetExt(int)
             Destroy(gameObject);
         }
     }
