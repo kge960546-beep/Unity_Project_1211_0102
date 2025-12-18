@@ -7,5 +7,5 @@ using UnityEngine;
 public class GameManagementServiceWrapper
 {
     public string name;
-    public Type type => string.IsNullOrEmpty(name) ? null : Type.GetType(name);
+    public Type ResolvedType => string.IsNullOrEmpty(name) ? null : Type.GetType(name);
 }
