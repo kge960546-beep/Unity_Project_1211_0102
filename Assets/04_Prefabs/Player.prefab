@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 7147104876290689308}
   - component: {fileID: 7073849704538818789}
   - component: {fileID: 4425041058524200579}
+  - component: {fileID: 1050227576253990691}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -279,7 +280,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   currentHp: 0
-  playerBaseData: {fileID: 0}
+  playerBaseData: {fileID: 11400000, guid: 7e3d131fea68ce34da411e6d6616d6e2, type: 2}
+--- !u!114 &1050227576253990691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585711465689959475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99c9c81229b410942968854e8708e29b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  context:
+    logic: {fileID: 11400000, guid: 3bae87512cc548d489601eb9c191ce5a, type: 2}
+    leveledTimingTables:
+    - <RequiredLevel>k__BackingField: 1
+      <ProjectionTimingTable>k__BackingField:
+      - 0
+    player: {fileID: 1585711465689959475}
+    tempSharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
+    searchRadius: 0
+    period: 0.3
+    level: 1
+    timer: 0
 --- !u!1 &1781776238354241438
 GameObject:
   m_ObjectHideFlags: 0

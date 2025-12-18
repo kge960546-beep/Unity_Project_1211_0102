@@ -13,7 +13,8 @@ public class FieldRandomBox : MonoBehaviour
     [SerializeField] private float destroyDistance = 20f;
 
     [Header("Tag")]
-    [SerializeField] private string playerTag = "Player";
+    [SerializeField] private string playerTag = "PlayerProjectile";
+    private int itemLayer;
     //두사체나 무기의 태그가 있으면 수정
     //[SerializeField] private string weaponTag = "WeaponTag";
 
@@ -31,6 +32,7 @@ public class FieldRandomBox : MonoBehaviour
             boxCol = gameObject.AddComponent<BoxCollider2D>();
         }
         boxCol.isTrigger = true;
+        itemLayer = LayerMask.NameToLayer("PlayerProjectile");
     }
 
     private void Start()
@@ -79,9 +81,15 @@ public class FieldRandomBox : MonoBehaviour
     }   
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag(playerTag)) return;
 
-        TakeDamage(1);
+        int layer = collision.gameObject.layer;      
+        
+        if (layer == itemLayer)
+        {
+            //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
+            Debug.Log("데미지가 들어갔냐?");
+            TakeDamage(1);
+        }
     }
     private void OnDestroy()
     {
