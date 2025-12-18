@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class MapUpDownScrolling : MonoBehaviour
 {
-    [SerializeField] Transform camera;
-    [SerializeField] float scrolloingSpeed = 0.0f;
+    [SerializeField] Transform cam;
+    
     [SerializeField] int tilemapCount = 3;
     
     private float tilemapHeight;
@@ -15,9 +15,9 @@ public class MapUpDownScrolling : MonoBehaviour
 
     void Start()
     {
-        if(camera == null)
+        if(cam == null)
         {
-            camera = Camera.main.transform;
+            cam = Camera.main.transform;
         }        
 
         TilemapRenderer tilemapRenderer = GetComponent<TilemapRenderer>();
@@ -30,7 +30,7 @@ public class MapUpDownScrolling : MonoBehaviour
     }
     private void LateUpdate()
     {
-        float distance = camera.position.y - transform.position.y;
+        float distance = cam.position.y - transform.position.y;
 
         if(distance > halfLength)
         {

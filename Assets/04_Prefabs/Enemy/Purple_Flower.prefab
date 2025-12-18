@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6416476599509688691}
   - component: {fileID: 630352100836194845}
   - component: {fileID: 6626245285976047310}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Purple_Flower
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3032f3b8c5729774fbaf5872714706be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterData: {fileID: 11400000, guid: 44a0597519687464ab14601d26e31e30, type: 2}
+  monsterData: {fileID: 11400000, guid: 05b6729d2d8a2f84eac794207ad5b4c1, type: 2}
   player: {fileID: 0}
   moveSpeed: 2.5
   damageInterval: 1

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class ClampMap : MonoBehaviour
 {    
-    [SerializeField] private Transform target;
-
-    [SerializeField] private float smooth = 0.1f;
+    [SerializeField] private Transform target;   
 
     [SerializeField] private Vector3 adjustCamPos;
 
@@ -15,7 +13,7 @@ public class ClampMap : MonoBehaviour
     void LateUpdate()
     {
         if (target == null) return;
-        Vector3 pos = Vector3.Lerp(transform.position, target.position, smooth);
+        Vector3 pos = target.position;
 
         transform.position = new Vector3(Mathf.Clamp(pos.x, minCamLimit.x, maxCamLimit.x) + adjustCamPos.x,
                                          Mathf.Clamp(pos.y, minCamLimit.y, maxCamLimit.y) + adjustCamPos.y, -10f + adjustCamPos.z);

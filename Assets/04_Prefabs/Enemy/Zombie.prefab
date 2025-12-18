@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1808042583524116769}
   - component: {fileID: 8772507745753034216}
   - component: {fileID: 4964104048879400680}
-  m_Layer: 0
+  - component: {fileID: 8491632265718853737}
+  m_Layer: 9
   m_Name: Zombie
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -183,10 +184,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3032f3b8c5729774fbaf5872714706be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterData: {fileID: 11400000, guid: 44a0597519687464ab14601d26e31e30, type: 2}
+  enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
   player: {fileID: 0}
   moveSpeed: 5
   damageInterval: 1
-  separationRadius: 1.2
+  separationRadius: 0.4
   separationForce: 1.1
   flipStopDistance: 0.6
+--- !u!114 &8491632265718853737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150319513743221602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8fcf927b2d87a49a15e27e3a9785c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  maxHp: 0
+  dropExp: 1
+  itemLayer: 0
+  itemLayers: 0
