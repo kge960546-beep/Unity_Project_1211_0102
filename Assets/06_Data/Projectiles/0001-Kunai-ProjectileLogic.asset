@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 405c36996a40acc4eb27b15a2454cbd7, type: 3}
+  m_Name: 0001-Kunai-ProjectileLogic
+  m_EditorClassIdentifier: 
+  <AnimationController>k__BackingField: {fileID: 9100000, guid: 732c7e82f62ca374d8cfd1ecd9b68db6, type: 2}
+  <ColliderRadius>k__BackingField: 1
+  <LifeTime>k__BackingField: 5
+  <NuckBackForce>k__BackingField: 0
+  <DefaultSpeed>k__BackingField: 5
+  <DefaultSearchRadius>k__BackingField: 30
