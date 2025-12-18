@@ -7,7 +7,6 @@ using UnityEngine;
 public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
 {
     [field: SerializeField] public float DefaultSpeed { set; private get; } // TODO: apply player stat in the calculation
-    [field: SerializeField] public float DefaultSearchRadius { set; private get; } // TODO: apply player stat in the calculation
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
@@ -28,8 +27,12 @@ public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData) { }
     protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData) { }
-    protected override void CallbackAtOnCollisionEnter2DInternal(ref ProjectileInstanceContext instanceData, Collision2D collision) { }
-    protected override void CallbackAtOnCollisionStay2DInternal(ref ProjectileInstanceContext instanceData, Collision2D collision) { }
+    protected override void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider)
+    {
+        Destroy(instanceData.obj);
+    }
+
+    protected override void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider) { }
 
     private GameObject GetNearstEnemy(Vector2 position)
     {

@@ -43,13 +43,13 @@ public class ProjectileLogicRunner : MonoBehaviour
         Logic?.CallbackAtFixedUpdate(ref context);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        Logic?.CallbackAtOnCollisionEnter2D(ref context, collision);
+        Logic?.CallbackAtOnTriggerEnter2D(ref context, collider);
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collider)
     {
-        Logic?.CallbackAtOnCollisionStay2D(ref context, collision);
+        Logic?.CallbackAtOnTriggerStay2D(ref context, collider);
     }
 }

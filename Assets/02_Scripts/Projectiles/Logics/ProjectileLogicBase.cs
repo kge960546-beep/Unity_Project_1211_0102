@@ -15,6 +15,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
 {
     [field: SerializeField] protected RuntimeAnimatorController AnimationController { get; private set; }
     // TODO: add more common values
+    [field: SerializeField] public float DefaultSearchRadius { get; private set; } // TODO: apply player stat in the calculation
     [field: SerializeField] protected float ColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float NuckBackForce { get; private set; }
@@ -43,8 +44,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
         CallbackAtFixedUpdateInternal(ref context);
     }
 
-    public void CallbackAtOnCollisionEnter2D(ref ProjectileInstanceContext context, Collision2D collision) { CallbackAtOnCollisionEnter2DInternal(ref context, collision); }
-    public void CallbackAtOnCollisionStay2D(ref ProjectileInstanceContext context, Collision2D collision) { CallbackAtOnCollisionStay2DInternal(ref context, collision); }
+    public void CallbackAtOnTriggerEnter2D(ref ProjectileInstanceContext context, Collider2D collider) { CallbackAtOnTriggerEnter2DInternal(ref context, collider); }
+    public void CallbackAtOnTriggerStay2D(ref ProjectileInstanceContext context, Collider2D collider) { CallbackAtOnTriggerStay2DInternal(ref context, collider); }
 
     protected abstract void CallbackAtOnEnableInternal(ref ProjectileInstanceContext context, ProjectileInstanceInitializationData initData);
     protected abstract void CallbackAtOnDisableInternal(ref ProjectileInstanceContext context);
@@ -52,8 +53,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
 
     // Common logics such as damage and destruction on collision are not processed here.
     // only projectile-specific logic goes here.
-    protected abstract void CallbackAtOnCollisionEnter2DInternal(ref ProjectileInstanceContext context, Collision2D collision);
-    protected abstract void CallbackAtOnCollisionStay2DInternal(ref ProjectileInstanceContext context, Collision2D collision);
+    protected abstract void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext context, Collider2D collider);
+    protected abstract void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext context, Collider2D collider);
 
 #if UNITY_EDITOR
     // use Debug.LogError / LogWarning / UnityEngine.Assertions.Assert if conditions are not met
