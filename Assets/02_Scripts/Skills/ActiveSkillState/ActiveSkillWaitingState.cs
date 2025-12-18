@@ -7,7 +7,11 @@ public sealed class ActiveSkillWaitingState : ActiveSkillStateBase
 {
     public override void Tick(ref ActiveSkillStateContext context)
     {
-        if (context.timer > context.period) // TODO search enemy and only transit into projecting state
+        if (context.timer > context.period
+            && null != Physics2D.OverlapCircle(
+                context.player.transform.position,
+                context.logic.DefaultSearchRadius,
+                1 << GameManager.Instance.GetService<LayerService>().enemyLayer))
         {
             OnExitState(ref context);
             context.currentState = ActiveSkillStateUtility.GetStateType<ActiveSkillProjectingState>();
