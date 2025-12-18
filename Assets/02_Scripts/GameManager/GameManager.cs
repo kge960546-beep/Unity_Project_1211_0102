@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         registeredServices = new Dictionary<Type, IGameManagementService>();
         foreach (GameManagementServiceWrapper svcWrapper in serviceDefinitions)
         {
-            Type t = svcWrapper.type;
+            Type t = svcWrapper.ResolvedType;
             if (!typeof(IGameManagementService).IsAssignableFrom(t)) continue;
             if (!typeof(MonoBehaviour).IsAssignableFrom(t)) continue;
             if (t.IsAbstract) continue;
