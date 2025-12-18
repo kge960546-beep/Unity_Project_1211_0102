@@ -15,12 +15,13 @@ public class PlayerHp : MonoBehaviour
     /// </summary>
     private event Action<int, int> onTakeDamageEvent;
 
-    [SerializeField] private int maxHp = 100;
-    private int currentHp;
+    [SerializeField] private int maxHp;
+    [SerializeField] private int currentHp;
     private bool isDead = false;
 
     private Animator anim;
     private Rigidbody2D rb;
+    public PlayerDataSO playerBaseData;
     #region DeathSubscriptionAndCancellation
     /// <summary>
     /// 데드 이벤트 구독 & 해지
@@ -56,6 +57,16 @@ public class PlayerHp : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
+    private void Start()
+    {
+        if(playerBaseData == null)
+        {
+            Debug.Log("참조할 데이터가 없습니다");
+            return;
+        }
+        maxHp = playerBaseData.playerMaxHp;
+        currentHp = maxHp;
+    }
     public void TakeDamage(int damage)
     {
         if (isDead) return;
@@ -65,7 +76,7 @@ public class PlayerHp : MonoBehaviour
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
         // TODO: 히트 이펙트 있으면 여기서 재생        
 
-        onTakeDamageEvent?.Invoke(finalDamage, currentHp);
+        onTakeDamageEvent?.Invoke(currentHp, maxHp);
 
         if (currentHp <= 0) { Die(); }
     }
@@ -79,8 +90,7 @@ public class PlayerHp : MonoBehaviour
 
         onPlayerDeadEvent?.Invoke();
         rb.bodyType = RigidbodyType2D.Static;
-        //TODO: 플레이어 컨트롤러에서 PlayerHp를 불러와 구독 해지 추가
-        
+        //TODO: 플레이어 컨트롤러에서 PlayerHp를 불러와 구독 해지 추가        
     }
    
     private void OnCollisionEnter2D(Collision2D collision)
