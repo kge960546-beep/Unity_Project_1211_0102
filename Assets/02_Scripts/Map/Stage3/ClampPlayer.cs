@@ -27,8 +27,7 @@ public class ClampPlayer : MonoBehaviour
 
         Vector2 clamped = new Vector2(x, y);
 
-        //If you exceed the range, turn back and adjust the speed so that you don't exceed it again.
-        // TODO: 떨림현상은 플레이어 컨트롤러 Update -> FixedUpdate 로 전환해야 수정 가능할것으로 예상
+        
         if (clamped != playerPos)
         {
             playerRb.position = clamped;
@@ -44,7 +43,7 @@ public class ClampPlayer : MonoBehaviour
                 velocity.y = 0.0f;
             }
         
-            playerRb.velocity = velocity;
+            //playerRb.velocity = velocity;
         }
     }
     private void OnDrawGizmos()

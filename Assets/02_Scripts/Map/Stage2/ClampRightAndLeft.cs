@@ -22,15 +22,16 @@ public class ClampRightAndLeft : MonoBehaviour
         //Limit range calculation
         Vector2 playerPos = playerRb.position;
 
-        float x = Mathf.Clamp(playerPos.x, minLimit.x, maxLimit.x);       
+        float x = Mathf.Clamp(playerPos.x, minLimit.x, maxLimit.x);
+        float y = playerPos.y;
 
-        Vector2 clamped = new Vector2(x, playerPos.y);
+        Vector2 clamped = new Vector2(x, y);
 
         //If you exceed the range, turn back and adjust the speed so that you don't exceed it again.
         // TODO: 떨림현상은 플레이어 컨트롤러 Update -> FixedUpdate 로 전환해야 수정 가능할것으로 예상
-        if (Mathf.Abs(x - playerPos.x) > 0.0001f)
+        if (clamped != playerPos)
         {
-            playerRb.MovePosition(clamped);
+            playerRb.position = clamped;
 
             Vector2 velocity = playerRb.velocity;
 
@@ -38,12 +39,11 @@ public class ClampRightAndLeft : MonoBehaviour
             {
                 velocity.x = 0.0f;
             }
-            if(playerPos.x > maxLimit.x && velocity.x > 0.0f)
+            if (playerPos.x > maxLimit.x && velocity.x > 0.0f)
             {
                 velocity.x = 0.0f;
             }
-            
-            playerRb.velocity = velocity;
+            //playerRb.velocity = velocity;
         }
     }   
 }

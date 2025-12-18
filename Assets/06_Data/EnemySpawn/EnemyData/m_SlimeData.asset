@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
+  m_Name: m_SlimeData
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 6992080625944048982, guid: a781372ff6416754189d88dda6dec536, type: 3}
+  enemyName: Slime
+  poolCount: 0
+  maxHp: 0
+  attack: 0
+  speed: 0
