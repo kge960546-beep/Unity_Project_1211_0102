@@ -26,7 +26,8 @@ public class LineBoundaryLimiter : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, c.x - halfW, c.x + halfW);
         pos.y = Mathf.Clamp(pos.y, bottomY, topY);
 
-        target.position = pos;
+        Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.position = pos;
+        else { target.position = pos; }            
     }
 }
-

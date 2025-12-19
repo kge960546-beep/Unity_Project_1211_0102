@@ -9,6 +9,6 @@ public class EnemyData : ScriptableObject
 
     public int maxHp;
     public int attack;
-    public int speed;
+    public float speed;
 }
     
