@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CircleBoundaryLimiter : MonoBehaviour
@@ -7,7 +8,10 @@ public class CircleBoundaryLimiter : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance == null) return;
+
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
+        if (gcs == null) return;
 
         LimitPosition(gcs.Player.transform);
         LimitPosition(gcs.BossMonster.transform);
@@ -26,7 +30,10 @@ public class CircleBoundaryLimiter : MonoBehaviour
         if (dist > maxRadius)
         {
             Vector2 clampedPos = c + offset.normalized * maxRadius;
-            target.position = clampedPos;
+
+            Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+            if (rb != null) rb.position = clampedPos;
+            else { target.position = clampedPos; }                
         }
     }
 }

@@ -24,7 +24,8 @@ public class SquareBoundaryLimiter : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, c.x - halfW, c.x + halfW);
         pos.y = Mathf.Clamp(pos.y, c.y - halfH, c.y + halfH);
 
-        target.position = pos;
-
+        Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.position = pos;
+        else { target.position = pos; }
     }
 }
