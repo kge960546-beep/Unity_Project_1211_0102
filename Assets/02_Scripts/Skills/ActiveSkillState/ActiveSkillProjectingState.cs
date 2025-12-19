@@ -7,6 +7,7 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
 {
     public override void Tick(ref ActiveSkillStateContext context)
     {
+        // need refactoring
         float prevTimer = context.timer;
         context.timer += Time.fixedDeltaTime;
         float currentTimer = context.timer;
@@ -31,13 +32,14 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
             ProjectileInstanceInitializationData initData = new ProjectileInstanceInitializationData();
             initData.projectorPosition = context.player.transform.position;
             //initData.targetingDirection = ????
+            // TODO
             initData.level = context.level;
             initData.layer = GameManager.Instance.GetService<LayerService>().playerProjectileLayer;
 
             for (int i = 0; i < targetTable.Count; i++)
             {
                 float t = targetTable[i];
-                if (t < prevTimer || currentTimer < t) continue;
+                if (t < prevTimer || currentTimer <= t) continue;
                 initData.sequenceNumber = i;
                 ProjectileSpawnUtility.Spawn(context.tempSharedCommonProjectilePrefab, context.logic, initData);
             }
