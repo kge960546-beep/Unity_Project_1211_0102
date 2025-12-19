@@ -42,7 +42,6 @@ public class BarricadeSquareSpawner : MonoBehaviour
             barricadeRoot = null;
         }
     }
-
     void SpawnSquare()
     {
         if (barricadePrefab == null) return;

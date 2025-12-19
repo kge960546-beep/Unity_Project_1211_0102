@@ -10,13 +10,13 @@ public class BarricadeCircleSpawner : MonoBehaviour
     public Transform spawner;
     private Transform barricadeRoot;
 
-    private event Action onBarricadeCircleSpawnEvent;
+    private event Action<Transform> onBarricadeCircleSpawnEvent;
 
-    public void SubscribeBarricadeCircleSpawnEvent(Action action)
+    public void SubscribeBarricadeCircleSpawnEvent(Action<Transform> action)
     {
         onBarricadeCircleSpawnEvent += action;
     }
-    public void UnsubscribeBarricadeCircleSpawnEvent(Action action)
+    public void UnsubscribeBarricadeCircleSpawnEvent(Action<Transform> action)
     {
         onBarricadeCircleSpawnEvent -= action;
     }
@@ -31,7 +31,7 @@ public class BarricadeCircleSpawner : MonoBehaviour
         }
         
         SpawnCircle();
-        onBarricadeCircleSpawnEvent?.Invoke();
+        onBarricadeCircleSpawnEvent?.Invoke(spawner);
     }
     public void ClearCircleBarricade()
     {
