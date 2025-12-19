@@ -16,5 +16,5 @@ MonoBehaviour:
   enemyName: Zombie
   poolCount: 20
   maxHp: 100
-  attack: 0
-  speed: 0
+  attack: 20
+  speed: 3
