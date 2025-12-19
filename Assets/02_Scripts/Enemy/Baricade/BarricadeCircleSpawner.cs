@@ -61,7 +61,7 @@ public class BarricadeCircleSpawner : MonoBehaviour
                 spawner.position.x + Mathf.Cos(angle) * radius,
                 spawner.position.y + Mathf.Sin(angle) * radius );
 
-            Instantiate(barricadePrefab, pos, Quaternion.identity,barricadeRoot);
+            Instantiate(barricadePrefab, pos, Quaternion.identity, barricadeRoot);
         }
     }
 }
