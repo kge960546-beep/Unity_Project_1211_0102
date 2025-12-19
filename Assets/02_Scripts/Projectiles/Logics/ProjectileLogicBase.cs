@@ -13,12 +13,16 @@ public struct ProjectileInstanceInitializationData
 
 public abstract class ProjectileLogicBase : ScriptableObject
 {
+    // TODO: apply player stat in the calculation
     [field: SerializeField] protected RuntimeAnimatorController AnimationController { get; private set; }
-    // TODO: add more common values
-    [field: SerializeField] public float DefaultSearchRadius { get; private set; } // TODO: apply player stat in the calculation
+    [field: SerializeField] protected float DefaultSpeed { get; private set; }
+    [field: SerializeField] public    float DefaultSearchRadius { get; private set; }
     [field: SerializeField] protected float ColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
-    [field: SerializeField] protected float NuckBackForce { get; private set; }
+    [field: SerializeField] protected float KnockBackForce { get; private set; }
+    // TODO: add more common values
+    // TODO: consider storing implementation-specific data and do not require context data store
+    //         - store data in packed form, like dots system?
 
     public void CallbackOnDrawGizmos(ref ProjectileInstanceContext context)
     {

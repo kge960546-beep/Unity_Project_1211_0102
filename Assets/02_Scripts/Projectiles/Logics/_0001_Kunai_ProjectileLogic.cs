@@ -6,8 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "0001-Kunai-ProjectileLogic", menuName = "Game/Projectile/0001 Kunai Projectile Logic")]
 public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
 {
-    [field: SerializeField] public float DefaultSpeed { set; private get; } // TODO: apply player stat in the calculation
-
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
         GameObject target = GetNearstEnemy(initData.projectorPosition);
