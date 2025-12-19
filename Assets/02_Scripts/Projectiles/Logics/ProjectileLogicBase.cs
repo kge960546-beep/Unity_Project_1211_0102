@@ -5,7 +5,8 @@ using UnityEngine;
 public struct ProjectileInstanceInitializationData
 {
     public Vector2 projectorPosition;
-    public Vector2 targetingDirection;
+    public float facingAzimuth;
+    public float targetingAzimuth;
     public int level;
     public int sequenceNumber;
     public int layer;
