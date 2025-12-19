@@ -18,6 +18,8 @@ public class CircleBoundaryLimiter : MonoBehaviour
     }
     private void LimitPosition(Transform target)
     {
+        if (center == null) return;
+
         Vector2 pos = target.position;
         Vector2 c = center.position;
 

@@ -12,12 +12,12 @@ public class BarricadeLineSpawner : MonoBehaviour
     public Transform spawner;
     private Transform barricadeRoot;
 
-    private event Action onBarricadeLineSpawnEvent;
-    public void SubscribeBarricadeLineSpawnEvent(Action action)
+    private event Action<Transform> onBarricadeLineSpawnEvent;
+    public void SubscribeBarricadeLineSpawnEvent(Action<Transform> action)
     {
         onBarricadeLineSpawnEvent += action;
     }
-    public void UnsubscribeBarricadeLineSpawnEvent(Action action)
+    public void UnsubscribeBarricadeLineSpawnEvent(Action<Transform> action)
     {
         onBarricadeLineSpawnEvent -= action;
     }
@@ -33,7 +33,7 @@ public class BarricadeLineSpawner : MonoBehaviour
         }
 
         SpawnLines();
-        onBarricadeLineSpawnEvent?.Invoke();
+        onBarricadeLineSpawnEvent?.Invoke(spawner);
     }
     public void ClearLineBarricade()
     {
