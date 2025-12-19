@@ -2,22 +2,12 @@ using UnityEngine;
 
 public class ExperienceService : MonoBehaviour, IGameManagementService
 {
-    public ExperienceService instance { get; private set; }
-
     public int level;
     public int exp;
     public int nextLevelExp = 5;
 
-    private void Awake()
-    {
-        if(instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-            
-        instance = this;
-    }
+    public LevelUpUI levelUpUI;
+
     public void GetExp(int amount)
     {
         exp += amount;
@@ -27,6 +17,8 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
             exp -= nextLevelExp;
             level++;
             nextLevelExp = nextLevelExp * 2;
+
+            levelUpUI.ShowLevelUp();
         }
     }
 }
