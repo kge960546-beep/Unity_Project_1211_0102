@@ -56,7 +56,7 @@ public class GoldService : MonoBehaviour, IGameManagementService
                 break;
             case (GoldType.gold_10):
                 amount = 10;
-                break;                
+                break;          
         }
         earnedGold += amount;
         savedGold += amount;        
