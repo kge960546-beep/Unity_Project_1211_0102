@@ -12,12 +12,12 @@ public class BarricadeSquareSpawner : MonoBehaviour
     public Transform spawner;
     private Transform barricadeRoot;
 
-    private event Action onBarricadeSquareSpawnEvent;
-    public void SubscribeBarricadeSquareSpawnEvent(Action action)
+    private event Action<Transform> onBarricadeSquareSpawnEvent;
+    public void SubscribeBarricadeSquareSpawnEvent(Action<Transform> action)
     {
         onBarricadeSquareSpawnEvent += action;
     }
-    public void UnsubscribeBarricadeSquareSpawnEvent(Action action)
+    public void UnsubscribeBarricadeSquareSpawnEvent(Action<Transform> action)
     {
         onBarricadeSquareSpawnEvent -= action;
     }
@@ -32,7 +32,7 @@ public class BarricadeSquareSpawner : MonoBehaviour
         }
 
         SpawnSquare();
-        onBarricadeSquareSpawnEvent?.Invoke();
+        onBarricadeSquareSpawnEvent?.Invoke(spawner);
     }
     public void ClearSquareBarricade()
     {
@@ -45,7 +45,7 @@ public class BarricadeSquareSpawner : MonoBehaviour
     void SpawnSquare()
     {
         if (barricadePrefab == null) return;
-        if (count <= 0) return;
+        if (count < 2) return;
 
         if (barricadeRoot == null)
         {
