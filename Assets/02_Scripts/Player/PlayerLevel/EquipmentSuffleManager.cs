@@ -7,12 +7,22 @@ public class EquipmentSuffleManager : MonoBehaviour
     [SerializeField] private EquipmentDataBase equipmentDB;
     [SerializeField] private EvolutionDataBase evolutionDB;
 
+    [SerializeField] private LevelUpUI levelUpUI;
     [SerializeField] private int optionCount = 3;
 
     private EquipmentService equipmentService;
-    private void Awake()
+
+    private void Start()
     {
-        equipmentService = GameManager.Instance.GetService<EquipmentService>();
+        var exp = GameManager.Instance.GetService<ExperienceService>();
+        exp.OnLevelUp += HandleLevelUp;
+    }
+    private void HandleLevelUp(int level)
+    {
+        Debug.Log($"[LevelUpService] HandleLevelUp {level}");
+
+        var options = GenerateOptions();
+        levelUpUI.Open(options);
     }
     private List<EquipmentOption> GenerateOptions()
     {

@@ -47,16 +47,41 @@ public class EquipmentService : MonoBehaviour,IEquipmentService, IGameManagement
     //진화 조건 검사
     public bool IsCanEvolve(EvolutionData evo)
     {
-
-        if (!ownedEquipments.TryGetValue(evo.baseEquipment, out var runtime))
+        //디버그 로그 & 방어코드
+        if (evo == null)
             return false;
 
-        if (runtime.level < evo.baseEquipment.levels.Length)
+        if (evo.baseEquipment == null)
+        {
+            Debug.LogError($"[EvolutionData ERROR] baseEquipment is NULL : {evo.name}");
             return false;
-        if(ownedEquipments.ContainsKey(evo.result))
-            return false;
+        }
 
-        return true;
+        if (ownedEquipments == null)
+        {
+            Debug.LogError("[EquipmentService] ownedEquipments is NULL");
+            return false;
+        }
+
+        //// 기존 코드
+        //return ownedEquipments.TryGetValue(evo.baseEquipment, out var level)
+        //       && level >= evo.requiredLevel;
+
+        // 수정 코드
+        return ownedEquipments.TryGetValue(evo.baseEquipment, out var runtime)
+               && runtime.level >= evo.requiredLevel;
+
+
+
+        //if (!ownedEquipments.TryGetValue(evo.baseEquipment, out var runtime))
+        //    return false;
+
+        //if (runtime.level < evo.baseEquipment.levels.Length)
+        //    return false;
+        //if(ownedEquipments.ContainsKey(evo.result))
+        //    return false;
+
+        //return true;
     }
     public void ApplyEvolution(EvolutionData evo)
     {

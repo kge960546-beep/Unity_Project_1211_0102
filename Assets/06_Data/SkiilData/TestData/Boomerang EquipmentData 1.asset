@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84796971cdfc4b741a9484c771aa78c0, type: 3}
+  m_Name: Boomerang EquipmentData 1
+  m_EditorClassIdentifier: 
+  id: 3
+  name: boomerang
+  icon: {fileID: 21300000, guid: b3bdf5846f140dd4fb0befbdddeb8402, type: 3}
+  description: throw boomerang
+  skill: {fileID: 11400000, guid: 4d9f4fe2bd74084418abee9075ffff34, type: 2}
+  maxLevel: 6
+  rarity: 0
+  levels:
+  - level: 0
+    description: 
+  - level: 0
+    description: 
+  - level: 0
+    description: 
+  - level: 0
+    description: 
+  - level: 0
+    description: 
+  - level: 0
+    description: 

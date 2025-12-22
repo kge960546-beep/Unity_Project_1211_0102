@@ -16,11 +16,6 @@ public class EquipmentOptionUI : MonoBehaviour
     private EquipmentOption option;
     private EquipmentService equipmentService;
 
-    private void Awake()
-    {
-        equipmentService = GameManager.Instance.GetService<EquipmentService>();
-    }
-
     public void Bind(
         EquipmentOption option, 
         EquipmentService equipmentService, 

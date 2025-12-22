@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b300990dfefbf90449b0551f39d0c6a0, type: 3}
   m_Name: 0003-Skill
   m_EditorClassIdentifier: 
-  <SkillID>k__BackingField: 0
-  <SkillName>k__BackingField: 
-  <SkillThumbnail>k__BackingField: {fileID: 0}
+  <SkillID>k__BackingField: 3
+  <SkillName>k__BackingField: boomerang
+  <SkillThumbnail>k__BackingField: {fileID: 2800000, guid: b3bdf5846f140dd4fb0befbdddeb8402, type: 3}
   skillDescription: 
   <SkillType>k__BackingField: 0
   <CommonSharedBaseProjectileSpawnerPrefab>k__BackingField: {fileID: 0}
   <ProjectileLogic>k__BackingField: {fileID: 0}
-  <LeveledProjectionTimingTables>k__BackingField: []
+  <LeveledProjectionTimingTables>k__BackingField:
+  - <RequiredLevel>k__BackingField: 0
+    <ProjectionTimingTable>k__BackingField: []
   <DefaultCooldown>k__BackingField: 0

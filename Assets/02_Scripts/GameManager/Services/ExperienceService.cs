@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ExperienceService : MonoBehaviour, IGameManagementService
@@ -6,7 +7,7 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
     public int exp;
     public int nextLevelExp = 5;
 
-    public LevelUpUI levelUpUI;
+    public event Action<int> OnLevelUp;
 
     public void GetExp(int amount)
     {
@@ -15,10 +16,14 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
         if(exp >= nextLevelExp)
         {
             exp -= nextLevelExp;
-            level++;
             nextLevelExp = nextLevelExp * 2;
-
-            levelUpUI.ShowLevelUp();
+            LevelUp();
         }
+    }
+    private void LevelUp()
+    {
+        level++;
+        Debug.Log("LEVEL UP INVOKED");
+        OnLevelUp?.Invoke(level);
     }
 }
