@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/01_Scenes/PlayerScene/Lobby.unity
+    path: Assets/01_Scenes/PlayerScene/LobbyScenes/Lobby.unity
     guid: bc5b31105da24c44787d01a0ce3e9053
   - enabled: 1
     path: Assets/01_Scenes/PlayerScene/StageChangeScene.unity
