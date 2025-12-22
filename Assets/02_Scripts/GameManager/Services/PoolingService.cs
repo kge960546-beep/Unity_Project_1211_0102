@@ -54,8 +54,11 @@ public class PoolingService : MonoBehaviour, IGameManagementService
             GameObject.Destroy(obj);
             return;
         }
-        obj.transform.SetParent(pooler.transform);
-        pool.Push(obj);
+        if (!pool.Contains(obj))
+        {
+            pool.Push(obj);
+            obj.transform.SetParent(pooler.transform);
+        }
     }
 
     public void Shrink()
