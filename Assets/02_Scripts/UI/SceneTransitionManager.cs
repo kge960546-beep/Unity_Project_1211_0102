@@ -3,9 +3,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 
-public class IrisShaderTransition : MonoBehaviour
+public class SceneTransitionManager : MonoBehaviour
 {
-    public static IrisShaderTransition Instance;
+    public static SceneTransitionManager Instance;
 
     [Header("설정")]
     public Image targetImage;       // 쉐이더가 적용된 그 이미지
@@ -17,6 +17,8 @@ public class IrisShaderTransition : MonoBehaviour
     public float minScale = 0f;     // 구멍이 아예 없을 때의 크기
 
     private Material materialInstance;
+
+    
 
     private void Awake()
     {
@@ -37,12 +39,12 @@ public class IrisShaderTransition : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        }        
     }
 
     // 외부에서 부르는 함수: IrisSceneLoader.Instance.LoadScene("이동할씬이름");
     public void LoadScene(string sceneName)
-    {
+    {        
         StartCoroutine(TransitionRoutine(sceneName));
     }
 
