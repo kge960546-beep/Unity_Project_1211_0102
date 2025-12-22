@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolingService : MonoBehaviour
+public class PoolingService : MonoBehaviour, IGameManagementService
 {
     private GameObject pooler;
 
