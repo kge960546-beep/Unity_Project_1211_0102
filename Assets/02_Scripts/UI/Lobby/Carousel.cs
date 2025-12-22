@@ -14,7 +14,8 @@ public class Carousel : MonoBehaviour
     
     void Start()
     {
-        scroll = GetComponent<Scrollbar>();
+        scroll = scrollbar.GetComponent<Scrollbar>();
+        Debug.Log($"{name} childCount={transform.childCount}");
     }
     void Update()
     {
