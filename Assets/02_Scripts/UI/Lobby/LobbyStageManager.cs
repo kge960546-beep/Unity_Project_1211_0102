@@ -40,6 +40,6 @@ public class LobbyStageManager : MonoBehaviour
     public void OnClickStart()
     {
         string scene = stages[selectStageIndex].SceneName;
-        SceneManager.LoadScene(scene);
+        SceneTransitionManager.Instance.LoadScene(scene);
     }
 }

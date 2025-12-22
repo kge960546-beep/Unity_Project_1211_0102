@@ -18,7 +18,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     private Material materialInstance;
 
-    [SerializeField] private LobbyStageManager lobbyStageManager;
+    
 
     private void Awake()
     {
@@ -39,14 +39,7 @@ public class SceneTransitionManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-        if(lobbyStageManager == null)
-        {
-#if UNITY_EDITOR
-            Debug.Log("넣어라");
-#endif
-            return;
-        }
+        }        
     }
 
     // 외부에서 부르는 함수: IrisSceneLoader.Instance.LoadScene("이동할씬이름");

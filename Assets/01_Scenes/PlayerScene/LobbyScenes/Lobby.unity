@@ -1256,10 +1256,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1895016251}
-        m_TargetAssemblyTypeName: IrisShaderTransition, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 423726388}
+        m_TargetAssemblyTypeName: LobbyStageManager, Assembly-CSharp
+        m_MethodName: OnClickStart
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2542,17 +2542,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1831447274}
   m_CullTransparentMesh: 1
---- !u!114 &1895016251 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7798246104283701607, guid: 61985d18e906d9e4ea1e7e611a739bfb, type: 3}
-  m_PrefabInstance: {fileID: 570490823859263190}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a87904b3782543645a4763bd12881d13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1903429529
 GameObject:
   m_ObjectHideFlags: 0
