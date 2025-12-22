@@ -44,7 +44,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
         context.timer += Time.fixedDeltaTime;
         if (context.timer >= LifeTime)
         {
-            Destroy(context.obj); // TODO: refine destruction, defer it and make some destruction animation etc. and use pooling
+            GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(context.obj);
+            // TODO: refine destruction, defer it and make some destruction animation etc.
         }
         CallbackAtFixedUpdateInternal(ref context);
     }

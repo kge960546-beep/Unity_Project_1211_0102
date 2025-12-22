@@ -27,7 +27,9 @@ public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
     protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData) { }
     protected override void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider)
     {
-        Destroy(instanceData.obj);
+        GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(instanceData.obj);
+        // duplicated returning occurs
+        // need to logically assure only one trigger occurs for a kunai projectile?
     }
 
     protected override void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider) { }
