@@ -10,7 +10,7 @@ public class FieldMeat : MonoBehaviour
 
     private CircleCollider2D circleCol;
 
-    private PlayerDataSO playerData;
+    [SerializeField] private PlayerHp playerHp;
     private void Awake()
     {
         circleCol = GetComponent<CircleCollider2D>();
@@ -22,6 +22,11 @@ public class FieldMeat : MonoBehaviour
             circleCol = gameObject.AddComponent<CircleCollider2D>();
         }
         circleCol.isTrigger = true;
+
+        if(playerHp == null)
+        {
+            playerHp = FindObjectOfType<PlayerHp>();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,7 +40,7 @@ public class FieldMeat : MonoBehaviour
     void UseMeat()
     {
         //TODO: 플레이어 체력 데이터 가져와서 회복시키기
-        playerData.playerMaxHp = healAmount;
+        playerHp.Heal();
         Debug.Log($"체력이 {healAmount} 만큼 회복했습니다");
     }
 }

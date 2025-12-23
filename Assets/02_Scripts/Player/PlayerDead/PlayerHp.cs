@@ -83,7 +83,9 @@ public class PlayerHp : MonoBehaviour
         int healAmount = Mathf.RoundToInt(maxHp * 0.3f);
         currentHp += healAmount;
 
-        if(currentHp > maxHp)
+        onTakeDamageEvent?.Invoke(currentHp, maxHp);
+
+        if (currentHp > maxHp)
         {
             currentHp = maxHp;
         }
