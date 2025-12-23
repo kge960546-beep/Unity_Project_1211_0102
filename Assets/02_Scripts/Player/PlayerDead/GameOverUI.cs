@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class GameOverUI : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private GameObject gameOverUI;
+
+    [Header("스크립트 연결")]
     [SerializeField] private PlayerHp playerHp;
     [SerializeField] TimeService timeService;
+    [SerializeField] private ResultItemWindow itemWindow;
 
 
     private void Awake()
@@ -18,9 +22,11 @@ public class GameOverUI : MonoBehaviour
             gameOverUI.SetActive(false);
 
         if(timeService == null && GameManager.Instance != null)
-        {
             timeService = GameManager.Instance.GetService<TimeService>();
-        }
+        
+        if(itemWindow == null)
+            itemWindow = gameOverUI.GetComponent<ResultItemWindow>();
+        
     }
 
     //TODO: 부활 기능을 넣을려면 클래스 이름변경과, 새로운 구독 해지 생성
@@ -42,6 +48,13 @@ public class GameOverUI : MonoBehaviour
         if(gameOverUI)
         {
             gameOverUI.SetActive(true);
+
+            if(itemWindow != null && ItemManager.instance != null)
+            {
+                List<ItemData> items = ItemManager.instance.GetResultItems();
+                itemWindow.OpenResult(items);
+            }
+
             timeService.PauseGame();
         }
     }

@@ -9,6 +9,8 @@ public class FieldMeat : MonoBehaviour
     private string playerTag = "Player";
 
     private CircleCollider2D circleCol;
+
+    private PlayerDataSO playerData;
     private void Awake()
     {
         circleCol = GetComponent<CircleCollider2D>();
@@ -33,7 +35,7 @@ public class FieldMeat : MonoBehaviour
     void UseMeat()
     {
         //TODO: 플레이어 체력 데이터 가져와서 회복시키기
-
+        playerData.playerMaxHp = healAmount;
         Debug.Log($"체력이 {healAmount} 만큼 회복했습니다");
     }
 }
