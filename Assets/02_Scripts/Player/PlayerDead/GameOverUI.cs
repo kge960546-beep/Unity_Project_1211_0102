@@ -6,6 +6,7 @@ public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private PlayerHp playerHp;
+    [SerializeField] TimeService timeService;
 
 
     private void Awake()
@@ -15,6 +16,11 @@ public class GameOverUI : MonoBehaviour
 
         if(gameOverUI != null)
             gameOverUI.SetActive(false);
+
+        if(timeService == null && GameManager.Instance != null)
+        {
+            timeService = GameManager.Instance.GetService<TimeService>();
+        }
     }
 
     //TODO: 부활 기능을 넣을려면 클래스 이름변경과, 새로운 구독 해지 생성
@@ -34,6 +40,9 @@ public class GameOverUI : MonoBehaviour
     private void OnPlayerDead()
     {
         if(gameOverUI)
+        {
             gameOverUI.SetActive(true);
+            timeService.PauseGame();
+        }
     }
 }

@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class TimeTextUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timeText;   
+    [SerializeField] private TextMeshProUGUI timeText;
 
     private TimeService timeService;
-    private float survialTime;
+    public float survialTime;
+    
     
     private void Awake()
     {
@@ -41,35 +42,8 @@ public class TimeTextUI : MonoBehaviour
             yield return null;
         }
     }
+    public float GetBestTIme()
+    {
+        return survialTime;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-/*
- void Start()
-    {
-        timeService.ResetTime();
-        survialTime = 0.0f;
-    }
-   
-    void Update()
-    {        
-        int totalSeconds = Mathf.FloorToInt(timeService.accumulatedDeltaTime);
-        TimeUpdateText(totalSeconds);
-    }
-    private void TimeUpdateText(int totalSeconds)
-    {
-        int minute = totalSeconds / 60;
-        int second = totalSeconds % 60;
-        timeText.text = $"{minute:00}:{second:00}";
-    }
- 
- 
- */
