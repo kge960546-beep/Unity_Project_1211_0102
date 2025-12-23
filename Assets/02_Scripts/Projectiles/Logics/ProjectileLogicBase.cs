@@ -4,11 +4,13 @@ using UnityEngine;
 
 public struct ProjectileInstanceInitializationData
 {
-    public Vector2 projectorPosition;
-    public float facingAzimuth;
-    public float targetingAzimuth;
-    public int level;
+    public Vector2 initialProjectorPositionSnapshot;
+    public Vector2 curretnProjectorPosition;
+    public float initialProjectorAzimuthSnapshot;
+    public float curretnProjectorAzimuth;
+    public int sequenceCount;
     public int sequenceNumber;
+    //public int level; // TODO: This may not required. Remove this appropriately.
     public int layer;
 }
 
@@ -17,7 +19,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
     // TODO: apply player stat in the calculation
     [field: SerializeField] protected RuntimeAnimatorController AnimationController { get; private set; }
     [field: SerializeField] protected float DefaultSpeed { get; private set; }
-    [field: SerializeField] public    float DefaultSearchRadius { get; private set; }
+    [field: SerializeField] public    float DefaultSearchDistance { get; private set; }
     [field: SerializeField] protected float ColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float KnockBackForce { get; private set; }
@@ -29,6 +31,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
     {
         Gizmos.DrawWireSphere(context.rb.position, ColliderRadius);
     }
+
+    public bool IsTargetInRange(Vector2 projectorPosition, float projectorAzimuth) => IsTargetInRangeInternal(projectorPosition, projectorAzimuth);
 
     public void CallbackAtOnEnable(ref ProjectileInstanceContext context, ProjectileInstanceInitializationData initData)
     {
@@ -50,15 +54,16 @@ public abstract class ProjectileLogicBase : ScriptableObject
         CallbackAtFixedUpdateInternal(ref context);
     }
 
-    public void CallbackAtOnTriggerEnter2D(ref ProjectileInstanceContext context, Collider2D collider) { CallbackAtOnTriggerEnter2DInternal(ref context, collider); }
-    public void CallbackAtOnTriggerStay2D(ref ProjectileInstanceContext context, Collider2D collider) { CallbackAtOnTriggerStay2DInternal(ref context, collider); }
+    public void CallbackAtOnTriggerEnter2D(ref ProjectileInstanceContext context, Collider2D collider) => CallbackAtOnTriggerEnter2DInternal(ref context, collider);
+    public void CallbackAtOnTriggerStay2D(ref ProjectileInstanceContext context, Collider2D collider) => CallbackAtOnTriggerStay2DInternal(ref context, collider);
+
+
+    protected abstract bool IsTargetInRangeInternal(Vector2 projectorPosition, float projectorAzimuth);
 
     protected abstract void CallbackAtOnEnableInternal(ref ProjectileInstanceContext context, ProjectileInstanceInitializationData initData);
     protected abstract void CallbackAtOnDisableInternal(ref ProjectileInstanceContext context);
     protected abstract void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext context);
 
-    // Common logics such as damage and destruction on collision are not processed here.
-    // only projectile-specific logic goes here.
     protected abstract void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext context, Collider2D collider);
     protected abstract void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext context, Collider2D collider);
 

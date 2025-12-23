@@ -9,12 +9,29 @@ public class ActiveSkillStateControllerBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        context.currentState = ActiveSkillStateUtility.GetStateType<ActiveSkillWaitingState>();
-        context.currentState.Initialize(ref context);
+        // TODO: init context dynamically with skill input
+
+        context.nextState = ActiveSkillStateUtility.GetStateType<ActiveSkillWaitingState>();
+        context.isStateChanged = true;
     }
 
     private void FixedUpdate()
     {
-        context.currentState.Tick(ref context);
+        ActiveSkillStateBase currentState = context.nextState;
+
+        if (context.isStateChanged)
+        {
+            currentState.OnEnterState(ref context);
+            context.isStateChanged = false;
+        }
+
+        currentState.Tick(ref context);
+        context.timer += Time.fixedDeltaTime;
+
+        if (currentState != context.nextState)
+        {
+            context.isStateChanged = true;
+            currentState.OnExitState(ref context);
+        }
     }
 }

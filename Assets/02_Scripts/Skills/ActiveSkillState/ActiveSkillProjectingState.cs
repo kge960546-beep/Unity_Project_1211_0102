@@ -7,44 +7,44 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
 {
     public override void Tick(ref ActiveSkillStateContext context)
     {
-        // need refactoring
-        float prevTimer = context.timer;
-        context.timer += Time.fixedDeltaTime;
+        float prevTimer = context.timer - Time.fixedDeltaTime;
         float currentTimer = context.timer;
 
-        int currentLevel = context.level;
-
-        List<float> targetTable =
-            context.leveledTimingTables
-                .Where(t => t.RequiredLevel <= currentLevel)
-                .Aggregate((tLeft, tRight) => tLeft.RequiredLevel < tRight.RequiredLevel ? tLeft : tRight)
-                .ProjectionTimingTable;
-
+        List<float> targetTable = GetTimingTable(context.leveledTimingTables, context.level);
+        // TODO: order by time at the OnEnable time.
+        //       The lines below this assume that the times are sorted in ascending order.
         int count = targetTable.Count;
-        if (0 == count || targetTable[count - 1] + Time.fixedDeltaTime < currentTimer)
-        {
-            OnExitState(ref context);
-            context.currentState = ActiveSkillStateUtility.GetStateType<ActiveSkillWaitingState>();
-            context.currentState.OnEnterState(ref context);
-        }
-        else
-        {
-            ProjectileInstanceInitializationData initData = new ProjectileInstanceInitializationData();
-            initData.projectorPosition = context.player.transform.position;
-            //initData.targetingDirection = ????
-            // TODO
-            initData.level = context.level;
-            initData.layer = GameManager.Instance.GetService<LayerService>().playerProjectileLayer;
 
-            for (int i = 0; i < targetTable.Count; i++)
-            {
-                float t = targetTable[i];
-                if (t < prevTimer || currentTimer <= t) continue;
-                initData.sequenceNumber = i;
-                ProjectileSpawnUtility.Spawn(context.tempSharedCommonProjectilePrefab, context.logic, initData);
-            }
-            // OnStayState(ref context);
+        Rigidbody2D rb = context.skillUserRB;
+
+        if (0f == currentTimer)
+        {
+            context.cachedInitData = new ProjectileInstanceInitializationData();
+            context.cachedInitData.initialProjectorPositionSnapshot
+                = context.cachedInitData.curretnProjectorPosition
+                = (null == rb) ? Vector2.zero : rb.position;
+            context.cachedInitData.initialProjectorAzimuthSnapshot
+                = context.cachedInitData.curretnProjectorAzimuth
+                = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x);
+            // TODO: change to get latest direction instead of velocity which may be zero.
+            context.cachedInitData.sequenceCount = targetTable.Count;
+            context.cachedInitData.layer = context.layer;
         }
+
+        context.cachedInitData.curretnProjectorPosition = (null == rb) ? Vector2.zero : rb.position;
+        context.cachedInitData.curretnProjectorAzimuth = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x);
+
+        for (int i = 0; i < targetTable.Count; i++)
+        {
+            float time = targetTable[i];
+            if (time <= prevTimer) continue;
+            if (currentTimer < time) break;
+            context.cachedInitData.sequenceNumber = i;
+            ProjectileSpawnUtility.Spawn(context.tempSharedCommonProjectilePrefab, context.logic, context.cachedInitData);
+        }
+
+        if (0 == count || targetTable[count - 1] <= currentTimer)
+            context.nextState = ActiveSkillStateUtility.GetStateType<ActiveSkillWaitingState>();
     }
 
     public override void OnEnterState(ref ActiveSkillStateContext context)
@@ -52,12 +52,15 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
         context.timer = 0;
     }
 
-    public override void OnStayState(ref ActiveSkillStateContext context)
-    {
-        // refactor this structure
-    }
-
     public override void OnExitState(ref ActiveSkillStateContext context)
     {
+    }
+
+    private List<float> GetTimingTable(LeveledProjectionTimingTable[] tables, int currentLevel)
+    {
+        return tables
+            .Where(t => t.RequiredLevel <= currentLevel)
+            .Aggregate((tLeft, tRight) => tLeft.RequiredLevel < tRight.RequiredLevel ? tLeft : tRight)
+            .ProjectionTimingTable;
     }
 }
