@@ -14,6 +14,9 @@ public class EquipmentService : MonoBehaviour,IEquipmentService, IGameManagement
     //상태 조회
     public int GetCurrentLevel(EquipmentData data)
     {
+        if(data == null)
+            return 0;
+
         if (!ownedEquipments.TryGetValue(data, out var runtime))
             return 0;
 
@@ -22,6 +25,16 @@ public class EquipmentService : MonoBehaviour,IEquipmentService, IGameManagement
     //업그레이드
     public bool IsCanUpgrade(EquipmentData data)
     {
+        if(data ==null) 
+            return false;
+#if UNITY_EDITOR
+        if (data.levels == null || data.levels.Length == 0)
+        {
+            Debug.LogError($"[EquipmentData ERROR] levels is NULL or EMPTY : {data.name}");
+            return false;
+        }
+#endif
+
         // 신규 획득
         if (!ownedEquipments.TryGetValue(data, out var runtime))
             return true;
@@ -50,7 +63,7 @@ public class EquipmentService : MonoBehaviour,IEquipmentService, IGameManagement
         //디버그 로그 & 방어코드
         if (evo == null)
             return false;
-
+#if UNITY_EDITOR
         if (evo.baseEquipment == null)
         {
             Debug.LogError($"[EvolutionData ERROR] baseEquipment is NULL : {evo.name}");
@@ -62,6 +75,7 @@ public class EquipmentService : MonoBehaviour,IEquipmentService, IGameManagement
             Debug.LogError("[EquipmentService] ownedEquipments is NULL");
             return false;
         }
+#endif
 
         //// 기존 코드
         //return ownedEquipments.TryGetValue(evo.baseEquipment, out var level)

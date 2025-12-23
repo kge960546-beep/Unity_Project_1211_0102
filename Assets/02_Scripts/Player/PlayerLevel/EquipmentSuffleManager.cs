@@ -12,14 +12,67 @@ public class EquipmentSuffleManager : MonoBehaviour
 
     private EquipmentService equipmentService;
 
+    private Queue<int> levelUpQueue = new();
+    private bool isProcessingLevelUp = false;
+
+
+    private void Awake()
+    {
+#if UNITY_EDITOR
+        if (equipmentDB == null)
+            Debug.LogError("equipmentDB NULL");
+        if (evolutionDB == null)
+            Debug.LogError("evolutionDB NULL");
+        if (levelUpUI == null)
+            Debug.LogError("levelUpUI NULL");
+#endif
+        levelUpUI.OnClosed += OnLevelUpUIClose;
+    }
+
     private void Start()
     {
+        equipmentService = GameManager.Instance.GetComponent<EquipmentService>();
+
+#if UNITY_EDITOR
+        if (equipmentService == null)
+            Debug.LogError("EquipmentService NULL");
+#endif
+
         var exp = GameManager.Instance.GetService<ExperienceService>();
-        exp.OnLevelUp += HandleLevelUp;
+        if (exp != null)
+            exp.OnLevelUp += HandleLevelUp;
     }
     private void HandleLevelUp(int level)
     {
+#if UNITY_EDITOR
+        if (equipmentService == null || levelUpUI == null)
+        {
+            Debug.LogError("[HandleLevelUp] Missing reference");
+            return;
+        }
+
         Debug.Log($"[LevelUpService] HandleLevelUp {level}");
+#endif
+        levelUpQueue.Enqueue(level);
+
+        TryProcessNextLevelUp();
+    }
+    private void TryProcessNextLevelUp()
+    {
+#if UNITY_EDITOR
+        if (isProcessingLevelUp)
+            return;
+
+        if (levelUpQueue.Count == 0)
+            return;
+#endif
+        isProcessingLevelUp = true;
+
+
+        int level = levelUpQueue.Dequeue();
+#if UNITY_EDITOR
+        Debug.Log($"[LevelUp] Processing : {level}");
+#endif
 
         var options = GenerateOptions();
         levelUpUI.Open(options);
@@ -30,13 +83,13 @@ public class EquipmentSuffleManager : MonoBehaviour
 
         List<EvolutionData> evolutions = new();
 
-        //진화 장비 후보 먼저 검사
+        // 1. 진화 장비 후보 수집
         foreach(var evo in evolutionDB.evolutionDataList)
         {
             if(equipmentService.IsCanEvolve(evo))
                 evolutions.Add(evo);
         }
-        //진화가 하나라도 있으면 -> 진화만 보여줌
+        // 2. 진화가 하나라도 있으면 -> 진화만 보여줌
         if(evolutions.Count > 0)
         {
             var pick = evolutions[Random.Range(0, evolutions.Count)];
@@ -44,7 +97,12 @@ public class EquipmentSuffleManager : MonoBehaviour
             return result;
         }
 
-        //기본 업그레이드 후보
+        // 3. 남은 슬롯 수 계산
+        int remain = optionCount - result.Count;
+        if(remain <= 0)
+            return result;
+
+        // 4. 기본 업그레이드 후보 수집
         List<EquipmentData> upgrades = new();
         foreach(var data in equipmentDB.equipmentDataList)
         { 
@@ -52,11 +110,19 @@ public class EquipmentSuffleManager : MonoBehaviour
                 upgrades.Add(data);
         }
 
-
+        // 5. 업그레이드 셔플 후 채우기
         foreach (var data in WeightedShuffle(upgrades, 3))
         {
             result.Add(EquipmentOption.Upgrade(data));
         }
+
+#if UNITY_EDITOR
+        //디버그
+        if (upgrades.Count == 0 && result.Count == 0)
+        {
+            Debug.LogWarning("[LevelUp] No available options");
+        }
+#endif
 
         return result;
     }
@@ -85,7 +151,7 @@ public class EquipmentSuffleManager : MonoBehaviour
 
         int rand = Random.Range(0, totalWeigth);
 
-        foreach(var skill in list)
+        foreach (var skill in list)
         {
             rand -= RarityWeightTable.GetWeight(skill.rarity);
             if (rand < 0)
@@ -93,5 +159,10 @@ public class EquipmentSuffleManager : MonoBehaviour
         }
 
         return list[0];
+    }
+    private void OnLevelUpUIClose()
+    {
+        isProcessingLevelUp = false;
+        TryProcessNextLevelUp();
     }
 }

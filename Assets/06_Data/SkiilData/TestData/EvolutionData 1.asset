@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 549b1872f0852a44a911e078aa27057f, type: 3}
   m_Name: EvolutionData 1
   m_EditorClassIdentifier: 
-  baseEquipment: {fileID: 0}
+  baseEquipment: {fileID: 11400000, guid: 03f8a13baa796cb4bb94693b2fe553f2, type: 2}
   requiredLevel: 0
   result: {fileID: 0}
   description: 
