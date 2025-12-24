@@ -33,7 +33,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
     private bool isDead = false;
 
     private Animator anim;
-    private EnemyData enemyData;
+    public EnemyData enemyData;
     private MonsterController mController;
     private KillCount kill;
     private void Awake()
