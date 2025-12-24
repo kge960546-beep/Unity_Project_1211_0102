@@ -6,13 +6,15 @@ using UnityEngine;
 [Serializable]
 public struct ActiveSkillStateContext
 {
-    public ActiveSkillStateBase currentState;
+    public ActiveSkillStateBase nextState;
+    [HideInInspector] public bool isStateChanged;
     public ProjectileLogicBase logic;
     public LeveledProjectionTimingTable[] leveledTimingTables;
-    public GameObject player;
+    public Rigidbody2D skillUserRB;
     public GameObject tempSharedCommonProjectilePrefab;
-    public float searchRadius;
+    public ProjectileInstanceInitializationData cachedInitData;
     public float period;
     public int level;
+    public int layer;
     [HideInInspector] public float timer;
 }

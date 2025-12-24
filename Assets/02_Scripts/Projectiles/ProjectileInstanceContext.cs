@@ -10,4 +10,5 @@ public struct ProjectileInstanceContext
     public CircleCollider2D cc; // TODO: use generic collider
     public Rigidbody2D rb;
     public float timer;
+    public int hitCount;
 }

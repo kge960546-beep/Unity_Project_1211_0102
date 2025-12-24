@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "0005-KatanaSlash-ProjectileLogic", menuName = "Game/Projectile/0005 Katana slash Projectile Logic")]
+public class _0005_KatanaSlash_ProjectileLogic : ProjectileLogicBase
+{
+    [field: SerializeField] public float DefaultExpansionTime { set; private get; } // TODO: apply player stat in the calculation
+    [field: SerializeField] public float DefaultExpandedDisplacementMagnitude { set; private get; } // TODO: apply player stat in the calculation
+
+    protected override bool IsTargetInRangeInternal(Vector2 projectorPosition, float projectorAzimuth)
+    {
+        return true;
+    }
+
+    protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
+    {
+        instanceData.rb.position = initData.currentProjectorPosition;
+        instanceData.rb.rotation = initData.initialProjectorAzimuthSnapshot;
+    }
+
+    protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData)
+    {
+        float timer = instanceData.timer;
+
+        Rigidbody2D playerRB = GameManager.Instance.GetService<GameContextService>().GetComponent<Rigidbody2D>();
+        // TODO: need to refactor not to use this gcs and instead utilize subscription based implementation
+
+        if (null == instanceData.rb || null == playerRB) return;
+
+        Vector2 playerPosition = playerRB.position;
+
+        Unity.Mathematics.math.sincos(instanceData.rb.rotation * Mathf.Deg2Rad, out float sin, out float cos);
+        Vector2 direction = new Vector2(cos, sin);
+
+        float scale = Mathf.Clamp01(timer / DefaultExpansionTime);
+        instanceData.rb.transform.localScale = new Vector3(scale, scale, scale);
+        instanceData.rb.position = playerPosition + direction * (DefaultExpandedDisplacementMagnitude * scale);
+    }
+
+    protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData)
+    {
+    }
+
+    protected override void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider) { }
+    protected override void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider) { }
+}

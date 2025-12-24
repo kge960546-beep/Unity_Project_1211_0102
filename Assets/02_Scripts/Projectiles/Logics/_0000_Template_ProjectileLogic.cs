@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class _0000_Template_ProjectileLogic : ProjectileLogicBase
 {
+    protected override bool IsTargetInRangeInternal(Vector2 projectorPosition, float projectorAzimuth)
+    {
+        return false;
+    }
+
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData) { }
     protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData) { }
     protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData) { }
