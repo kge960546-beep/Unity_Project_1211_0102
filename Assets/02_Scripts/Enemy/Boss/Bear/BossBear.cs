@@ -26,7 +26,7 @@ public class BossBear : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D boxcol;
-    public BossBaseDataSO bbData;
+    public EnemyData bbData;
 
     [Header("Status")]
     public bool isDead = false;
@@ -41,10 +41,11 @@ public class BossBear : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxcol = GetComponent<BoxCollider2D>();
+        
         if(GameManager.Instance != null)
         {
             GameManager.Instance.GetService<GameContextService>().RegisterBossMonsterObject(gameObject);
-        }        
+        }
     }
     private void Start()
     {
@@ -70,8 +71,15 @@ public class BossBear : MonoBehaviour
             Debug.Log("참조할 데이터가 없습니다");
             return;
         }
+
+        if(player == null)
+        {
+            var playerT = GameObject.FindGameObjectWithTag("Player");
+            if (playerT != null) player = playerT.transform;
+        }
+
         isDead = false;
-        maxHp = bbData.bossHp;
+        maxHp = bbData.maxHp;
         currentHp = maxHp;
     }
     public void TakeDamage(int damage)

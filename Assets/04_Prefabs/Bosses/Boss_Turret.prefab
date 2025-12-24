@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2308045532749242293}
   - component: {fileID: 5514590518395294189}
   - component: {fileID: 8948775839304505266}
+  - component: {fileID: 4338047612791110244}
   m_Layer: 6
   m_Name: Boss_Turret
   m_TagString: Untagged
@@ -207,3 +208,20 @@ MonoBehaviour:
   currentHp: 0
   moveDirection: {x: 0, y: 0}
   moveSpeed: 0
+--- !u!114 &4338047612791110244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196098856121274468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8fcf927b2d87a49a15e27e3a9785c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 2
+  maxHp: 0
+  dropExp: 1
+  itemLayer: 0
+  itemLayers: 0
