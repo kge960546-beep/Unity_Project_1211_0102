@@ -57,5 +57,5 @@ MonoBehaviour:
     tempSharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
     period: 1
     level: 1
-    layer: 8
+    layer: 11
     timer: 0
