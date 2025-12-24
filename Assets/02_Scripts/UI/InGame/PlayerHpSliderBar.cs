@@ -38,13 +38,7 @@ public class PlayerHpSliderBar : MonoBehaviour
     {
         if (playerHp == null) return;
         playerHp.UnsubscribePlayerTakeDamageEvent(UpdatePlayerHp);
-    }
-    private void Update()
-    {
-        if (playerHpSlider == null) return;
-        if (playerMaxHp <= 0) return;
-        float targetSliderValue = (float)playerCurrentHp / playerMaxHp;
-    }
+    }   
     #region playerHpSlider
     public void UpdatePlayerHp(int currentHp, int maxHp)
     {

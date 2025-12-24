@@ -77,7 +77,19 @@ public class PlayerHp : MonoBehaviour
         onTakeDamageEvent?.Invoke(currentHp, maxHp);
 
         if (currentHp <= 0) { Die(); }
-    }    
+    }
+    public void Heal()
+    {       
+        int healAmount = Mathf.RoundToInt(maxHp * 0.3f);
+        currentHp += healAmount;
+
+        onTakeDamageEvent?.Invoke(currentHp, maxHp);
+
+        if (currentHp > maxHp)
+        {
+            currentHp = maxHp;
+        }
+    }
     private void Die()
     {
         if(isDead) return;

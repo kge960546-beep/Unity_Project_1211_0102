@@ -34,6 +34,7 @@ public class MonsterController : MonoBehaviour
     private EnemyHp enemyHp;
     
     bool isDead = false;
+    bool ishit;
     float lastDamageTime = -999f; // 플레이어와 몬스터의 콜라이더가 닿아있는 동안 데미지를 주는 마지막 시간 초기화 
 
     private void Awake()
@@ -93,10 +94,12 @@ public class MonsterController : MonoBehaviour
         }
     }
     public void TakeDamage(int currentHp, int maxHp)
-    {        
+    {
+        ishit = true;
         Debug.Log($"Enemy HP: {currentHp}/{maxHp}");
         if(sr != null)
             StartCoroutine(HitEffect());
+        ishit = false;
     }
     public void StopMove(EnemyType type, Vector3 pos, int dropExp)
     {        
@@ -108,9 +111,12 @@ public class MonsterController : MonoBehaviour
     }
     IEnumerator HitEffect()
     {
-        sr.enabled = false;
-        yield return new WaitForSeconds(0.05f);
-        sr.enabled = true;
+        if (ishit)
+        {
+            sr.enabled = false;
+            yield return new WaitForSeconds(0.05f);
+            sr.enabled = true;
+        }       
     }
     void ChasePlayer()
     {

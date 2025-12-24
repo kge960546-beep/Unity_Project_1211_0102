@@ -56,7 +56,5 @@ public class TestPlayerController : MonoBehaviour
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         indicator.transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
         indicator.transform.position = transform.position + (dir * 1.0f);
-        
-    }
-   
+    }   
 }
