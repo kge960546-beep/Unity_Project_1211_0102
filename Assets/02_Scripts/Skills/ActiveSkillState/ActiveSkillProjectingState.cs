@@ -21,18 +21,18 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
         {
             context.cachedInitData = new ProjectileInstanceInitializationData();
             context.cachedInitData.initialProjectorPositionSnapshot
-                = context.cachedInitData.curretnProjectorPosition
+                = context.cachedInitData.currentProjectorPosition
                 = (null == rb) ? Vector2.zero : rb.position;
             context.cachedInitData.initialProjectorAzimuthSnapshot
-                = context.cachedInitData.curretnProjectorAzimuth
+                = context.cachedInitData.currentProjectorAzimuth
                 = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
             // TODO: change to get latest direction instead of velocity which may be zero.
             context.cachedInitData.sequenceCount = targetTable.Count;
             context.cachedInitData.layer = context.layer;
         }
 
-        context.cachedInitData.curretnProjectorPosition = (null == rb) ? Vector2.zero : rb.position;
-        context.cachedInitData.curretnProjectorAzimuth = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+        context.cachedInitData.currentProjectorPosition = (null == rb) ? Vector2.zero : rb.position;
+        context.cachedInitData.currentProjectorAzimuth = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
 
         for (int i = 0; i < targetTable.Count; i++)
         {

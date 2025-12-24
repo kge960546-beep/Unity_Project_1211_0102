@@ -7,7 +7,7 @@ using UnityEngine;
 public struct ActiveSkillStateContext
 {
     public ActiveSkillStateBase nextState;
-    public bool isStateChanged;
+    [HideInInspector] public bool isStateChanged;
     public ProjectileLogicBase logic;
     public LeveledProjectionTimingTable[] leveledTimingTables;
     public Rigidbody2D skillUserRB;

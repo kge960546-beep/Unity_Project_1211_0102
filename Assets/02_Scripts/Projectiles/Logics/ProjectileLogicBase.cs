@@ -5,9 +5,9 @@ using UnityEngine;
 public struct ProjectileInstanceInitializationData
 {
     public Vector2 initialProjectorPositionSnapshot;
-    public Vector2 curretnProjectorPosition;
+    public Vector2 currentProjectorPosition;
     public float initialProjectorAzimuthSnapshot;
-    public float curretnProjectorAzimuth;
+    public float currentProjectorAzimuth;
     public int sequenceCount;
     public int sequenceNumber;
     //public int level; // TODO: This may not required. Remove this appropriately.
@@ -40,6 +40,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
         context.anim.runtimeAnimatorController = AnimationController;
         context.cc.radius = ColliderRadius;
         context.timer = 0f;
+        context.hitCount = 0;
         CallbackAtOnEnableInternal(ref context, initData);
     }
 

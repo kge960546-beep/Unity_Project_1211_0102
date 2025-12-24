@@ -41,11 +41,11 @@ public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
-        instanceData.rb.position = initData.curretnProjectorPosition;
+        instanceData.rb.position = initData.currentProjectorPosition;
 
-        Vector2 targetPosition = GetTargetPosition(initData.curretnProjectorPosition) ?? initData.curretnProjectorPosition;
+        Vector2 targetPosition = GetTargetPosition(initData.currentProjectorPosition) ?? initData.currentProjectorPosition;
 
-        Vector2 dir = (targetPosition - initData.curretnProjectorPosition).normalized;
+        Vector2 dir = (targetPosition - initData.currentProjectorPosition).normalized;
         instanceData.rb.velocity = dir * DefaultSpeed;
         instanceData.rb.rotation = Mathf.Atan2(-dir.x, dir.y) * Mathf.Rad2Deg;
     }
