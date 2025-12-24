@@ -10,8 +10,8 @@ public class PlayerHp : MonoBehaviour
     private event Action onPlayerDeadEvent;
     /// <summary>
     /// onTakeDamage: 데미지를 입었을 때 발생하는 이벤트
-    /// int: 입은 데미지 양 (finalDamage)
-    /// int: 남은 체력 (currentHp)
+    /// int: 현재 체력 (currentHp)
+    /// int: 최대 체력 (maxHp)
     /// </summary>
     private event Action<int, int> onTakeDamageEvent;
 
@@ -52,8 +52,6 @@ public class PlayerHp : MonoBehaviour
     #endregion
     private void Awake()
     {
-        currentHp = maxHp;
-
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -74,11 +72,23 @@ public class PlayerHp : MonoBehaviour
         int finalDamage = Mathf.Max(damage, 0);
 
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
-        // TODO: 히트 이펙트 있으면 여기서 재생        
+        // TODO: 히트 이펙트 있으면 여기서 재생
 
         onTakeDamageEvent?.Invoke(currentHp, maxHp);
 
         if (currentHp <= 0) { Die(); }
+    }
+    public void Heal()
+    {       
+        int healAmount = Mathf.RoundToInt(maxHp * 0.3f);
+        currentHp += healAmount;
+
+        onTakeDamageEvent?.Invoke(currentHp, maxHp);
+
+        if (currentHp > maxHp)
+        {
+            currentHp = maxHp;
+        }
     }
     private void Die()
     {
@@ -88,19 +98,23 @@ public class PlayerHp : MonoBehaviour
         if(anim != null)
             anim.SetTrigger("isDead");
 
-        onPlayerDeadEvent?.Invoke();
+        StartCoroutine(PlayerDie());
         rb.bodyType = RigidbodyType2D.Static;
-        //TODO: 플레이어 컨트롤러에서 PlayerHp를 불러와 구독 해지 추가        
+        //TODO: 플레이어 컨트롤러에서 PlayerHp를 불러와 구독 해지 추가
     }
-   
-    private void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator PlayerDie()
     {
-        if(isDead) return;
-        
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        yield return new WaitForSecondsRealtime(1.0f);
+        onPlayerDeadEvent?.Invoke();
+    }   
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (isDead) return;
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             // TODO: 데미지 적 정보로 불러오기 임시로 20 데미지
             TakeDamage(20);
         }
-    }    
+    }
 }

@@ -37,6 +37,7 @@ public class TurretController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        enemyHp = GetComponent<EnemyHp>();
 
         // 고정된 포탑의 위치 
         rb.bodyType = RigidbodyType2D.Kinematic;

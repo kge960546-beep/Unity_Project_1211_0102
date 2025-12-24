@@ -20,10 +20,12 @@ public class EnemySpawner : MonoBehaviour
     }
     private void Start()
     {
+#if UNITY_EDITOR
         if (enemyPool == null)
             Debug.LogError("EnemySpawner : EnemyPool 미할당");
         if (spawnPos == null)
             Debug.LogError("EnemySpawner : SpawnPos 미할당");
+#endif
     }
     public Coroutine RunPattern(SpawnPatternSO pattern)
     {
