@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -6,10 +7,12 @@ using UnityEngine;
 public class TurretController : MonoBehaviour
 {
     [Header("Turret Data (SO)")]
-    public EnemyData monsterData;
+    public EnemyData enemyData;
 
     [Header("Target (Range Check Only)")]
     public Transform player; // 사거리 체크용
+    private string playerTag = "Player";
+
 
     [Header("Fire Settings")]
     public GameObject bulletPrefab; // 탄환 프리팹
@@ -22,6 +25,8 @@ public class TurretController : MonoBehaviour
 
     Rigidbody2D rb;
     Animator animator;
+    SpriteRenderer sr;
+    private EnemyHp enemyHp;
 
     int currentHp;
     bool isDead = false;
@@ -31,12 +36,14 @@ public class TurretController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
+        enemyHp = GetComponent<EnemyHp>();
 
         // 고정된 포탑의 위치 
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.velocity = Vector2.zero;
 
-        currentHp = monsterData.maxHp;
+        currentHp = enemyData.maxHp;
 
         // 방향 정규화 
         fireDirection = fireDirection.normalized;
@@ -60,25 +67,56 @@ public class TurretController : MonoBehaviour
             }
         }
     }
-
-    public void TakeDamage(int damage)
+    private void OnEnable()
     {
-        if (isDead) return;
+        var go = GameObject.FindGameObjectWithTag(playerTag);
+        player = go != null ? go.transform : null;
 
-        currentHp -= damage;
-
-        if (currentHp <= 0)
+        if (enemyHp != null && enemyData != null)
         {
-            Die();
+            enemyHp.Init(enemyData, EnemyType.Normal, exp: 1);
+
+            if (enemyHp != null)
+            {
+                enemyHp.SubscribeEnemyTakeDamageEvent(TakeDamage);
+            }
+
+            if (enemyHp != null)
+            {
+                enemyHp.UnsubscribeEnemyDeadEvent(Die);
+                enemyHp.SubscribeEnemyDeadEvent(Die);
+            }
+        }
+    }
+    private void OnDisable()
+    {
+        if (enemyHp != null)
+        {
+            enemyHp.UnsubscribeEnemyDeadEvent(Die);
         }
     }
 
-    void Die()
+    public void TakeDamage(int currentHp, int maxHp)
     {
-        isDead = true;
-        animator.SetTrigger("isDead");
+        Debug.Log($"Enemy HP: {currentHp}/{maxHp}");
+        if (sr != null)
+            StartCoroutine(HitEffect());
+    }
+
+    void Die(EnemyType type, Vector3 pos, int dropExp)
+    {
+       if(rb != null)
+        {
+            rb.velocity = Vector2.zero;
+        }
 
         GetComponent<Collider2D>().enabled = false;
+    }
+    IEnumerator HitEffect()
+    {
+        sr.enabled = false;
+        yield return new WaitForSeconds(0.05f);
+        sr.enabled = true;
     }
 
     private void OnDrawGizmosSelected()

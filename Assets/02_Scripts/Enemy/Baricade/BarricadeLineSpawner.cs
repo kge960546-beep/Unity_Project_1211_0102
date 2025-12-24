@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BarricadeLineSpawner : MonoBehaviour
@@ -9,14 +10,51 @@ public class BarricadeLineSpawner : MonoBehaviour
     public float cellSize = 1.0f;
     public float heightOffset = 5f;
     public Transform spawner;
+    private Transform barricadeRoot;
 
-    private void Start()
+    private event Action<Transform> onBarricadeLineSpawnEvent;
+    public void SubscribeBarricadeLineSpawnEvent(Action<Transform> action)
     {
-        SpawnLines();
+        onBarricadeLineSpawnEvent += action;
+    }
+    public void UnsubscribeBarricadeLineSpawnEvent(Action<Transform> action)
+    {
+        onBarricadeLineSpawnEvent -= action;
     }
 
+    public void CallLineBarricadeSpawn()
+    {
+        if (spawner == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning("스폰할 위치를 선정해주세요");
+#endif
+            return;
+        }
+
+        SpawnLines();
+        onBarricadeLineSpawnEvent?.Invoke(spawner);
+    }
+    public void ClearLineBarricade()
+    {
+        if (barricadeRoot != null)
+        {
+            Destroy(barricadeRoot.gameObject);
+            barricadeRoot = null;
+        }
+    }
     void SpawnLines()
     {
+        if (barricadePrefab == null) return;
+        if (cellCount <= 0) return;
+
+        if (barricadeRoot == null)
+        {
+            var root = new GameObject("Barricades");
+            root.transform.position = spawner.position;
+            barricadeRoot = root.transform;
+        }
+
         float totalWidth = (cellCount - 1) * cellSize;
 
         for (int i = 0; i < cellCount; i++)
@@ -27,14 +65,14 @@ public class BarricadeLineSpawner : MonoBehaviour
             Instantiate(
                 barricadePrefab,
                 new Vector2(xPos, spawner.position.y + heightOffset),
-                Quaternion.identity
+                Quaternion.identity,barricadeRoot
             );
 
             // 아래쪽 라인
             Instantiate(
                 barricadePrefab,
                 new Vector2(xPos, spawner.position.y - heightOffset),
-                Quaternion.identity
+                Quaternion.identity,barricadeRoot
             );
         }
     }

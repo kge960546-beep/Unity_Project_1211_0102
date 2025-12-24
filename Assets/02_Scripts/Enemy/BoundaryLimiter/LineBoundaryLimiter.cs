@@ -10,6 +10,7 @@ public class LineBoundaryLimiter : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance == null) return;
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
 
         LimitPosition(gcs.Player.transform);
@@ -18,6 +19,8 @@ public class LineBoundaryLimiter : MonoBehaviour
 
     private void LimitPosition(Transform target)
     {
+        if (center == null) return;
+
         Vector2 pos = target.position;
         Vector2 c = center.position;
 
@@ -26,7 +29,8 @@ public class LineBoundaryLimiter : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, c.x - halfW, c.x + halfW);
         pos.y = Mathf.Clamp(pos.y, bottomY, topY);
 
-        target.position = pos;
+        Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.position = pos;
+        else { target.position = pos; }            
     }
 }
-

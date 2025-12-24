@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52931915637cc24aaf26f647d54a5b2, type: 3}
+  m_Name: BossTimerData
+  m_EditorClassIdentifier: 
+  stageMaxTime: 60
+  stageFirstBossTime: 30
+  firstBossPrefab: {fileID: 6303473374084532117, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
+  lastBossPrefab: {fileID: 3501854086956680643, guid: 06a4d475b2cbb8943843380d9b9070da, type: 3}

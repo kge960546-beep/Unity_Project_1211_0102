@@ -30,12 +30,11 @@ public class MonsterController : MonoBehaviour
 
     Rigidbody2D rb;
     Animator animator;
-    SpriteRenderer sr;
-    private EnemyHp enemyHp;  
+    SpriteRenderer sr;    
+    private EnemyHp enemyHp;
     
-
-    int currentHp;
     bool isDead = false;
+    bool ishit;
     float lastDamageTime = -999f; // 플레이어와 몬스터의 콜라이더가 닿아있는 동안 데미지를 주는 마지막 시간 초기화 
 
     private void Awake()
@@ -74,25 +73,52 @@ public class MonsterController : MonoBehaviour
         if(enemyHp != null && enemyData != null)
         {
             enemyHp.Init(enemyData, EnemyType.Normal, exp: 1);
+            moveSpeed = enemyData.speed;
         }
         if(enemyHp != null)
         {
             enemyHp.SubscribeEnemyTakeDamageEvent(TakeDamage);            
         }
+
+        if(enemyHp != null)
+        {
+            enemyHp.UnsubscribeEnemyDeadEvent(StopMove);
+            enemyHp.SubscribeEnemyDeadEvent(StopMove);
+        }
+    }
+    private void OnDisable()
+    {
+        if(enemyHp != null)
+        {
+            enemyHp.UnsubscribeEnemyDeadEvent(StopMove);
+        }
     }
     public void TakeDamage(int currentHp, int maxHp)
     {
+        ishit = true;
         Debug.Log($"Enemy HP: {currentHp}/{maxHp}");
         if(sr != null)
-            StartCoroutine(HitEffect());        
-    }    
+            StartCoroutine(HitEffect());
+        ishit = false;
+    }
+    public void StopMove(EnemyType type, Vector3 pos, int dropExp)
+    {        
+        moveSpeed = 0;
+        if(rb != null)
+        {
+            rb.velocity = Vector2.zero;
+        }
+    }
     IEnumerator HitEffect()
     {
-        sr.enabled = false;
-        yield return new WaitForSeconds(0.05f);
-        sr.enabled = true;
+        if (ishit)
+        {
+            sr.enabled = false;
+            yield return new WaitForSeconds(0.05f);
+            sr.enabled = true;
+        }       
     }
-    void ChasePlayer() 
+    void ChasePlayer()
     {
        // 플레이어를 향해 추격하기 위한 방향 벡터 
        Vector2 toPlayer = ((Vector2)player.position - (Vector2)transform.position).normalized;
@@ -121,7 +147,7 @@ public class MonsterController : MonoBehaviour
             if (hit. gameObject == gameObject)
                 continue;
 
-            if (hit.CompareTag("Enemy")) 
+            if (hit.CompareTag("Enemy"))
             {
                 //  오브젝트와 가까울수록 밀려나기 위한 거리를 역수 방식으로 계산
                 Vector2 diff = (Vector2)(transform.position - hit.transform.position);
@@ -137,7 +163,7 @@ public class MonsterController : MonoBehaviour
         return separation * separationForce;
     }
 
-    void Flip(float targetX) 
+    void Flip(float targetX)
     {
         if (targetX > transform.position.x)
             transform.localScale = new Vector3(1, 1, 1);
@@ -150,12 +176,12 @@ public class MonsterController : MonoBehaviour
     {
         if (isDead) return;
 
-        if (other.CompareTag("Player")) 
+        if (other.CompareTag("Player"))
         {
-            if (Time.time - lastDamageTime >= damageInterval) 
+            if (Time.time - lastDamageTime >= damageInterval)
             {
                 PlayerHp hp = other.GetComponent<PlayerHp>();
-                if (hp != null) 
+                if (hp != null)
                 {
                     hp.TakeDamage(enemyData.attack);
                     lastDamageTime = Time.time;
@@ -164,12 +190,12 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    // 몬스터가 플레이어를 추격할때 서로 겹치지 않고 밀어내야 하는 로직이 필요함 
-    public void SetMoveSpeed(float speed) 
+    // 몬스터가 플레이어를 추격할때 서로 겹치지 않고 밀어내야 하는 로직이 필요함
+    public void SetMoveSpeed(float speed)
     {
-       moveSpeed = speed;   
+       moveSpeed = speed;
     }
-    public float GetMoveSpeed() 
+    public float GetMoveSpeed()
     {
         return moveSpeed;
     }

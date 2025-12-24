@@ -8,6 +8,7 @@ public class SquareBoundaryLimiter : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (GameManager.Instance == null) return;
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
         LimitPostion(gcs.Player.transform);
         LimitPostion(gcs.BossMonster.transform);
@@ -15,6 +16,8 @@ public class SquareBoundaryLimiter : MonoBehaviour
 
     private void LimitPostion(Transform target) 
     {
+        if (center == null) return;
+
         Vector2 pos = target.position;
         Vector2 c = center.position;
 
@@ -24,9 +27,8 @@ public class SquareBoundaryLimiter : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, c.x - halfW, c.x + halfW);
         pos.y = Mathf.Clamp(pos.y, c.y - halfH, c.y + halfH);
 
-        target.position = pos;
-
+        Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.position = pos;
+        else { target.position = pos; }
     }
 }
-
-

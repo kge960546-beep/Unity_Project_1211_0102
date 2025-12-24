@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1364587485254797600}
   - component: {fileID: 2198302126427555671}
   - component: {fileID: 5702804809288159649}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: RandomItemBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,6 @@ MonoBehaviour:
   player: {fileID: 1010370825851419075, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}
   destroyDistance: 30
   playerTag: Player
-  weaponTag: WeaponTag
 --- !u!61 &5702804809288159649
 BoxCollider2D:
   m_ObjectHideFlags: 0

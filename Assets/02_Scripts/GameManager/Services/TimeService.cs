@@ -14,6 +14,8 @@ public class TimeService : MonoBehaviour, IGameManagementService
     private bool isResetRequestedForAccumulatedFixedDeltaTime = false;
     private bool isResetRequestedForAccumulatedDeltaTime = false;
 
+    private bool isTimePaused = false;
+
     private void FixedUpdate()
     {
         if (isResetRequestedForAccumulatedFixedDeltaTime)
@@ -31,14 +33,38 @@ public class TimeService : MonoBehaviour, IGameManagementService
         {
             accumulatedDeltaTime = 0;
             isResetRequestedForAccumulatedDeltaTime = false;
+            isTimePaused = false;
             return;
         }
-        accumulatedDeltaTime += Time.deltaTime;
+
+        if(!isTimePaused)
+        {
+            accumulatedDeltaTime += Time.deltaTime;
+        }        
     }
 
     public void ResetTime()
     {
         isResetRequestedForAccumulatedFixedDeltaTime = true;
         isResetRequestedForAccumulatedDeltaTime = true;
+    }
+
+    public void PauseStageTimer()
+    {
+        isTimePaused = true;
+    }
+    public void ResumeStageTimer()
+    {
+        isTimePaused = false;
+    }
+
+    public void PauseGame()
+    {        
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame()
+    {        
+        Time.timeScale = 1;
     }
 }

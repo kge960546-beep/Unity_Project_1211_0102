@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e607a72ed9491a74896e9b3bbfdbfeec, type: 3}
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
-  playerMaxHp: 100
+  playerMaxHp: 500
   playerAttack: 0

@@ -18403,7 +18403,7 @@ Transform:
   m_GameObject: {fileID: 455870480}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0.1, z: -10.092474}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27521,7 +27521,7 @@ Transform:
   m_GameObject: {fileID: 1620848830}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.535517, y: -0.8567604, z: -0.19219336}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41160,7 +41160,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.64, y: 0.64}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -41210,22 +41210,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5951874422269203008}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &2536314933378449147
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7570615021992731552}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.51, y: 7.71, z: 0.15248786}
-  m_LocalScale: {x: 6, y: 6, z: 6}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8391242208746397156}
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2565037264583129051
 Rigidbody2D:
@@ -41457,10 +41441,15 @@ MonoBehaviour:
   rushRange: 30
   rushCooldown: 8
   rushDelay: 5
+  lastRushTime: -99
+  spawnTime: 0
   anim: {fileID: 0}
   rb: {fileID: 0}
   boxcol: {fileID: 0}
+  bbData: {fileID: 0}
   isDead: 0
+  maxHp: 0
+  currentHp: 0
   moveDirection: {x: 0, y: 0}
 --- !u!1 &7126933667806643738
 GameObject:
@@ -41524,22 +41513,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 60, y: 60}
   m_EdgeRadius: 0
---- !u!1 &7570615021992731552
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2536314933378449147}
-  m_Layer: 0
-  m_Name: Boss_Bear
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!212 &7730273060737434743
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -41601,11 +41574,11 @@ Transform:
   m_GameObject: {fileID: 6056965661513348236}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.51, y: 7.71, z: 0.15248786}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2536314933378449147}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &9061491560893042258
 Animator:
@@ -41634,7 +41607,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 121164387}
   - {fileID: 363994216}
-  - {fileID: 2536314933378449147}
+  - {fileID: 8391242208746397156}
   - {fileID: 455870481}
   - {fileID: 5951874422269203008}
   - {fileID: 1620848832}

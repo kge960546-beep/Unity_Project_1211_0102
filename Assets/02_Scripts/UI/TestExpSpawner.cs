@@ -13,8 +13,7 @@ public class TestExpSpawner : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            es.GetExp(10);
-            Debug.Log(es.exp);
+            es.GetExp(10);     
         }
     }
 }
