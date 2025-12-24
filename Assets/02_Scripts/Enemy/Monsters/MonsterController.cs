@@ -172,23 +172,23 @@ public class MonsterController : MonoBehaviour
     }
 
     // TODO:플레이어와 닿았을때 플레이어의 체력을 감소 시키는 임시 로직
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (isDead) return;
-
-        if (other.CompareTag("Player"))
-        {
-            if (Time.time - lastDamageTime >= damageInterval)
-            {
-                PlayerHp hp = other.GetComponent<PlayerHp>();
-                if (hp != null)
-                {
-                    hp.TakeDamage(enemyData.attack);
-                    lastDamageTime = Time.time;
-                }
-            }
-        }
-    }
+    //private void OnTriggerStay2D(Collider2D other)
+    //{
+    //    if (isDead) return;
+    //
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        if (Time.time - lastDamageTime >= damageInterval)
+    //        {
+    //            PlayerHp hp = other.GetComponent<PlayerHp>();
+    //            if (hp != null)
+    //            {
+    //                hp.TakeDamage(enemyData.attack);
+    //                lastDamageTime = Time.time;
+    //            }
+    //        }
+    //    }
+    //}
 
     // 몬스터가 플레이어를 추격할때 서로 겹치지 않고 밀어내야 하는 로직이 필요함
     public void SetMoveSpeed(float speed)

@@ -26,8 +26,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
 
     //임시 레이어 지정
     [Header("Layer")]
-    [SerializeField] int itemLayer;
-    [SerializeField] int itemLayers;
+    [SerializeField] int playerLayer;   
 
     private int currentHp;
     private bool isDead = false;
@@ -36,15 +35,19 @@ public class EnemyHp : MonoBehaviour, IDamageable
     public EnemyData enemyData;
     private MonsterController mController;
     private KillCount kill;
+    private PlayerHp playerHp;
     private void Awake()
-    {
+    {        
         anim = GetComponent<Animator>();
         mController = GetComponent<MonsterController>();
 
         kill = FindAnyObjectByType<KillCount>();
+        
+        if(playerHp == null)
+            playerHp = FindAnyObjectByType<PlayerHp>();
 
-        itemLayer = LayerMask.NameToLayer("Item");
-        itemLayers = LayerMask.NameToLayer("PlayerProjectile");
+        playerLayer = LayerMask.NameToLayer("Player");
+        
     }
     private void Start()
     {
@@ -156,17 +159,24 @@ public class EnemyHp : MonoBehaviour, IDamageable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("콜리이더가 잘 작동 합니다");
-        if (isDead) return;
-
-        //TODO: 레이어 정의하면 수정
-
         int layer = collision.gameObject.layer;
-        if (layer == itemLayer || layer == itemLayers)
+        if (layer == playerLayer)
         {
-            //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
-            Debug.Log("데미지가 들어갔냐?");
-            TakeDamage(300);
+            playerHp.TakeDamage(enemyData.attack);
         }
-    }   
+
+        //주체 변경
+        //Debug.Log("콜리이더가 잘 작동 합니다");
+        //if (isDead) return;
+        //
+        ////TODO: 레이어 정의하면 수정
+        //
+        //int layer = collision.gameObject.layer;
+        //if (layer == itemLayer || layer == itemLayers)
+        //{
+        //    //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
+        //    Debug.Log("데미지가 들어갔냐?");
+        //    TakeDamage(300);
+        //}
+    }
 }
