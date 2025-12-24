@@ -31,7 +31,8 @@ public class EnemyPool : MonoBehaviour
 
         foreach(var data in enemyDataList)
         {
-            if(data == null || data.enemyPrefab == null)
+#if UNITY_EDITOR
+            if (data == null || data.enemyPrefab == null)
             {
                 Debug.LogError("EnemyData 또는 Prefab이 비어있음");
                 continue;
@@ -42,6 +43,7 @@ public class EnemyPool : MonoBehaviour
                 Debug.LogError($"중복 EnemyData : {data.name}");
                 continue;
             }
+#endif
 
             // Queue 생성
             Queue<GameObject> queue = new Queue<GameObject>();
@@ -58,19 +60,21 @@ public class EnemyPool : MonoBehaviour
     }
     public GameObject GetQueue(EnemyData data)
     {
-        if(data == null)
+#if UNITY_EDITOR
+        if (data == null)
         {
             Debug.LogError("EnemyData가 null");
             return null;
         }
 
-        if(!pools.TryGetValue(data, out Queue<GameObject> queue))
+        if (!pools.TryGetValue(data, out Queue<GameObject> queue))
         {
             Debug.LogError($"EnemyPool에 {data.name} 풀 없음");
             return null;
         }
+#endif
 
-        if(queue.Count > 0)
+        if (queue.Count > 0)
         {
             return queue.Dequeue();
         }

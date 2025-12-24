@@ -13,9 +13,10 @@ public class SpawnPatternController : MonoBehaviour
     private void Awake()
     {     
         ts = GameManager.Instance.GetService<TimeService>();
-
+#if UNITY_EDITOR
         if (ts == null)
             Debug.LogError("TimeService not found");
+#endif
     }
     void Start()
     {

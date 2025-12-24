@@ -9,7 +9,6 @@ public class ExpUI : MonoBehaviour
 
     ExperienceService es;
 
-
     private void Awake()
     {
         es = GameManager.Instance.GetService<ExperienceService>();        
