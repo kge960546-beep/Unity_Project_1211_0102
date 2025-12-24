@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9681c096d3a7c42bcd9a2b0a400374, type: 3}
+  m_Name: 0005-KatanaSlash-ProjectileLogic
+  m_EditorClassIdentifier: 
+  <AnimationController>k__BackingField: {fileID: 9100000, guid: 2ea0c61944b744242bd70199f4150287, type: 2}
+  <DefaultSpeed>k__BackingField: 4
+  <DefaultSearchDistance>k__BackingField: 0
+  <ColliderRadius>k__BackingField: 3
+  <LifeTime>k__BackingField: 2
+  <KnockBackForce>k__BackingField: 0
+  <DefaultExpansionTime>k__BackingField: 0.5
+  <DefaultExpandedDisplacementMagnitude>k__BackingField: 1.5

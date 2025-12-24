@@ -25,9 +25,7 @@ public static class ActiveSkillStateUtility
 
 public abstract class ActiveSkillStateBase
 {
-    public void Initialize(ref ActiveSkillStateContext context) { OnEnterState(ref context); }
-    public abstract void Tick(ref ActiveSkillStateContext context);
     public abstract void OnEnterState(ref ActiveSkillStateContext context);
-    public abstract void OnStayState(ref ActiveSkillStateContext context);
+    public abstract void Tick(ref ActiveSkillStateContext context);
     public abstract void OnExitState(ref ActiveSkillStateContext context);
 }

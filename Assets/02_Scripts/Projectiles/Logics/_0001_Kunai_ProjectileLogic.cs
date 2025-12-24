@@ -1,55 +1,63 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "0001-Kunai-ProjectileLogic", menuName = "Game/Projectile/0001 Kunai Projectile Logic")]
 public class _0001_Kunai_ProjectileLogic : ProjectileLogicBase
 {
+    protected override bool IsTargetInRangeInternal(Vector2 projectorPosition, float projectorAzimuth)
+    {
+        return null != GetTargetPosition(projectorPosition);
+    }
+
+    private Vector2? GetTargetPosition(Vector2 projectorPosition)
+    {
+        LayerService ls = GameManager.Instance.GetService<LayerService>();
+        int enemyLayer = ls.enemyLayer;
+        int bossLayer = ls.bossLayer;
+        int destructibleItemLayer = ls.destructibleItemLayer;
+        LayerMask mask = (1 << enemyLayer) | (1 << bossLayer) | (1 << destructibleItemLayer);
+
+        float minimumDistance = float.MaxValue;
+        Vector2? targetPosition = null;
+
+        Collider2D[] candidates = Physics2D.OverlapCircleAll(projectorPosition, DefaultSearchDistance, mask);
+        // TODO: may use NonAlloc to minimize GC
+
+        foreach (Collider2D candidate in candidates)
+        {
+            float distance = Vector2.Distance(projectorPosition, candidate.transform.position);
+            if (distance < minimumDistance)
+            {
+                minimumDistance = distance;
+                targetPosition = candidate.transform.position;
+            }
+        }
+
+        return targetPosition;
+    }
+
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
-        GameObject target = GetNearstEnemy(initData.projectorPosition);
-        instanceData.rb.position = initData.projectorPosition;
-        if (null != target)
-        {
-            Vector2 dir = ((Vector2)target.transform.position - initData.projectorPosition).normalized;
-            instanceData.rb.velocity = dir * DefaultSpeed;
-            instanceData.rb.rotation = Mathf.Atan2(-dir.x, dir.y) * Mathf.Rad2Deg;
-        }
-        else
-        {
-            instanceData.rb.velocity = Vector2.zero;
-            instanceData.rb.rotation = 0f;
-        }
+        instanceData.rb.position = initData.currentProjectorPosition;
+
+        Vector2 targetPosition = GetTargetPosition(initData.currentProjectorPosition) ?? initData.currentProjectorPosition;
+
+        Vector2 dir = (targetPosition - initData.currentProjectorPosition).normalized;
+        instanceData.rb.velocity = dir * DefaultSpeed;
+        instanceData.rb.rotation = Mathf.Atan2(-dir.x, dir.y) * Mathf.Rad2Deg;
     }
 
     protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData) { }
     protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData) { }
     protected override void CallbackAtOnTriggerEnter2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider)
     {
-        Destroy(instanceData.obj);
+        GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(instanceData.obj);
+        // duplicated returning occurs
+        // do we need to logically assure only one trigger occurs for a kunai projectile?
     }
 
     protected override void CallbackAtOnTriggerStay2DInternal(ref ProjectileInstanceContext instanceData, Collider2D collider) { }
-
-    private GameObject GetNearstEnemy(Vector2 position)
-    {
-        LayerService ls = GameManager.Instance.GetService<LayerService>();
-        int enemyLayer = ls.enemyLayer;
-        int bossLayer = ls.bossLayer;
-        LayerMask mask = (1 << enemyLayer) | (1 << bossLayer);
-        Collider2D[] candidates = Physics2D.OverlapCircleAll(position, DefaultSearchRadius, mask);
-        float minimumDistance = float.MaxValue;
-        GameObject target = null;
-        foreach (var candidate in candidates)
-        {
-            float distance = Vector2.Distance(position, candidate.transform.position);
-            if (distance < minimumDistance)
-            {
-                minimumDistance = distance;
-                target = candidate.gameObject;
-            }
-        }
-        return target;
-    }
 }

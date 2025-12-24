@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826c5815d943b224589b6de3196d0d27, type: 3}
+  m_Name: 1014-LandMine-ProjectileLogic
+  m_EditorClassIdentifier: 
+  <AnimationController>k__BackingField: {fileID: 9100000, guid: b7103301264006b41b786ef756944932, type: 2}
+  <DefaultSpeed>k__BackingField: 0
+  <DefaultSearchDistance>k__BackingField: 0
+  <ColliderRadius>k__BackingField: 3
+  <LifeTime>k__BackingField: 5
+  <KnockBackForce>k__BackingField: 0
+  <RadialDistanceUIPrefab>k__BackingField: {fileID: 0}
+  <DefaultExplosionDamageRadius>k__BackingField: {fileID: 0}
+  <ExplosionEffectPrefab>k__BackingField: {fileID: 0}
+  <DefaultSummonDistance>k__BackingField: 8
+  <DefaultFuseDelayFrame>k__BackingField: 60

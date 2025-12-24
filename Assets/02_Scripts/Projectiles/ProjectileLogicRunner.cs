@@ -20,7 +20,8 @@ public class ProjectileLogicRunner : MonoBehaviour
                 sr = gameObject.GetComponent<SpriteRenderer>(),
                 cc = gameObject.GetComponent<CircleCollider2D>(),
                 rb = gameObject.GetComponent<Rigidbody2D>(),
-                timer = 0f
+                timer = 0f,
+                hitCount = 0,
             };
     }
 

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 0001-Kunai-ProjectileLogic
   m_EditorClassIdentifier: 
   <AnimationController>k__BackingField: {fileID: 9100000, guid: 732c7e82f62ca374d8cfd1ecd9b68db6, type: 2}
+  <DefaultSpeed>k__BackingField: 5
+  <DefaultSearchDistance>k__BackingField: 8
   <ColliderRadius>k__BackingField: 1
   <LifeTime>k__BackingField: 5
-  <NuckBackForce>k__BackingField: 0
-  <DefaultSpeed>k__BackingField: 5
-  <DefaultSearchRadius>k__BackingField: 30
+  <KnockBackForce>k__BackingField: 0
