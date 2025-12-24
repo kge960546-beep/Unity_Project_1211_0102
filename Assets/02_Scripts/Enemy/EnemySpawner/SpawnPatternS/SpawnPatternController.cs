@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class SpawnPatternController : MonoBehaviour
@@ -7,7 +8,6 @@ public class SpawnPatternController : MonoBehaviour
     [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private EnemySpawner enemySpawner;
 
-    private Coroutine stageRoutine;
     TimeService ts;
 
     private void Awake()
@@ -20,33 +20,21 @@ public class SpawnPatternController : MonoBehaviour
     }
     void Start()
     {
-        stageRoutine = StartCoroutine(RunStage());
+        RunStage();
     }
-    IEnumerator RunStage()
+    private void RunStage()
     {
         foreach(var pattern in stagePattern.patterns)
         {
-            if (pattern.isAllowParallel)
-            {
-                enemySpawner.RunPattern(pattern);
-            }
-            else
-            {
-                yield return enemySpawner.RunPattern(pattern);
-            }
+            enemySpawner.AddPattern(pattern);
         }
     }
-    void OnStageComplete()
+    private void OnStaggComplete()
     {
-        //보상, 스테이지 클리어 UI
+        //보상, UI 등
     }
     public void StopStage()
     {
-        if (stageRoutine != null)
-        { 
-            StopCoroutine(stageRoutine);
-        }
-
         enemySpawner.StopAllPatterns();
     }
 }

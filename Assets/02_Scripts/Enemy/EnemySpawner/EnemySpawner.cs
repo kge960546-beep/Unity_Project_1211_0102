@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    private List<ActivePattern> activePatterns = new();
+
     [SerializeField] private EnemyPool enemyPool;
     [SerializeField] private Transform spawnPos;
-    [SerializeField] private Rigidbody2D playerRb;
   
-    private List<Coroutine> runningPatterns = new();
-
     TimeService ts;
-    TimeService TS => ts ??= GameManager.Instance?.GetService<TimeService>();
+    TimeService TS
+    {
+        get
+        {
+            if(ts == null && GameManager.Instance != null)
+            {
+                ts = GameManager.Instance.GetService<TimeService>();
+            }
+            return ts;
+        }
+    }
 
     void Awake()
     {
@@ -27,64 +36,128 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("EnemySpawner : SpawnPos 미할당");
 #endif
     }
-    public Coroutine RunPattern(SpawnPatternSO pattern)
+    private void FixedUpdate()
     {
-        var co = StartCoroutine(RunPatternRoutine(pattern));
-        runningPatterns.Add(co);
-        return co;
-    }
-    //패턴 실행
-    IEnumerator RunPatternRoutine(SpawnPatternSO pattern)
-    {
-        float startTime = TS.accumulatedFixedDeltaTime;
+        float time = TS.accumulatedFixedDeltaTime;
 
-        while (TS.accumulatedFixedDeltaTime < pattern.endTime)
+        for(int i = activePatterns.Count - 1; i>= 0; i--)
         {
-            if (TS.accumulatedFixedDeltaTime < pattern.startTime)
+            var ap = activePatterns[i];
+            var pattern = ap.pattern;
+
+            //패턴 종료
+            if(time >= pattern.endTime)
             {
-                yield return null;
+                activePatterns.RemoveAt(i);
                 continue;
             }
-            float patternTime = TS.accumulatedFixedDeltaTime - startTime;
 
-            SpawnContext context = new SpawnContext
-            {
-                playerPosition = spawnPos.transform.position,
-                playerVelocity = playerRb != null ? playerRb.velocity : Vector3.zero,
-                spawnCount = pattern.spawnCount,
-                radius = pattern.radius,
-                patternTime = patternTime
-            };
+            // 아직 시작시간이 아니면
+            if(time < pattern.startTime)
+                continue;
 
-            Vector3[] positions = pattern.shape.GetSpawnPositions(context);
+            //다음 tick 전이면 스킵
+            if (time < ap.nectSpawnTime)
+                continue;
 
-            Spawn(pattern, positions , context);
-
-            yield return new WaitForSeconds(pattern.tick);
+            RunSingleTick(pattern);
+            ap.nectSpawnTime = time + pattern.tick;
         }
+
     }
-    //적 스폰 
-    void Spawn(SpawnPatternSO pattern, Vector3[] positions, SpawnContext context)
+    public void AddPattern(SpawnPatternSO pattern)
     {
-        foreach(var pos in positions)
+        activePatterns.Add(new ActivePattern
+        {
+            pattern = pattern,
+            nectSpawnTime = pattern.startTime
+        });
+
+    }
+    public void RunSingleTick(SpawnPatternSO pattern)
+    {
+        SpawnContext context = new()
+        { 
+            playerPosition = spawnPos.position,
+            spawnCount = pattern.spawnCount,
+            radius = pattern.radius,
+            patternTime = TS.accumulatedFixedDeltaTime
+        };
+
+        Vector3[] position = pattern.shape.GetSpawnPositions(context);
+
+        foreach(var pos in position)
         {
             GameObject enemy = enemyPool.GetQueue(pattern.enemyData);
-            if(enemy == null) continue;
+            if(enemy == null)
+                continue;
 
             enemy.transform.position = pos;
             enemy.SetActive(true);
         }
     }
-    //모든 생성 패턴 정지
     public void StopAllPatterns()
     {
-        foreach(var co in runningPatterns)
-        {
-            if(co != null)
-                StopCoroutine(co);
-        }
-        runningPatterns.Clear();
+        activePatterns.Clear();
     }
+    //public Coroutine RunPattern(SpawnPatternSO pattern)
+    //{
+    //    var co = StartCoroutine(RunPatternRoutine(pattern));
+    //    runningPatterns.Add(co);
+    //    return co;
+    //}
+    ////패턴 실행
+    //IEnumerator RunPatternRoutine(SpawnPatternSO pattern)
+    //{
+    //    float startTime = TS.accumulatedFixedDeltaTime;
+
+    //    while (TS.accumulatedFixedDeltaTime < pattern.endTime)
+    //    {
+    //        if (TS.accumulatedFixedDeltaTime < pattern.startTime)
+    //        {
+    //            yield return null;
+    //            continue;
+    //        }
+    //        float patternTime = TS.accumulatedFixedDeltaTime - startTime;
+
+    //        SpawnContext context = new SpawnContext
+    //        {
+    //            playerPosition = spawnPos.transform.position,
+    //            playerVelocity = playerRb != null ? playerRb.velocity : Vector3.zero,
+    //            spawnCount = pattern.spawnCount,
+    //            radius = pattern.radius,
+    //            patternTime = patternTime
+    //        };
+
+    //        Vector3[] positions = pattern.shape.GetSpawnPositions(context);
+
+    //        Spawn(pattern, positions , context);
+
+    //        yield return new WaitForSeconds(pattern.tick);
+    //    }
+    //}
+    ////적 스폰 
+    //void Spawn(SpawnPatternSO pattern, Vector3[] positions, SpawnContext context)
+    //{
+    //    foreach(var pos in positions)
+    //    {
+    //        GameObject enemy = enemyPool.GetQueue(pattern.enemyData);
+    //        if(enemy == null) continue;
+
+    //        enemy.transform.position = pos;
+    //        enemy.SetActive(true);
+    //    }
+    //}
+    ////모든 생성 패턴 정지
+    //public void StopAllPatterns()
+    //{
+    //    foreach(var co in runningPatterns)
+    //    {
+    //        if(co != null)
+    //            StopCoroutine(co);
+    //    }
+    //    runningPatterns.Clear();
+    //}
     #region Test
     //void Awake()
     //{
