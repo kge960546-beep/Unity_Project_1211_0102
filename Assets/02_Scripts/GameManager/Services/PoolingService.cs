@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PoolingService : MonoBehaviour, IGameManagementService
 {
@@ -18,18 +19,21 @@ public class PoolingService : MonoBehaviour, IGameManagementService
 
     private void OnEnable()
     {
-        pooler = new GameObject("Pooler");
-        pooler.SetActive(false);
-
-        trackingMap = new Dictionary<GameObject, GameObject>();
-        poolMap = new Dictionary<GameObject, Stack<GameObject>>();
+        SceneManager.sceneLoaded += ClearPool;
     }
 
     private void OnDisable()
     {
         GameObject.Destroy(pooler);
     }
+    public void ClearPool(Scene scene, LoadSceneMode load)
+    {
+        pooler = new GameObject("Pooler");
+        pooler.SetActive(false);
 
+        trackingMap = new Dictionary<GameObject, GameObject>();
+        poolMap = new Dictionary<GameObject, Stack<GameObject>>();
+    }
     public GameObject GetOrCreateInactivatedGameObject(GameObject prefab)
     {
         Stack<GameObject> pool = GetOrCreatePool(prefab);

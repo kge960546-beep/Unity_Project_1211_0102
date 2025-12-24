@@ -31,19 +31,23 @@ public class EnemyPool : MonoBehaviour
 
         foreach(var data in enemyDataList)
         {
-#if UNITY_EDITOR
+
             if (data == null || data.enemyPrefab == null)
             {
+#if UNITY_EDITOR
                 Debug.LogError("EnemyData 또는 Prefab이 비어있음");
+#endif
                 continue;
             }   
             
             if(pools.ContainsKey(data))
             {
+#if UNITY_EDITOR
                 Debug.LogError($"중복 EnemyData : {data.name}");
+#endif
                 continue;
             }
-#endif
+
 
             // Queue 생성
             Queue<GameObject> queue = new Queue<GameObject>();
@@ -60,19 +64,23 @@ public class EnemyPool : MonoBehaviour
     }
     public GameObject GetQueue(EnemyData data)
     {
-#if UNITY_EDITOR
+
         if (data == null)
         {
+#if UNITY_EDITOR
             Debug.LogError("EnemyData가 null");
+#endif
             return null;
         }
 
         if (!pools.TryGetValue(data, out Queue<GameObject> queue))
         {
+#if UNITY_EDITOR
             Debug.LogError($"EnemyPool에 {data.name} 풀 없음");
+#endif
             return null;
         }
-#endif
+
 
         if (queue.Count > 0)
         {

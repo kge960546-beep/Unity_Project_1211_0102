@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +16,10 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     [Header("데이터 소스(무기/스킬 컨트롤러)")]
     [SerializeField] private ActiveSkillStateControllerBehaviour coolTimeController;
 
-    private TimeService timeService;    
+    private TimeService timeService;
 
+
+    
     private void Awake()
     {
         if(GameManager.Instance != null)
@@ -26,8 +29,8 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     }
     void Start()
     {
-        if(coolTimeController == null)
-            coolTimeController = FindAnyObjectByType<ActiveSkillStateControllerBehaviour>();
+        if (coolTimeController == null)
+            coolTimeController = FindObjectsOfType<ActiveSkillStateControllerBehaviour>().Where(obj => obj.isDefaultSkill).First(); ;
 
         if (coolTimeSlider == null)
             coolTimeSlider = GetComponent<Slider>();        
@@ -46,15 +49,10 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            StartCoolTime();
-        }
-
         if (!isCoolTime) return;
         if (maxCoolTime <= 0) return;
 
-        currentCoolTime += Time.deltaTime;//timeService.accumulatedDeltaTime;
+        currentCoolTime += Time.deltaTime;
 
         if(currentCoolTime >= maxCoolTime)
         {
@@ -76,7 +74,27 @@ public class PlayerCoolTimeSlider : MonoBehaviour
         {
             maxCoolTime = coolTimeController.Context.period;
         }
-        Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
+        //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
+        Debug.Log($"현재 period : {coolTimeController.Context.period}");
+
+        currentCoolTime = 0.0f;
+        isCoolTime = true;
+        UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);
+    }
+    public void AttackStart()
+    {
+        isCoolTime = false;
+        currentCoolTime = 0;
+        UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);
+    }
+    public void AttackFinished()
+    {
+        if (coolTimeController != null)
+        {
+            maxCoolTime = coolTimeController.Context.period;
+        }
+        //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
+        Debug.Log($"현재 period : {coolTimeController.Context.period}");
 
         currentCoolTime = 0.0f;
         isCoolTime = true;

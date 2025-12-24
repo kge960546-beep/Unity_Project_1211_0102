@@ -91,7 +91,9 @@ public class EnemyHp : MonoBehaviour, IDamageable
         isDead = false;
         StopAllCoroutines();
 
-        if(EnemyDead.instance != null)
+        gameObject.layer = GameManager.Instance.GetService<LayerService>().enemyLayer;
+
+        if (EnemyDead.instance != null)
         {
             EnemyDead.instance.RegisterEnemy(this);
         }
@@ -141,8 +143,9 @@ public class EnemyHp : MonoBehaviour, IDamageable
         if (anim != null)
             anim.SetTrigger("isDead");        
 
-        onEnemyDeadEvent?.Invoke(enemyType, transform.position, dropExp);        
-        
+        onEnemyDeadEvent?.Invoke(enemyType, transform.position, dropExp);
+
+        gameObject.layer = GameManager.Instance.GetService<LayerService>().defaultLayer;
         StartCoroutine(DeadTime());
         kill.AddKillCount(1);
     }
@@ -163,7 +166,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
         {
             //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
             Debug.Log("데미지가 들어갔냐?");
-            TakeDamage(20);
+            TakeDamage(300);
         }
     }   
 }
