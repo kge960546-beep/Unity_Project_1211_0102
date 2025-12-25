@@ -10,13 +10,17 @@ public class SquareBoundaryLimiter : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
-        LimitPostion(gcs.Player.transform);
-        LimitPostion(gcs.BossMonster.transform);
+
+        if (gcs.Player != null)
+            LimitPostion(gcs.Player.transform);
+
+        if(gcs.BossMonster != null)
+            LimitPostion(gcs.BossMonster.transform);
     }
 
     private void LimitPostion(Transform target) 
     {
-        if (center == null) return;
+        if (center == null || target == null) return;
 
         Vector2 pos = target.position;
         Vector2 c = center.position;

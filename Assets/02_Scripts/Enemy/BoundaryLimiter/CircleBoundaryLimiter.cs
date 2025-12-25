@@ -13,12 +13,14 @@ public class CircleBoundaryLimiter : MonoBehaviour
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
         if (gcs == null) return;
 
-        LimitPosition(gcs.Player.transform);
-        LimitPosition(gcs.BossMonster.transform);
+        if(gcs.Player != null)
+            LimitPosition(gcs.Player.transform);
+        if(gcs.BossMonster != null)
+            LimitPosition(gcs.BossMonster.transform);
     }
     private void LimitPosition(Transform target)
     {
-        if (center == null) return;
+        if (center == null || target == null) return;
 
         Vector2 pos = target.position;
         Vector2 c = center.position;
