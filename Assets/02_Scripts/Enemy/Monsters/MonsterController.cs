@@ -176,17 +176,15 @@ public class MonsterController : MonoBehaviour
     {
         if (isDead) return;
 
-        if (other.CompareTag("Player"))
+        LayerService ls = GameManager.Instance.GetService<LayerService>();
+        DamageManagementService dms = GameManager.Instance.GetService<DamageManagementService>();
+
+        if (other.gameObject.layer == ls.playerLayer
+            && Time.time - lastDamageTime >= damageInterval
+            && other.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            if (Time.time - lastDamageTime >= damageInterval)
-            {
-                PlayerHp hp = other.GetComponent<PlayerHp>();
-                if (hp != null)
-                {
-                    hp.TakeDamage(enemyData.attack);
-                    lastDamageTime = Time.time;
-                }
-            }
+            dms.QueueDamage(enemyData.attack, gameObject, damageable, false);
+            lastDamageTime = Time.time;
         }
     }
 
