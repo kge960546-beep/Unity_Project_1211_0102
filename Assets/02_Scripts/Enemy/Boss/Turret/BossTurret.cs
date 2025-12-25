@@ -50,8 +50,8 @@ public class BossTurret : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDead) return;
-        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
-        //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
+        rb.velocity = moveDirection * moveSpeed;
+        //rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);       
     }
     private void OnEnable()
     {
@@ -95,6 +95,7 @@ public class BossTurret : MonoBehaviour
         moveDirection = Vector2.zero;
         moveSpeed = 0f;
 
+        if (rb != null) rb.velocity = Vector2.zero;
     }
     protected virtual void OnDrawGizmosSelected()
     {
