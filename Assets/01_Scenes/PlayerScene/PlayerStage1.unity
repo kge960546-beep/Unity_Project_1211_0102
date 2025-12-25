@@ -34407,9 +34407,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7dd55095cd9b54f9a1ab4b211ab85b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStateData: {fileID: 11400000, guid: 8464c53cd77df3b48a99004c7753edfb, type: 2}
-  isFirstBoss: 0
-  isLastBoss: 0
+  circleLimiter: {fileID: 0}
+  lineLimiter: {fileID: 0}
+  squareLimiter: {fileID: 0}
+  circleSpawner: {fileID: 0}
+  lineSpawner: {fileID: 0}
+  squareSpawner: {fileID: 0}
+  barricadeSpawnDelay: 1.5
+  currentPhaseIndex: 0
+  isBossPhase: 0
+  bossPhases: []
 --- !u!4 &1864742595
 Transform:
   m_ObjectHideFlags: 0
