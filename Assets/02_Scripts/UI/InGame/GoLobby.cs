@@ -15,6 +15,6 @@ public class GoLobby : MonoBehaviour
     public void GoHomeLoad()
     {
         timeService.ResumeGame();        
-        SceneTransitionManager.Instance.LoadScene("Lobby");
+        SceneManager.LoadScene("Lobby");
     }
 }

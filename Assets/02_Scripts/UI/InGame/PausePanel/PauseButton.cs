@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class PauseButton : MonoBehaviour
@@ -13,8 +10,8 @@ public class PauseButton : MonoBehaviour
         if(pausePanel == null)
             pausePanel = GetComponent<GameObject>();
 
-        if(GameManager.Instance == null)
-            timeService = FindAnyObjectByType<TimeService>();
+        if(GameManager.Instance != null)
+            timeService = GameManager.Instance.GetService<TimeService>();
     }
     public void ActivePausePanel()
     {
