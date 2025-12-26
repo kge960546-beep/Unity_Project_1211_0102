@@ -23,6 +23,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
     [field: SerializeField] protected float ColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float KnockBackForce { get; private set; }
+
+    [field: SerializeField] protected bool IsInflictingDamageOnTriggerStay { set; private get; }
     [field: SerializeField] protected float CriticalRate { set; private get; }
     [field: SerializeField] protected int OrdinaryDamage { set; private get; }
     [field: SerializeField] protected int CriticalDamage { set; private get; }
@@ -48,6 +50,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
 
         if (context.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb))
         {
+            pcdb.IsInflictingDamageOnTriggerStay = IsInflictingDamageOnTriggerStay;
             pcdb.CriticalRate = CriticalRate;
             pcdb.OrdinaryDamage = OrdinaryDamage;
             pcdb.CriticalDamage = CriticalDamage;
