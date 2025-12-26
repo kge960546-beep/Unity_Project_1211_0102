@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(10)]
+[RequireComponent(typeof(ProjectileCollisionDamageBehaviour))]
 public class ProjectileLogicRunner : MonoBehaviour
 {
     public ProjectileLogicBase Logic { set; private get; }

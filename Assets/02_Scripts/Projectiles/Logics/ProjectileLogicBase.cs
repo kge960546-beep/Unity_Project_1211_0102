@@ -23,6 +23,10 @@ public abstract class ProjectileLogicBase : ScriptableObject
     [field: SerializeField] protected float ColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float KnockBackForce { get; private set; }
+    [field: SerializeField] protected float CriticalRate { set; private get; }
+    [field: SerializeField] protected int OrdinaryDamage { set; private get; }
+    [field: SerializeField] protected int CriticalDamage { set; private get; }
+
     // TODO: add more common values
     // TODO: consider storing implementation-specific data and do not require context data store
     //         - store data in packed form, like dots system?
@@ -41,6 +45,14 @@ public abstract class ProjectileLogicBase : ScriptableObject
         context.cc.radius = ColliderRadius;
         context.timer = 0f;
         context.hitCount = 0;
+
+        if (context.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb))
+        {
+            pcdb.CriticalRate = CriticalRate;
+            pcdb.OrdinaryDamage = OrdinaryDamage;
+            pcdb.CriticalDamage = CriticalDamage;
+        }
+
         CallbackAtOnEnableInternal(ref context, initData);
     }
 
