@@ -7,7 +7,7 @@ public interface ISpawnShape
 public struct SpawnContext
 {
     public Vector3 playerPosition;
-    public Vector3 playerVelocity;
+    public Vector3 playerMoveDir;
     public float patternTime;
     public int spawnCount;
     public float radius;

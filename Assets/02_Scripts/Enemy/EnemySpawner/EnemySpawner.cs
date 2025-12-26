@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
             SpawnContext context = new SpawnContext
             {
                 playerPosition = spawnPos.transform.position,
-                playerVelocity = playerRb != null ? playerRb.velocity : Vector3.zero,
+                playerMoveDir = playerRb != null ? playerRb.velocity : Vector3.zero,
                 spawnCount = pattern.spawnCount,
                 radius = pattern.radius,
                 patternTime = patternTime
