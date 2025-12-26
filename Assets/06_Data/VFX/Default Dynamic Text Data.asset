@@ -14,25 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   colours:
-  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0.65, b: 0, a: 1}
   sizes:
-  - 10
+  - 0.8
   font: {fileID: 11400000, guid: 4363968829adf0a4e971be7d091fd1a2, type: 2}
   bold: 1
   italic: 0
   underline: 0
   strikethrough: 0
-  lifetime: 3
+  lifetime: 0.6
   numberOfColourAlternations: 0
-  numberOfSizeAlternations: 2
+  numberOfSizeAlternations: 0
   colourAlternationDuration: 0
   sizeAlternationDuration: 0.3
   enterDuration: 0.3
   exitDuration: 0.3
   maxDrift: 0
   maxHeight: 0
-  popModifier: 0
+  popModifier: 0.25
   colourAlternationMode: 0
   sizeAlternationMode: 1
-  enterType: 02000000
+  enterType: 0300000001000000
   exitType: 1
