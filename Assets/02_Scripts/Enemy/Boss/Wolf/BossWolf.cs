@@ -35,8 +35,7 @@ public class BossWolf : MonoBehaviour
 
     public Vector2 moveDirection;
     protected float moveSpeed;
-
-   
+    
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -61,7 +60,8 @@ public class BossWolf : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDead) return;
-        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        rb.velocity = moveDirection * moveSpeed;
+        //rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
         //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
     }
     private void OnEnable()
@@ -101,6 +101,8 @@ public class BossWolf : MonoBehaviour
     {
         moveDirection = direction.normalized;
         moveSpeed = speed;
+
+        if (rb != null) rb.velocity = Vector2.zero;
     }
     public void StopMove()
     {

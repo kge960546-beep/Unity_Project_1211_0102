@@ -22,7 +22,7 @@ public class BarricadeLineSpawner : MonoBehaviour
         onBarricadeLineSpawnEvent -= action;
     }
 
-    public void CallLineBarricadeSpawn()
+    public void CallLineBarricadeSpawn(bool enableBoundary = true, bool spawnBarricade = true)
     {
         if (spawner == null)
         {
@@ -31,9 +31,11 @@ public class BarricadeLineSpawner : MonoBehaviour
 #endif
             return;
         }
+        if (enableBoundary)
+            onBarricadeLineSpawnEvent?.Invoke(spawner);
 
-        SpawnLines();
-        onBarricadeLineSpawnEvent?.Invoke(spawner);
+        if (spawnBarricade)
+            SpawnLines();
     }
     public void ClearLineBarricade()
     {

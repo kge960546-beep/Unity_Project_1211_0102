@@ -36,11 +36,19 @@ public class EquipmentSuffleManager : MonoBehaviour
 #if UNITY_EDITOR
         if (equipmentService == null)
             Debug.LogError("EquipmentService NULL");
-#endif
-
+#endif       
+    }
+    private void OnEnable()
+    {
         var exp = GameManager.Instance.GetService<ExperienceService>();
         if (exp != null)
             exp.OnLevelUp += HandleLevelUp;
+    }
+    private void OnDisable()
+    {
+        var exp = GameManager.Instance.GetService<ExperienceService>();
+        if (exp != null)
+            exp.OnLevelUp -= HandleLevelUp;
     }
     private void HandleLevelUp(int level)
     {
@@ -59,13 +67,13 @@ public class EquipmentSuffleManager : MonoBehaviour
     }
     private void TryProcessNextLevelUp()
     {
-#if UNITY_EDITOR
+
         if (isProcessingLevelUp)
             return;
 
         if (levelUpQueue.Count == 0)
             return;
-#endif
+
         isProcessingLevelUp = true;
 
 

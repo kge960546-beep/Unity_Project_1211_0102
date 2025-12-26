@@ -26,8 +26,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
 
     //임시 레이어 지정
     [Header("Layer")]
-    [SerializeField] int itemLayer;
-    [SerializeField] int itemLayers;
+    [SerializeField] int playerLayer;   
 
     private int currentHp;
     private bool isDead = false;
@@ -36,15 +35,19 @@ public class EnemyHp : MonoBehaviour, IDamageable
     public EnemyData enemyData;
     private MonsterController mController;
     private KillCount kill;
+    private PlayerHp playerHp;
     private void Awake()
-    {
+    {        
         anim = GetComponent<Animator>();
         mController = GetComponent<MonsterController>();
 
         kill = FindAnyObjectByType<KillCount>();
+        
+        if(playerHp == null)
+            playerHp = FindAnyObjectByType<PlayerHp>();
 
-        itemLayer = LayerMask.NameToLayer("Item");
-        itemLayers = LayerMask.NameToLayer("PlayerProjectile");
+        playerLayer = LayerMask.NameToLayer("Player");
+        
     }
     private void Start()
     {

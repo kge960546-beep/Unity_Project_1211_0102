@@ -20,7 +20,7 @@ public class BarricadeCircleSpawner : MonoBehaviour
     {
         onBarricadeCircleSpawnEvent -= action;
     }
-    public void CallCircleBarricadeSpawn()
+    public void CallCircleBarricadeSpawn(bool enableBoundary = true, bool spawnBarricade = true)
     {
         if (spawner == null)
         {
@@ -29,9 +29,11 @@ public class BarricadeCircleSpawner : MonoBehaviour
 #endif
             return;
         }
-        
-        SpawnCircle();
-        onBarricadeCircleSpawnEvent?.Invoke(spawner);
+        if(enableBoundary)
+            onBarricadeCircleSpawnEvent?.Invoke(spawner);
+
+        if(spawnBarricade)
+            SpawnCircle();
     }
     public void ClearCircleBarricade()
     {

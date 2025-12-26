@@ -7,10 +7,10 @@ public class ExpObj : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private Transform target;
-    private bool isMagnetOn = false;
+    private bool isMagnetOn = false;    
 
     private CircleCollider2D circleCollider;
-    ExperienceService es;
+    [SerializeField] private ExperienceService es;
 
     private void Awake()
     {
@@ -55,13 +55,12 @@ public class ExpObj : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
-        {
-            es.GetExp(10);
-            //TODO: 경험치 획득 로직 추가
-            //TODO: 풀링할시 SetActive(false)로 변경
-            //ExperienceService GetExt(int)
-            Destroy(gameObject);
-        }
+        if(!collision.CompareTag("Player")) return;
+
+        es.GetExp(10);
+        //TODO: 경험치 획득 로직 추가
+        //TODO: 풀링할시 SetActive(false)로 변경
+        //ExperienceService GetExt(int)
+        Destroy(gameObject);        
     }
 }
