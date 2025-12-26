@@ -437,7 +437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e096bfed6d7c2c74eaf31537111be04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
+  targets:
+  - {fileID: 7345183642421116605, guid: a596f8c5bac6a904b94c7bf78d44aaef, type: 3}
   indicatorPrefab: {fileID: 5926556433246597843, guid: 2afeb4d75a7f43c42b6f981be3dd7c85, type: 3}
   screenMargin: 0.1
   topMargin: 0.2
@@ -34564,7 +34565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1864742594
 MonoBehaviour:
   m_ObjectHideFlags: 0
