@@ -61,8 +61,8 @@ public class BossBear : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDead) return;
-        rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
-        //transform.position += (Vector3)(moveDirection * moveSpeed * Time.fixedDeltaTime);
+        rb.velocity = moveDirection * moveSpeed;
+        //rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);       
     }
     private void OnEnable()
     {
@@ -114,6 +114,8 @@ public class BossBear : MonoBehaviour
     {
         moveDirection = Vector2.zero;
         moveSpeed = 0f;
+
+        if (rb != null) rb.velocity = Vector2.zero;
     }
     // 벽 충돌 감지
     private void OnCollisionEnter2D(Collision2D collision)

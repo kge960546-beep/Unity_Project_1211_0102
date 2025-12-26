@@ -51,7 +51,7 @@ public class MonsterController : MonoBehaviour
         if (isDead) return;
         if (player == null) return;
 
-        ChasePlayer();
+        
        
         float distanceToPlayer = Vector2.Distance(transform.position,player.position);
 
@@ -63,7 +63,10 @@ public class MonsterController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        
+        if (isDead) return;
+        if (player == null) return;
+
+        ChasePlayer();
     }
     private void OnEnable()
     {
@@ -120,19 +123,19 @@ public class MonsterController : MonoBehaviour
     }
     void ChasePlayer()
     {
-       // 플레이어를 향해 추격하기 위한 방향 벡터 
-       Vector2 toPlayer = ((Vector2)player.position - (Vector2)transform.position).normalized;
+        // 플레이어를 향해 추격하기 위한 방향 벡터
+        Vector2 toPlayer = ((Vector2)player.position - rb.position).normalized;
        
-       // 주변에 있는 다른 오브젝트로 부터 겹치지 않게 밀려나는 방향 
-       Vector2 separation = CalculateSeparation();
-       
-       // 최종이동 방향 =  플레이어를 향하는 힘 + 서로 밀어내는 힘
-       Vector2 finalDir= (toPlayer + separation).normalized;
+        // 주변에 있는 다른 오브젝트로 부터 겹치지 않게 밀려나는 방향 
+        Vector2 separation = CalculateSeparation();
         
-       rb.position += (finalDir * moveSpeed * Time.deltaTime);
-    }
-   
+        // 최종이동 방향 =  플레이어를 향하는 힘 + 서로 밀어내는 힘
+        Vector2 finalDir= (toPlayer + separation).normalized;
+         
+        Vector2 nextPos = rb.position + finalDir * moveSpeed * Time.fixedDeltaTime;
 
+        rb.MovePosition(nextPos);
+    }
     Vector2 CalculateSeparation() 
     {
         // 오브젝트가 겹치지 않게 하기 위한 최종분리 벡터 
@@ -172,23 +175,23 @@ public class MonsterController : MonoBehaviour
     }
 
     // TODO:플레이어와 닿았을때 플레이어의 체력을 감소 시키는 임시 로직
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (isDead) return;
-
-        if (other.CompareTag("Player"))
-        {
-            if (Time.time - lastDamageTime >= damageInterval)
-            {
-                PlayerHp hp = other.GetComponent<PlayerHp>();
-                if (hp != null)
-                {
-                    hp.TakeDamage(enemyData.attack);
-                    lastDamageTime = Time.time;
-                }
-            }
-        }
-    }
+    //private void OnTriggerStay2D(Collider2D other)
+    //{
+    //    if (isDead) return;
+    //
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        if (Time.time - lastDamageTime >= damageInterval)
+    //        {
+    //            PlayerHp hp = other.GetComponent<PlayerHp>();
+    //            if (hp != null)
+    //            {
+    //                hp.TakeDamage(enemyData.attack);
+    //                lastDamageTime = Time.time;
+    //            }
+    //        }
+    //    }
+    //}
 
     // 몬스터가 플레이어를 추격할때 서로 겹치지 않고 밀어내야 하는 로직이 필요함
     public void SetMoveSpeed(float speed)

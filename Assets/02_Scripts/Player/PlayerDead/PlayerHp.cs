@@ -107,14 +107,14 @@ public class PlayerHp : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
         onPlayerDeadEvent?.Invoke();
     }   
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (isDead) return;
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            // TODO: 데미지 적 정보로 불러오기 임시로 20 데미지
-            TakeDamage(20);
-        }
-    }
+   //private void OnCollisionStay2D(Collision2D collision)
+   //{
+   //    if (isDead) return;
+   //
+   //    if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+   //    {
+   //        // TODO: 데미지 적 정보로 불러오기 임시로 20 데미지
+   //        TakeDamage(20);
+   //    }
+   //}
 }

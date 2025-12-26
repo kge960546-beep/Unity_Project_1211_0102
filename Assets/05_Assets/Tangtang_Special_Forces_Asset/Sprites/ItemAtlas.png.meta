@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -111,6 +116,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -120,12 +126,12 @@ TextureImporter:
       name: ItemAtlas_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 853.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 16
+        y: 872
+        width: 136
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -141,12 +147,12 @@ TextureImporter:
       name: ItemAtlas_1
       rect:
         serializedVersion: 2
-        x: 173
-        y: 853.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 190
+        y: 872
+        width: 134
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,12 +168,12 @@ TextureImporter:
       name: ItemAtlas_2
       rect:
         serializedVersion: 2
-        x: 343
-        y: 852
-        width: 170
-        height: 171
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 360
+        y: 872
+        width: 133
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,12 +189,12 @@ TextureImporter:
       name: ItemAtlas_3
       rect:
         serializedVersion: 2
-        x: 513
-        y: 853.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 514
+        y: 860
+        width: 162
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,12 +210,12 @@ TextureImporter:
       name: ItemAtlas_4
       rect:
         serializedVersion: 2
-        x: 683
-        y: 853.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 682
+        y: 871
+        width: 172
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,12 +231,12 @@ TextureImporter:
       name: ItemAtlas_5
       rect:
         serializedVersion: 2
-        x: 853
-        y: 853.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 7
+        y: 696
+        width: 155
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,12 +252,12 @@ TextureImporter:
       name: ItemAtlas_6
       rect:
         serializedVersion: 2
-        x: 3
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 176
+        y: 692
+        width: 157
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,12 +273,12 @@ TextureImporter:
       name: ItemAtlas_7
       rect:
         serializedVersion: 2
-        x: 173
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 348
+        y: 692
+        width: 155
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -288,12 +294,12 @@ TextureImporter:
       name: ItemAtlas_8
       rect:
         serializedVersion: 2
-        x: 343
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 512
+        y: 686
+        width: 167
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -309,12 +315,12 @@ TextureImporter:
       name: ItemAtlas_9
       rect:
         serializedVersion: 2
-        x: 513
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 696
+        y: 686
+        width: 142
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -330,12 +336,12 @@ TextureImporter:
       name: ItemAtlas_10
       rect:
         serializedVersion: 2
-        x: 683
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 867
+        y: 699
+        width: 155
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -351,12 +357,12 @@ TextureImporter:
       name: ItemAtlas_11
       rect:
         serializedVersion: 2
-        x: 853
-        y: 683.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 6
+        y: 520
+        width: 158
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -372,12 +378,12 @@ TextureImporter:
       name: ItemAtlas_12
       rect:
         serializedVersion: 2
-        x: 3
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 178
+        y: 530
+        width: 154
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -393,12 +399,12 @@ TextureImporter:
       name: ItemAtlas_13
       rect:
         serializedVersion: 2
-        x: 173
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 348
+        y: 530
+        width: 156
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -414,12 +420,12 @@ TextureImporter:
       name: ItemAtlas_14
       rect:
         serializedVersion: 2
-        x: 343
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 514
+        y: 523
+        width: 167
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -435,12 +441,12 @@ TextureImporter:
       name: ItemAtlas_15
       rect:
         serializedVersion: 2
-        x: 513
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 686
+        y: 535
+        width: 160
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -456,12 +462,12 @@ TextureImporter:
       name: ItemAtlas_16
       rect:
         serializedVersion: 2
-        x: 683
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 867
+        y: 532
+        width: 149
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -477,12 +483,12 @@ TextureImporter:
       name: ItemAtlas_17
       rect:
         serializedVersion: 2
-        x: 853
-        y: 513.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 0
+        y: 340
+        width: 148
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -498,12 +504,12 @@ TextureImporter:
       name: ItemAtlas_18
       rect:
         serializedVersion: 2
-        x: 3
-        y: 343.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 172
+        y: 340
+        width: 150
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -519,12 +525,12 @@ TextureImporter:
       name: ItemAtlas_19
       rect:
         serializedVersion: 2
-        x: 173
-        y: 343.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 340
+        y: 341
+        width: 164
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -540,12 +546,12 @@ TextureImporter:
       name: ItemAtlas_20
       rect:
         serializedVersion: 2
-        x: 343
-        y: 343.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 554
+        y: 352
+        width: 115
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -561,12 +567,12 @@ TextureImporter:
       name: ItemAtlas_21
       rect:
         serializedVersion: 2
-        x: 513
-        y: 343.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 696
+        y: 344
+        width: 150
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -582,82 +588,19 @@ TextureImporter:
       name: ItemAtlas_22
       rect:
         serializedVersion: 2
-        x: 683
-        y: 343.3333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
+        x: 854
+        y: 872
+        width: 170
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ebfd1d8eb9197394f8283cc974c9bee9
+      spriteID: 7f9cac0e1b560d24b8da710a69faf8b3
       internalID: 488270425
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ItemAtlas_23
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 173.33333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 64c773ac98cc6c14f9cedd2e4bfaa7c6
-      internalID: -39179072
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ItemAtlas_24
-      rect:
-        serializedVersion: 2
-        x: 173
-        y: 173.33333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b74b26cfb31147743b3de595d82d0b86
-      internalID: -1617860522
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ItemAtlas_25
-      rect:
-        serializedVersion: 2
-        x: 343
-        y: 173.33333
-        width: 170.16667
-        height: 170.66667
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6e5f0f557d132a743ba425c75192fcde
-      internalID: 1009076747
       vertices: []
       indices: 
       edges: []
@@ -689,9 +632,6 @@ TextureImporter:
       ItemAtlas_20: 1809592969
       ItemAtlas_21: -1969143077
       ItemAtlas_22: 488270425
-      ItemAtlas_23: -39179072
-      ItemAtlas_24: -1617860522
-      ItemAtlas_25: 1009076747
       ItemAtlas_3: -1477956609
       ItemAtlas_4: -562356114
       ItemAtlas_5: 907939306
@@ -699,9 +639,8 @@ TextureImporter:
       ItemAtlas_7: -1567560422
       ItemAtlas_8: 102886883
       ItemAtlas_9: 1015211533
-  spritePackingTag: 
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
