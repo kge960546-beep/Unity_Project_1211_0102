@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 /// Registers core GameObjects and provides views for each of them.
 /// This service does not instantiate or create any objects.
 /// </summary>
+[Obsolete("GameContextService is deprecated. To get player position feed, use PlayerFeedService instead.")]
 public class GameContextService : MonoBehaviour, IGameManagementService
 {
     public GameObject Player { get; private set; }

@@ -14,41 +14,49 @@ public class TestPlayerController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
 
-    Animator anim;    
+    Animator anim;
     private static readonly int moveHash = Animator.StringToHash("Speed");
+
+    private PlayerFeedService pfs;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         //TODO: 실행순서로 인한 null버그 있음 Start로 바꿔 볼 예정
-        GameManager.Instance.GetService<GameContextService>().RegisterPlayerObject(gameObject);
+        GameManager.Instance.GetService<GameContextService>().RegisterPlayerObject(gameObject); // TODO: remove
+        pfs = GameManager.Instance.GetService<PlayerFeedService>();
+        StartCoroutine(UpdateFeedAfterPhysicsUpdate());
     }
-    void Update()
-    {
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputY = Input.GetAxisRaw("Vertical");        
-        
-        if(inputX != 0)
-        {
-            if(inputX < 0)
-            {
-                spriteRenderer.flipX = true;
-            }
-            else
-            {
-                spriteRenderer.flipX = false;
-            }            
-        }
-        float speed = new Vector2(inputX, inputY).sqrMagnitude;
-        anim.SetFloat(moveHash,speed);
 
-        MoveCrossHair();
+    IEnumerator UpdateFeedAfterPhysicsUpdate()
+    {
+        var wait = new WaitForFixedUpdate();
+        while (true)
+        {
+            yield return wait;
+            if (!gameObject.activeInHierarchy) continue;
+            pfs.playerPosition = rb.position;
+        }
     }
+
     private void FixedUpdate()
     {
-        Vector2 dir = new Vector2(inputX, inputY).normalized;
+        Vector2 dir = pfs.userInputDirection;
         rb.velocity = dir * moveSpeed;
+
+        switch (System.Math.Sign(dir.x))
+        {
+            case -1:
+                spriteRenderer.flipX = true;
+                break;
+            case 1:
+                spriteRenderer.flipX = false;
+                break;
+        }
+        anim.SetFloat(moveHash, rb.velocity.sqrMagnitude);
+        MoveCrossHair();
     }
     private void MoveCrossHair()
     {
