@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public GameObject enemyPrefab;
-    public string enemyName;
+    public int enemyID;
     public int poolCount;
 
     public int maxHp;

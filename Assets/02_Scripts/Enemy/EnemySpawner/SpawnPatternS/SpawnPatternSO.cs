@@ -1,10 +1,18 @@
 using UnityEngine;
 
+public enum SpawnTargetType
+{
+    Normal,
+    Elite,
+    Boss
+}
+
 [CreateAssetMenu(menuName = "Game/Stage/SpawnPattern/SpawnPattern SO",fileName = "SpawnPattern")]
 public class SpawnPatternSO : ScriptableObject
 {
     [Header("Spawn Type")]
     public EnemyData enemyData;
+    public SpawnTargetType targetType;
     public SpawnShapeSO shape;
 
     [Header("Spawn Timer")]

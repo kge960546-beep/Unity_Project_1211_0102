@@ -1,52 +1,72 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnPatternController : MonoBehaviour
 {
-    [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private EnemySpawner enemySpawner;
 
-    private Coroutine stageRoutine;
-    TimeService ts;
+    [SerializeField] private StagePatternSO stagePattern;
+    [SerializeField] private Transform player;
 
-    private void Awake()
-    {     
-        ts = GameManager.Instance.GetService<TimeService>();
-#if UNITY_EDITOR
-        if (ts == null)
-            Debug.LogError("TimeService not found");
-#endif
-    }
-    void Start()
+    private Coroutine stageRoutine;
+
+    private void Start()
     {
-        stageRoutine = StartCoroutine(RunStage());
+        stageRoutine = StartCoroutine(RunStagePatterns());
     }
-    IEnumerator RunStage()
+    private IEnumerator RunStagePatterns()
     {
-        foreach(var pattern in stagePattern.patterns)
+        foreach (var pattern in stagePattern.patterns)
         {
-            if (pattern.isAllowParallel)
+            if (pattern == null)
+                continue;
+
+            if(pattern.isAllowParallel)
             {
-                enemySpawner.RunPattern(pattern);
+                StartCoroutine(RunSpawnPattern(pattern));
             }
             else
             {
-                yield return enemySpawner.RunPattern(pattern);
+                yield return StartCoroutine(RunSpawnPattern(pattern));
             }
         }
     }
-    void OnStageComplete()
+    private IEnumerator RunSpawnPattern(SpawnPatternSO pattern)
     {
-        //보상, 스테이지 클리어 UI
-    }
-    public void StopStage()
-    {
-        if (stageRoutine != null)
-        { 
-            StopCoroutine(stageRoutine);
-        }
+        //패턴 시작 시간 까지 대기
+        if(pattern.startTime > 0f)
+            yield return new WaitForSeconds(pattern.startTime);
 
-        enemySpawner.StopAllPatterns();
+        float timer = 0f;
+
+        while(timer < pattern.endTime)
+        {
+            SpawnByPattern(pattern);
+
+            timer += pattern.tick;
+
+            if(pattern.tick > 0)
+                yield return new WaitForSeconds(pattern.tick);
+            else
+                yield return null;
+        }
+    }
+    public void SpawnByPattern(SpawnPatternSO pattern)
+    {
+        var context = new SpawnContext
+        {
+            playerPosition = player.position,
+            radius = pattern.radius,
+            spawnCount = pattern.spawnCount,
+            targetType = pattern.targetType
+        };
+
+        Vector3[] positions = pattern.shape.GetSpawnPositions(context);
+
+        foreach(var pos in positions)
+        {
+            enemySpawner.SpawnEnemy(pattern.enemyData, pos);
+        }
     }
 }

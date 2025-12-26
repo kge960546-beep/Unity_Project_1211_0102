@@ -33,7 +33,7 @@ public class _1004_Defender_ProjectileLogic : ProjectileLogicBase
         float orbitingAngle = InitialOrbitalAngle + orbitalAngularVelocity * instanceData.timer;
         float orbitRadius = DefaultOrbitRadius * Mathf.Clamp01((LifeTime - instanceData.timer) / (LifeTime - DefaultOrbitStayTime));
         Unity.Mathematics.math.sincos(orbitingAngle * Mathf.Deg2Rad, out float sin, out float cos);
-        // as stated in ProjectileLogicBase, consider storing implementation-specific data
+        // as stated in ProjectileLogicBase, consider storing implementation-specific stagePattern
 
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
         Vector2 predictedNextCenterPosition =

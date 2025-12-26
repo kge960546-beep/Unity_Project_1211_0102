@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: CirclePattern
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
+  targetType: 0
   shape: {fileID: 11400000, guid: aa6bdba29feeddd4da98c3bb535cd5ab, type: 2}
   startTime: 0
   endTime: 300
   tick: 10
   radius: 13
   spawnCount: 10
-  isAllowParallel: 0
+  isAllowParallel: 1

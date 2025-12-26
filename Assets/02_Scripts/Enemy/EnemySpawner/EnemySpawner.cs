@@ -1,89 +1,98 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private EnemyPool enemyPool;
+    [SerializeField] private List<EnemyData> enemyDataList; 
+
     [SerializeField] private Transform spawnPos;
+    //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄것 
     [SerializeField] private Rigidbody2D playerRb;
-  
+
+    private Dictionary<int, GameObject> enemyDataPrefab;
+    //실행 중인 패턴 코루틴 관리
     private List<Coroutine> runningPatterns = new();
 
-    TimeService ts;
-    TimeService TS => ts ??= GameManager.Instance?.GetService<TimeService>();
+    PoolingService ps;
 
     void Awake()
     {
+        ps = GameManager.Instance.GetService<PoolingService>();
+        enemyDataPrefab = new();
+
         if (spawnPos == null)
             spawnPos = GameObject.FindWithTag("Player").transform;
+
+        foreach (var data in enemyDataList)
+        {
+            if (enemyDataPrefab.ContainsKey(data.enemyID))
+            {
+                Debug.LogError($"중복된 enemyID : {data.enemyID}");
+                continue;
+            }
+
+            enemyDataPrefab.Add(data.enemyID, data.enemyPrefab);
+        }
+        foreach(var data in enemyDataPrefab)
+        {
+            Debug.Log($"등록된 Enemy : ID = {data.Key}, Prefab ={data.Value}");
+        }
     }
     private void Start()
     {
 #if UNITY_EDITOR
-        if (enemyPool == null)
-            Debug.LogError("EnemySpawner : EnemyPool 미할당");
+        if (ps == null)
+            Debug.LogError("EnemySpawner : PoolingService 미할당");
         if (spawnPos == null)
             Debug.LogError("EnemySpawner : SpawnPos 미할당");
 #endif
     }
-    public Coroutine RunPattern(SpawnPatternSO pattern)
+    // Normal / Elite Spawn
+    public GameObject SpawnEnemy(EnemyData data, Vector3 position)
     {
-        var co = StartCoroutine(RunPatternRoutine(pattern));
-        runningPatterns.Add(co);
-        return co;
+        GameObject enemy = EnemyPool.instance.Get(data);
+       
+        enemy.transform.position = position;
+        enemy.transform.rotation = Quaternion.identity;
+        enemy.SetActive(true);
+
+        return enemy;
     }
-    //패턴 실행
-    IEnumerator RunPatternRoutine(SpawnPatternSO pattern)
+    // Boss Spawn
+    public void SpawnBoss(BossPatternSO bossPattern)
     {
-        float startTime = TS.accumulatedFixedDeltaTime;
-
-        while (TS.accumulatedFixedDeltaTime < pattern.endTime)
+        if(bossPattern.clearOtherEnemies)
         {
-            if (TS.accumulatedFixedDeltaTime < pattern.startTime)
-            {
-                yield return null;
-                continue;
-            }
-            float patternTime = TS.accumulatedFixedDeltaTime - startTime;
+            ClearAllEnemies();
+        }
 
-            SpawnContext context = new SpawnContext
-            {
-                playerPosition = spawnPos.transform.position,
-                playerMoveDir = playerRb != null ? playerRb.velocity : Vector3.zero,
-                spawnCount = pattern.spawnCount,
-                radius = pattern.radius,
-                patternTime = patternTime
-            };
+        if(bossPattern.isLockedArena)
+        {
+            //테두리 잠금
+        }
 
-            Vector3[] positions = pattern.shape.GetSpawnPositions(context);
-
-            Spawn(pattern, positions , context);
-
-            yield return new WaitForSeconds(pattern.tick);
+        if(!enemyDataPrefab.TryGetValue(bossPattern.bossID,out GameObject prefab))
+        {
+            Debug.LogError($"bossID {bossPattern.bossID} 프리팹 없음");
+            return;
         }
     }
-    //적 스폰 
-    void Spawn(SpawnPatternSO pattern, Vector3[] positions, SpawnContext context)
+    //풀 되돌리기
+    public void ReturnEnemy(GameObject obj)
     {
-        foreach(var pos in positions)
-        {
-            GameObject enemy = enemyPool.GetQueue(pattern.enemyData);
-            if(enemy == null) continue;
-
-            enemy.transform.position = pos;
-            enemy.SetActive(true);
-        }
+        ps.ReturnOrDestroyGameObject(obj);
     }
-    //모든 생성 패턴 정지
-    public void StopAllPatterns()
+    //모든 적 제거
+    private void ClearAllEnemies()
     {
-        foreach(var co in runningPatterns)
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach(var e in enemies)
         {
-            if(co != null)
-                StopCoroutine(co);
+            ps.ReturnOrDestroyGameObject(e);
         }
-        runningPatterns.Clear();
     }
     #region Test
     //void Awake()

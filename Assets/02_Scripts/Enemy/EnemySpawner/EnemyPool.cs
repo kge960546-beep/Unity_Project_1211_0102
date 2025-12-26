@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.Design.Serialization;
+using System.Xml.Schema;
 
 //작동 테스트용 임시 오브젝트 풀링 큐(추후 수정하거나 삭제해도 됨)
 public class EnemyPool : MonoBehaviour
@@ -11,95 +12,75 @@ public class EnemyPool : MonoBehaviour
 
     [SerializeField] private List<EnemyData> enemyDataList;
 
-    public Dictionary<EnemyData,Queue<GameObject>> pools = new();
+    public Dictionary<EnemyData, GameObject> prefabMap;
 
-    public int poolCountPrefab = 250;
+    PoolingService ps;
 
     void Awake()
     {
         if (instance == null) instance = this;
-        Initialize();
-    }
-    void Start()
-    {
-        //Initialize();
-    }
-    public void Initialize()
-    {
-        //초기화
-        pools.Clear();
+        
+        ps = GameManager.Instance.GetService<PoolingService>();
+
+        if (ps == null)
+        {
+            Debug.LogError("[EnemyPool] PoolingService 못 찾음");
+        }
+        else
+        {
+            Debug.Log("[EnemyPool] PoolingService 연결 성공");
+        }
+
+        prefabMap = new();
 
         foreach(var data in enemyDataList)
         {
-#if UNITY_EDITOR
+            Debug.Log($"[EnemyPool] 등록 시도 -> {data?.name}, ep:{data?.enemyPrefab}");
+
             if (data == null || data.enemyPrefab == null)
             {
-                Debug.LogError("EnemyData 또는 Prefab이 비어있음");
-                continue;
-            }   
-            
-            if(pools.ContainsKey(data))
-            {
-                Debug.LogError($"중복 EnemyData : {data.name}");
+                Debug.LogError($"EnemyData 설정 오류 : {data}");
                 continue;
             }
-#endif
 
-            // Queue 생성
-            Queue<GameObject> queue = new Queue<GameObject>();
-
-            // pool 생성
-            for(int i = 0; i<data.poolCount; i++)
-            {
-                GameObject enemy = Instantiate(data.enemyPrefab, transform);
-                enemy.SetActive(false);
-                queue.Enqueue(enemy);
-            }
-            pools.Add(data, queue);
+            prefabMap[data] = data.enemyPrefab;
         }
+        Debug.Log($"[EnemyPool] enemyPrefab 등록 개수 : {prefabMap.Count}");
     }
-    public GameObject GetQueue(EnemyData data)
+    
+    public GameObject Get(EnemyData data)
     {
-#if UNITY_EDITOR
-        if (data == null)
+        Debug.Log($"[EnemyPool] Get 요청 : {data?.name}");
+
+        if(!prefabMap.TryGetValue(data, out var prefab))
         {
-            Debug.LogError("EnemyData가 null");
+            Debug.LogError($"EnemyData 매핑 없음 : {data}");
             return null;
         }
+        Debug.Log($"[EnemyPool] prefab 확인 : {prefab.name}");
 
-        if (!pools.TryGetValue(data, out Queue<GameObject> queue))
-        {
-            Debug.LogError($"EnemyPool에 {data.name} 풀 없음");
-            return null;
-        }
-#endif
+        var ep = ps.GetOrCreateInactivatedGameObject(prefab);
 
-        if (queue.Count > 0)
-        {
-            return queue.Dequeue();
-        }
+        Debug.Log($"[EnemyPool] 풀에서 반환된 객체 : {ep.name}");
 
-        GameObject enemy = Instantiate(data.enemyPrefab, transform);
-        enemy.SetActive(false);
-        return enemy;
+        return ep;
     }
     public void Return(EnemyData data, GameObject enemy)
     {
-        enemy.SetActive(false);
-        pools[data].Enqueue(enemy);
+        ps.ReturnOrDestroyGameObject(enemy);
     }
     //private void BuildEnemyDictionary()
     //{
     //    enemyID.Clear();
     //
-    //    foreach(var data in enemyDataList)
+    //    foreach(var stagePattern in enemyDataList)
     //    {
-    //        if(enemyID.ContainsKey(data.enemyID))
+    //        if(enemyID.ContainsKey(stagePattern.enemyID))
     //        {
-    //            Debug.LogError($"중복 enemyID : {data.enemyID}");
+    //            Debug.LogError($"중복 enemyID : {stagePattern.enemyID}");
     //            continue;
     //        }
-    //        enemyID.Add(data.enemyID, data);
+    //        enemyID.Add(stagePattern.enemyID, stagePattern);
     //    }
     //}
     //private void Initialize()
@@ -107,13 +88,13 @@ public class EnemyPool : MonoBehaviour
     //    foreach(var pair in enemyID)
     //    {
     //        int id = pair.Key;
-    //        EnemyData data = pair.Value;
+    //        EnemyData stagePattern = pair.Value;
     //
     //        Queue<GameObject> que = new Queue<GameObject>();
     //
-    //        for(int i = 0; i< data.poolCount; i++)
+    //        for(int i = 0; i< stagePattern.poolCount; i++)
     //        {
-    //            GameObject obj = Instantiate(data.enemyPrefab, transform);
+    //            GameObject obj = Instantiate(stagePattern.enemyPrefab, transform);
     //            var pool = obj.GetComponent<PoolableEnemy>();
     //            if (pool == null) pool = obj.AddComponent<PoolableEnemy>();
     //            pool.enemyID = id;
@@ -148,19 +129,19 @@ public class EnemyPool : MonoBehaviour
     //    }
     //    else
     //    {
-    //        EnemyData data = GetMonsterData(enemyID);
-    //        GameObject newEnemy = Instantiate(data.enemyPrefab);
+    //        EnemyData stagePattern = GetMonsterData(enemyID);
+    //        GameObject newEnemy = Instantiate(stagePattern.enemyPrefab);
 
     //        return newEnemy;
     //    }
     //}
     //private EnemyData GetMonsterData(int enemyID)
     //{
-    //    foreach(var data in enemyDataList)
+    //    foreach(var stagePattern in enemyDataList)
     //    {
-    //        if(data.enemyID == enemyID)
+    //        if(stagePattern.enemyID == enemyID)
     //        {
-    //            return data;
+    //            return stagePattern;
     //        }
     //    }
     //    Debug.LogError($"{enemyID}에 해당하는 MonsterData가 없습니다");

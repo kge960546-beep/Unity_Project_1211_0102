@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: BatSwarmPattern
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
+  targetType: 0
   shape: {fileID: 11400000, guid: 87e7451d9ceb861489c07aa2148b06e5, type: 2}
   startTime: 5
   endTime: 13
   tick: 2
   radius: 0
   spawnCount: 20
-  isAllowParallel: 0
+  isAllowParallel: 1
