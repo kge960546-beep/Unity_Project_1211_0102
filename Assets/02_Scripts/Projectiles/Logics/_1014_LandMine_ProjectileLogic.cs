@@ -19,7 +19,7 @@ public class _1014_LandMine_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
-        float azimuth = GameManager.Instance.GetService<RandomService>().Random.NextFloat(360f);
+        float azimuth = GameManager.Instance.GetService<RandomService>().random.NextFloat(360f);
         // TODO: this does not work as random is separately calculated... need to put into ref initData
 
 
