@@ -37,9 +37,10 @@ public class DamageManagementService : MonoBehaviour, IGameManagementService
     /// <summary>
     /// int: damage value
     /// GameObject: damage source
+    /// IDamageable: damage target
     /// bool: boolean whether the damage was critical damage
     /// </summary>
-    private event Action<int, GameObject, bool> OnDamageEvent;
+    private event Action<int, GameObject, IDamageable, bool> OnDamageEvent;
 
     private void OnEnable()
     {
@@ -56,18 +57,17 @@ public class DamageManagementService : MonoBehaviour, IGameManagementService
         while (0 != damageInfoQueue.Count)
         {
             DamageInformation damageInfo = damageInfoQueue.Dequeue();
-            Debug.Log((damageInfo.target as MonoBehaviour).gameObject.name);
             damageInfo.target.TakeDamage(damageInfo.damage, damageInfo.source, damageInfo.isCritical);
-            OnDamageEvent?.Invoke(damageInfo.damage, damageInfo.source, damageInfo.isCritical);
+            OnDamageEvent?.Invoke(damageInfo.damage, damageInfo.source, damageInfo.target, damageInfo.isCritical);
         }
     }
 
-    public void SubscribeOnDamageEvent(Action<int, GameObject, bool> action)
+    public void SubscribeOnDamageEvent(Action<int, GameObject, IDamageable, bool> action)
     {
         OnDamageEvent += action;
     }
 
-    public void UnsubscribeOnDamageEvent(Action<int, GameObject, bool> action)
+    public void UnsubscribeOnDamageEvent(Action<int, GameObject, IDamageable, bool> action)
     {
         OnDamageEvent -= action;
     }
