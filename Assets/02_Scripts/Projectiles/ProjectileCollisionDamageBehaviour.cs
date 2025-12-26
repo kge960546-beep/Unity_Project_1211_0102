@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ProjectileCollisionDamageBehaviour : MonoBehaviour
 {
+    public bool IsInflictingDamageOnTriggerStay{ set; private get; }
     public float CriticalRate { set; private get; }
     public int OrdinaryDamage { set; private get; }
     public int CriticalDamage { set; private get; }
@@ -33,6 +34,7 @@ public class ProjectileCollisionDamageBehaviour : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         // expects to be filtered with collision matrix
+        if (!IsInflictingDamageOnTriggerStay) return;
         if (collision.gameObject.TryGetComponent(out IDamageable damagable)) InflictDamage(damagable);
     }
 

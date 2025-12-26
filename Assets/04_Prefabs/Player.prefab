@@ -197,6 +197,7 @@ Transform:
   - {fileID: 2070851248310096390}
   - {fileID: 4277608443473908153}
   - {fileID: 1713861511101450516}
+  - {fileID: 6319258823091351786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3238356254785365282
@@ -365,6 +366,7 @@ MonoBehaviour:
   maxHp: 100
   currentHp: 0
   playerBaseData: {fileID: 11400000, guid: 7e3d131fea68ce34da411e6d6616d6e2, type: 2}
+  bloodSplashVFX: {fileID: 6319258823091351783}
 --- !u!1 &1781776238354241438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,3 +1058,74 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1001 &7530584355407179526
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1010370825851419075}
+    m_Modifications:
+    - target: {fileID: 4553287630450876385, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_Name
+      value: CFXR2 Blood Shape Splash Editted
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876385, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+--- !u!1 &6319258823091351783 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4553287630450876385, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+  m_PrefabInstance: {fileID: 7530584355407179526}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6319258823091351786 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4553287630450876396, guid: a9f6e4530731bc647a1431120660f0ac, type: 3}
+  m_PrefabInstance: {fileID: 7530584355407179526}
+  m_PrefabAsset: {fileID: 0}

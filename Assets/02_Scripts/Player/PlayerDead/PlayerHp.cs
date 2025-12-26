@@ -22,6 +22,9 @@ public class PlayerHp : MonoBehaviour, IDamageable
     private Animator anim;
     private Rigidbody2D rb;
     public PlayerDataSO playerBaseData;
+
+    [SerializeField] private GameObject bloodSplashVFX;
+
     #region DeathSubscriptionAndCancellation
     /// <summary>
     /// 데드 이벤트 구독 & 해지
@@ -75,6 +78,7 @@ public class PlayerHp : MonoBehaviour, IDamageable
 
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
         // TODO: 히트 이펙트 있으면 여기서 재생
+        if (!bloodSplashVFX.activeSelf) bloodSplashVFX.SetActive(true);
 
         onTakeDamageEvent?.Invoke(currentHp, maxHp);
 
