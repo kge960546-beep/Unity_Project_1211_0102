@@ -23,12 +23,14 @@ public class EquipmentSO : ScriptableObject
     }
 
     [Header("Identity")]
+    public string equipmentName;
     public int equipmentID;
 
     [Header("Stats")]
     public int plusEquimentHP;
     public int plusEquimentAttack;
     public EquipmentPart partType;
+    public Sprite itemSprite;
 
     [Header("Upgrade")]
     public GameObject[] upgradePrefabs = new GameObject[18];

@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipmentItem : MonoBehaviour
 {
     [SerializeField] private EquipmentSO data;
     [SerializeField] private EquipmentSO.EquipmentClassType type;    
     [Range(0, 2)] public int step;
+
+    [SerializeField] private Image iconImage;
+    [SerializeField] private Image frameImage;
 
     public EquipmentSO Data => data;
     public int EquipmentId { get { return data != null ? data.equipmentID : -1; } }
@@ -16,7 +20,48 @@ public class EquipmentItem : MonoBehaviour
         data = newData;
         type = newtype;
         step = Mathf.Clamp(newStep, 0, 2);
+        
+        UpdateItem();
+    }
+    public void UpdateItem()
+    {
+        if (data == null) return;
+        if(iconImage != null)
+        {
+            iconImage.sprite = data.itemSprite;
+        }
+        if(frameImage != null)
+        {
+           SetColor(type);
+        }
+    }
+    public void SetColor(EquipmentSO.EquipmentClassType type)
+    {
+        switch(type)
+        {
+            case (EquipmentSO.EquipmentClassType.Normal):
+                frameImage.color =  Color.gray;
+                break;
+                
+            case (EquipmentSO.EquipmentClassType.Good):
+                frameImage.color = Color.green;
+                break;
 
-        //TODO: 아이콘, 능력치 갱신 로직 구현해야함
+            case (EquipmentSO.EquipmentClassType.Better):
+                frameImage.color = Color.blue;
+                break;
+
+            case (EquipmentSO.EquipmentClassType.Excellent):
+                frameImage.color = new Color(0.6f, 0.0f, 0.8f);
+                break;
+
+            case (EquipmentSO.EquipmentClassType.Epic):
+                frameImage.color = Color.yellow;
+                break;
+
+            case (EquipmentSO.EquipmentClassType.Legend):
+                frameImage.color = Color.red;
+                break;
+        }
     }
 }
