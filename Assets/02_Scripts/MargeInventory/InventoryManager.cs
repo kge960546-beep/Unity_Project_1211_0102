@@ -15,6 +15,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Transform slotRoot;
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
+
+    public List<EquipmentSO> acquisitionItemsInStage = new List<EquipmentSO>();
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +29,14 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+    }
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        
     }
     public void AddItem(EquipmentSO itemData)
     {
@@ -60,5 +70,20 @@ public class InventoryManager : MonoBehaviour
                 item.Initialize(data.soData, data.type, data.step);
             }
         }
+    }
+    public void AcquisitionItem(EquipmentSO itemData)
+    {
+        if (itemData == null) return;
+
+        AddItem(itemData);        
+        acquisitionItemsInStage.Add(itemData);
+
+#if UNITY_EDITOR
+        Debug.Log($"{itemData.equipmentName} È¹µæ");
+#endif
+    }
+    public void ClearStageData()
+    {
+        acquisitionItemsInStage.Clear();
     }
 }
