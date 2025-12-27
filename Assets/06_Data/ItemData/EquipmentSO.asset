@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1907b7223b1c2489daae0e58e8f30f, type: 3}
   m_Name: EquipmentSO
   m_EditorClassIdentifier: 
-  equipmentID: 0
+  equipmentName: Kunai
+  equipmentID: 1
   plusEquimentHP: 0
   plusEquimentAttack: 0
   partType: 0
