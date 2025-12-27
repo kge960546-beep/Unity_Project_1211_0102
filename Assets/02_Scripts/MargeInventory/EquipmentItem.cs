@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +12,25 @@ public class EquipmentItem : MonoBehaviour
     [SerializeField] private Image iconImage;
     [SerializeField] private Image frameImage;
 
+    [SerializeField] private TextMeshProUGUI mergeLevel;
+
+    private Action onClickItemAction;
+    [SerializeField] private Button btn;
+
     public EquipmentSO Data => data;
     public int EquipmentId { get { return data != null ? data.equipmentID : -1; } }
     public EquipmentSO.EquipmentClassType Type => type;    
     public int Step => step;
-   
+
+    private void Awake()
+    {
+        btn.onClick.AddListener(OnButtonClicked);
+    }
+    private void OnButtonClicked()
+    {
+        if (onClickItemAction != null)
+            onClickItemAction.Invoke();
+    }
     public void Initialize(EquipmentSO newData, EquipmentSO.EquipmentClassType newtype,int newStep)
     {
         data = newData;
@@ -33,6 +49,21 @@ public class EquipmentItem : MonoBehaviour
         if(frameImage != null)
         {
            SetColor(type);
+        }
+        UpdateMergeLevel();
+    }
+    void UpdateMergeLevel()
+    {
+        if (mergeLevel == null) return;
+
+        if(step > 0)
+        {
+            mergeLevel.gameObject.SetActive(true);
+            mergeLevel.text = step.ToString();
+        }
+        else
+        {
+            mergeLevel.gameObject.SetActive(false);            
         }
     }
     public void SetColor(EquipmentSO.EquipmentClassType type)
@@ -64,4 +95,9 @@ public class EquipmentItem : MonoBehaviour
                 break;
         }
     }
+    public void SetOnClickAction(Action action)
+    {
+        onClickItemAction = action;
+    }
+   
 }

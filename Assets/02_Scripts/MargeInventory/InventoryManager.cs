@@ -11,12 +11,8 @@ public class InventoryItemData
 }
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance;
+    public static InventoryManager Instance;    
 
-    [SerializeField] private string sceneLoad = "Inventory_Grid";
-
-    [SerializeField] private Transform slotRoot;
-    [SerializeField] private GameObject itemPrefab;
     [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
 
     public List<EquipmentSO> acquisitionItemsInStage = new List<EquipmentSO>();
@@ -34,29 +30,6 @@ public class InventoryManager : MonoBehaviour
             return;
         }
     }
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoad;
-    }
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoad;        
-    }
-    private void OnSceneLoad(Scene scene, LoadSceneMode mode)
-    {
-        GameObject grid = GameObject.Find(sceneLoad);
-
-        if(grid != null)
-        {
-            slotRoot = grid.transform;
-
-            UpdateSlot();
-        }
-        else
-        {
-            slotRoot = null;
-        }
-    }
     public void AddItem(EquipmentSO itemData)
     {
         InventoryItemData newData = new InventoryItemData();
@@ -64,32 +37,12 @@ public class InventoryManager : MonoBehaviour
         newData.type = EquipmentSO.EquipmentClassType.Normal;
         newData.step = 0;
 
-        inventoryItems.Add(newData);
-
-        if(slotRoot != null)
-            UpdateSlot();
+        inventoryItems.Add(newData);        
     }
-    public void UpdateSlot()
+    public List<InventoryItemData> GetInventoryList()
     {
-        if (slotRoot == null) return;
-
-        foreach(Transform child in slotRoot)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach(InventoryItemData data in inventoryItems)
-        {
-            GameObject newSlot = Instantiate(itemPrefab, slotRoot);
-
-            EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-
-            if(item != null)
-            {
-                item.Initialize(data.soData, data.type, data.step);
-            }
-        }
-    }
+        return inventoryItems;
+    }   
     public void AcquisitionItem(EquipmentSO itemData)
     {
         if (itemData == null) return;
