@@ -16,8 +16,8 @@ MonoBehaviour:
   equipmentID: 0
   plusEquimentHP: 0
   plusEquimentAttack: 0
-  partType: 0
-  itemSprite: {fileID: 0}
+  partType: 1
+  itemSprite: {fileID: 21300000, guid: 5105fe1d825990746b9a92407ea447ca, type: 3}
   upgradePrefabs:
   - {fileID: 0}
   - {fileID: 0}

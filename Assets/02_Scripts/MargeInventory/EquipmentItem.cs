@@ -17,6 +17,7 @@ public class EquipmentItem : MonoBehaviour
     private Action onClickItemAction;
     [SerializeField] private Button btn;
 
+    public string inventoryUid {  get; private set; }
     public EquipmentSO Data => data;
     public int EquipmentId { get { return data != null ? data.equipmentID : -1; } }
     public EquipmentSO.EquipmentClassType Type => type;    
@@ -38,6 +39,10 @@ public class EquipmentItem : MonoBehaviour
         step = Mathf.Clamp(newStep, 0, 2);
         
         UpdateItem();
+    }
+    public void BindInventory(string uid)
+    {
+        inventoryUid = uid;
     }
     public void UpdateItem()
     {

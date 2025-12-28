@@ -8,7 +8,7 @@ public class LobbyButton : MonoBehaviour
     [SerializeField] GameObject lobbyStageSelectButton;
     [SerializeField] GameObject mainScrollView;
 
-    void OnClickButton()
+    public void OnClickButton()
     {
         startButton.SetActive(true);
         lobbyStageSelectButton.SetActive(true);

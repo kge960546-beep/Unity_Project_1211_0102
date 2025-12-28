@@ -39,7 +39,9 @@ public class MergeInventory : MonoBehaviour
 
             if (item != null)
             {
-                item.Initialize(data.soData, data.type, data.step);
+                item.Initialize(data.soData, data.classType, data.step);
+                item.BindInventory(data.uid);
+                
                 item.SetOnClickAction(() =>
                 {
                     if (mergeWindow != null)

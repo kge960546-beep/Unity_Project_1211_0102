@@ -5,7 +5,7 @@ using UnityEngine;
 public class MergeRecipe
 {
     [Header("선택 조건")]
-    public EquipmentSO.EquipmentClassType type;    
+    public EquipmentSO.EquipmentClassType inputType;    
     public int inputStep;
 
     [Header("재료 조건")]
@@ -31,25 +31,64 @@ public class MergeController : MonoBehaviour
     {
         if (recipes.Count == 0) InitializeDefaultRecipes();
     }
+
+    //병합대상 아이템 지정후 기존 재료는 초기화
     public void SetBase(EquipmentItem item)
     {
-        if (item == null) return;
-
         baseItem = item;
         ingredients.Clear();
     }
-    public void ToggleMaterial(EquipmentItem item)
-    {
-        if (item == null || item == baseItem) return;
 
-        if (ingredients.Contains(item)) ingredients.Remove(item);
-        else ingredients.Add(item);
+    //재료를 선택/ 해제 하는 기능
+    public bool ToggleIngredient(EquipmentItem item)
+    {
+        if (item == null || item == baseItem || baseItem == null || baseItem.Data == null) return false;
+        
+        if(ingredients.Contains(item))
+        {
+            ingredients.Remove(item);
+            return true;
+        }
+
+        MergeRecipe recipe = null;
+        for(int i = 0; i < recipes.Count; i++)
+        {
+            MergeRecipe r = recipes[i];
+            if(r.inputType == baseItem.Type && r.inputStep == baseItem.Step)
+            {
+                recipe = r;
+                break;
+            }
+        }
+        if (recipe == null) return false;
+        if (ingredients.Count >= recipe.needCount) return false;
+
+        if (!IsValidIngredient(item, recipe)) return false;
+
+        ingredients.Add(item);
+        return true;
     }
+   
+
+    //병합을 할 수 있는지 판단
+    public bool CanMerge()
+    {
+        if (baseItem == null || baseItem.Data == null) return false;
+
+        var recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.Type && r.inputStep == baseItem.Step);
+        if (recipe == null) return false;
+
+        if (ingredients.Count != recipe.needCount) return false;
+
+        return ingredients.All(mat => IsValidIngredient(mat, recipe));
+    }
+
+    //병합 최종 체크하고 병합 실행
     public bool IsMarge()
     {
         if (baseItem == null || baseItem.Data == null) return false;
 
-        MergeRecipe recipe = recipes.FirstOrDefault(r => r.type == baseItem.Type && r.inputStep == baseItem.Step);
+        MergeRecipe recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.Type && r.inputStep == baseItem.Step);
 
         if (recipe == null)
         {
@@ -66,7 +105,7 @@ public class MergeController : MonoBehaviour
 #endif
             return false;
         }
-        bool isValid = ingredients.All(mat => IsValidMaterial(mat, recipe));
+        bool isValid = ingredients.All(mat => IsValidIngredient(mat, recipe));
 
         if(!isValid)
         {
@@ -75,53 +114,125 @@ public class MergeController : MonoBehaviour
 #endif
             return false;
         }
-
+        Debug.Log("[Merge] IsMarge SUCCESS");
         ProcessMergeSuccess(recipe);
         return isValid;
     }
-    public bool IsValidMaterial(EquipmentItem item, MergeRecipe recipe)
-    {
-        if (item == null) return false;
 
-        if (item.Type != recipe.needType) return false;
-        if (item.Step != recipe.needStep) return false;
-        
-        if(item.Data.partType != baseItem.Data.partType) return false;
+    //재료가 몇개 필요한지 판단
+    public int GetIngredientNeedCount()
+    {
+        if (baseItem == null || baseItem.Data == null)
+        {
+            return 0; 
+        }
+
+#if UNITY_EDITOR
+        Debug.Log($"[Merge] baseItem.Type={baseItem.Type}, baseItem.Step={baseItem.Step}");
+#endif
+
+        //var recipe = recipes.FirstOrDefault(r => r.type == baseItem.Type && r.inputStep == baseItem.Step);
+        MergeRecipe recipe = null;
+        foreach (MergeRecipe r in recipes)
+        {
+            if (r.inputType == baseItem.Type && r.inputStep == baseItem.Step)
+            {
+                recipe = r;
+                break;
+            }
+        }
+
+        if (recipe == null)
+        {
+#if UNITY_EDITOR
+            Debug.Log("[Merge] recipe NOT FOUND");
+#endif
+            return 0;
+        }
+#if UNITY_EDITOR
+        Debug.Log($"[Merge] recipe FOUND, needCount={recipe.needCount}, needType={recipe.needType}, needStep={recipe.needStep}, sameId={recipe.isSameId}");
+#endif
+        return recipe.needCount;
+    }
+
+    //재료가 조건에 맞는지 판단
+    public bool IsValidIngredient(EquipmentItem item, MergeRecipe recipe)
+    {
+        if (item == null)
+        {
+            Debug.Log("[Merge] mat null");
+            return false;
+        }
+
+        if (item.Data == null) { Debug.Log("[Merge] mat.Data null"); return false; }
+        if (baseItem == null || baseItem.Data == null) { Debug.Log("[Merge] base null/data null"); return false; }
+
+
+        if (item.Type != recipe.needType)
+        {
+            Debug.Log($"[Merge] FAIL Type mat={item.Type} need={recipe.needType}");
+            return false;
+        }
+
+        if (item.Step != recipe.needStep)
+        {
+            Debug.Log($"[Merge] FAIL Step mat={item.Step} need={recipe.needStep}");
+            return false;
+        }
+
+        if (item.Data.partType != baseItem.Data.partType)
+        {
+            Debug.Log($"[Merge] FAIL partType mat={item.Data.partType} base={baseItem.Data.partType}");
+            return false;
+        }
 
         if(recipe.isSameId)
         {
-            if(item.EquipmentId != baseItem.EquipmentId) return false;
+            if (item.Data == null || baseItem.Data == null) return false;
+
+            int itemId = item.Data.equipmentID;
+            int baseId = baseItem.Data.equipmentID;
+
+            if (itemId != baseId)
+            {
+                Debug.Log($"[Merge] FAIL equipmentID mat={itemId} base={baseId}");
+                return false;
+            }
         }
 
         return true;
     }
+   
+    //병합성공시 실행
     public bool ProcessMergeSuccess(MergeRecipe recipe)
     {
-        GameObject itemPrefab = baseItem.Data.GetUpgradePrefab(recipe.resultType, recipe.resultStep);
+        if (baseItem == null || baseItem.Data == null) return false;
 
-        if(itemPrefab != null)
+        var inventoryManager = InventoryManager.Instance;
+        if (inventoryManager == null) return false;
+        
+        foreach (var mat in ingredients)
         {
-            Transform slot = baseItem.transform.parent;
-            GameObject newObject = Instantiate(itemPrefab, baseItem.transform.position, Quaternion.identity, slot);
-
-            EquipmentItem newItem = newObject.GetComponent<EquipmentItem>();
-            if(newItem != null)
-            {
-                newItem.Initialize(baseItem.Data, recipe.resultType, recipe.resultStep);
-            }
+            if (mat == null) continue;
+            inventoryManager.RemoveUid(mat.inventoryUid);
+            Destroy(mat.gameObject);
         }
-
-        foreach(var mat in ingredients)
+        
+        var baseData = inventoryManager.FindUid(baseItem.inventoryUid);
+        if (baseData != null)
         {
-            if (mat != null) Destroy(mat.gameObject);
+            baseData.classType = recipe.resultType;
+            baseData.step = recipe.resultStep;
         }
-        Destroy(baseItem.gameObject);
+        
+        baseItem.Initialize(baseItem.Data, recipe.resultType, recipe.resultStep);
 
-        baseItem = null;
         ingredients.Clear();
-
-        return true;
+        baseItem = null;
+        return true;        
     }   
+
+    //병합 규칙
     private void InitializeDefaultRecipes()
     {
         //Better(파랑등급) 까지는 같은 종류면 상관x
@@ -142,13 +253,15 @@ public class MergeController : MonoBehaviour
         AddRecipe(EquipmentSO.EquipmentClassType.Excellent,
                   2, 1, EquipmentSO.EquipmentClassType.Excellent, 2, EquipmentSO.EquipmentClassType.Epic, 0, true);
     }
+
+    //병합 레시피 추가메서드
     private void AddRecipe(EquipmentSO.EquipmentClassType inType, int inStep, int count,
-                          EquipmentSO.EquipmentClassType needType, int needStep,
-                          EquipmentSO.EquipmentClassType outType, int outStep, bool sameId)
+                           EquipmentSO.EquipmentClassType needType, int needStep,
+                           EquipmentSO.EquipmentClassType outType, int outStep, bool sameId)
     {
         recipes.Add(new MergeRecipe()
         {
-            type = inType,
+            inputType = inType,
             inputStep = inStep,
             needCount = count,
             needType = needType,

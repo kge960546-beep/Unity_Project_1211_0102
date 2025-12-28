@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipmentInventory : MonoBehaviour
 {
@@ -30,8 +31,16 @@ public class EquipmentInventory : MonoBehaviour
 
             if (item != null)
             {
-                item.Initialize(data.soData, data.type, data.step);
+                item.Initialize(data.soData, data.classType, data.step);
+                item.BindInventory(data.uid);
             }
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(lobbyGrid.parent.GetComponent<RectTransform>());
+
+        if(lobbyGrid.parent != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(lobbyGrid.parent.GetComponent<RectTransform>());
         }
     }
 }

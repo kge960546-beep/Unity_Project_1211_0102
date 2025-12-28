@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/01_Scenes/PlayerScene/LobbyScenes/Lobby.unity
     guid: bc5b31105da24c44787d01a0ce3e9053
   - enabled: 1
+    path: Assets/01_Scenes/PlayerScene/LobbyScenes/MergeScene.unity
+    guid: 69529b4b9c8158046b4a6fdefb36511a
+  - enabled: 1
     path: Assets/01_Scenes/PlayerScene/PlayerStage1.unity
     guid: f43f0369de133d14daa279c8ff2e31f0
   - enabled: 1
