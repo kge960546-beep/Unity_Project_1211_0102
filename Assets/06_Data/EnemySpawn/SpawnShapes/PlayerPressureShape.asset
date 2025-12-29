@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d852bdaac4fd6e24eabd32d945060214, type: 3}
   m_Name: PlayerPressureShape
   m_EditorClassIdentifier: 
-  forwardDistance: 8
+  forwardDistance: 10
   lateralSpread: 5
   angleSpread: 30

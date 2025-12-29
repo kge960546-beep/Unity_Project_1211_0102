@@ -1,15 +1,34 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BossWarningUI : MonoBehaviour
 {
-    [SerializeField] private GameObject root;
+    public CanvasGroup canvasGroup;
+    [SerializeField] private TextMeshProUGUI countdownText;
 
-    public void BWShow()
+    private void Awake()
     {
-        root.SetActive(true);
+        if(canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
     }
-    public void BWHide()
+    public IEnumerator ShowCountdown(int sec)
     {
-        root.SetActive(false);
+        canvasGroup.alpha = 1f;
+
+        for (int i = sec; i > 0; i--)
+        {
+            if(countdownText != null)
+                countdownText.text = i.ToString();
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        if (countdownText != null)
+            countdownText.text = "BOSS APPROACHING";
+
+        yield return new WaitForSeconds(1f);
+
+        canvasGroup.alpha = 0f;
     }
 }

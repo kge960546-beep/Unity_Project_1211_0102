@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Stage Pattern SO
   m_EditorClassIdentifier: 
   patterns:
-  - {fileID: 11400000, guid: 1da508fb2b790f34bb6483b6cdeba601, type: 2}
-  - {fileID: 11400000, guid: 09b87c147b1ef8f43a10aa95f314b46d, type: 2}
-  - {fileID: 11400000, guid: ce39a94519c4cdf4298f43e1075425a1, type: 2}
+  - {fileID: 11400000, guid: a25867daf481ba844a050d18ea8e8fb4, type: 2}
+  - {fileID: 11400000, guid: 237fd8eff6ecaf744b8500152b9b3b80, type: 2}

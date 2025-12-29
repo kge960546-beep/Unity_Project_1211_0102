@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_Flower Data
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 5072729482443720922, guid: d35f142a7c9e463419c471614c1b5745, type: 3}
-  enemyName: Flower
+  enemyID: 2
   poolCount: 250
   maxHp: 0
   attack: 0

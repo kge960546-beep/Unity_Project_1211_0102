@@ -9,6 +9,7 @@ public class SpawnPatternController : MonoBehaviour
     [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private Transform player;
 
+    private EnemyType enemyType;
     private Coroutine stageRoutine;
 
     private void Start()
@@ -54,7 +55,10 @@ public class SpawnPatternController : MonoBehaviour
     }
     public void SpawnByPattern(SpawnPatternSO pattern)
     {
-        var context = new SpawnContext
+        BossData bossData = ScriptableObject.CreateInstance<BossData>();
+        BossPatternSO bossPattern = ScriptableObject.CreateInstance<BossPatternSO>();
+
+        bossData.context = new SpawnContext
         {
             playerPosition = player.position,
             radius = pattern.radius,
@@ -62,7 +66,12 @@ public class SpawnPatternController : MonoBehaviour
             targetType = pattern.targetType
         };
 
-        Vector3[] positions = pattern.shape.GetSpawnPositions(context);
+        Vector3[] positions = pattern.shape.GetSpawnPositions(bossData.context);
+
+        if(pattern.enemyData.enemyType == EnemyType.Boss)
+        {
+            StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
+        }
 
         foreach(var pos in positions)
         {

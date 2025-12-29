@@ -10,7 +10,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform spawnPos;
     //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄것 
     [SerializeField] private Rigidbody2D playerRb;
+    [SerializeField] private BossWarningUI countdownUI;
+    [SerializeField] private GameObject barricadePrefab;
 
+    private GameObject barricadeInstance;
     private Dictionary<int, GameObject> enemyDataPrefab;
     //실행 중인 패턴 코루틴 관리
     private List<Coroutine> runningPatterns = new();
@@ -61,23 +64,72 @@ public class EnemySpawner : MonoBehaviour
         return enemy;
     }
     // Boss Spawn
-    public void SpawnBoss(BossPatternSO bossPattern)
+    public IEnumerator SpawnBossRoutine(BossPatternSO bossPattern, BossData bossData)
     {
-        if(bossPattern.clearOtherEnemies)
-        {
+        Debug.Log("[EmemySpawner] SpawnBossRoutine 호출");
+        if (bossPattern.clearOtherEnemies)
             ClearAllEnemies();
+
+        if (bossData == null)
+            Debug.LogError("bossData가 null");
+
+        if (bossData.shape == null)
+            Debug.LogError("bossData.Shape이 지정되지 못함");
+
+        // SpawnContext는 struct이므로 null 비교가 불가, 대신 기본값과 비교
+        if (bossData.context.Equals(default(SpawnContext)))
+            Debug.LogError("bossData.context가 초기화 되지 않음");
+
+        Vector3[] positions = bossData.shape.GetSpawnPositions(bossData.context);
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            positions[i].y += 5.0f;
         }
 
-        if(bossPattern.isLockedArena)
+        if (bossPattern.isLockedArena)
         {
-            //테두리 잠금
+            Debug.Log("isLockedArena 활성화");
+            ActivateBarricade(bossData.barricadeCenter);
         }
 
-        if(!enemyDataPrefab.TryGetValue(bossPattern.bossID,out GameObject prefab))
+        if (countdownUI != null)
+            yield return countdownUI.ShowCountdown(3);
+
+        if (!enemyDataPrefab.TryGetValue(bossPattern.bossID, out GameObject prefab))
         {
-            Debug.LogError($"bossID {bossPattern.bossID} 프리팹 없음");
-            return;
+            Debug.LogError($"boss {bossPattern.bossID} 프리핍 없음");
+            yield break;
         }
+
+        GameObject boss = ps.GetOrCreateInactivatedGameObject(prefab);
+        boss.transform.position = positions[0];
+        boss.transform.rotation = Quaternion.identity;
+        boss.SetActive(true);
+
+        while (bossData.currentHp > 0)
+            yield return null;
+
+        DeactivateBarricade();
+    }
+    private void ActivateBarricade(Transform center)
+    {
+        Debug.Log("[BossSpawn] ActivateBarricade 호출");
+        if (barricadeInstance == null)
+        {
+            Debug.LogError("[BossSpawn] 바리게이트가 프리팹 인스턴스 생성");
+            barricadeInstance = Instantiate(barricadePrefab);
+        }
+
+        barricadeInstance.transform.position = center.position;
+        barricadeInstance.SetActive(true);
+
+        Debug.Log($"[BossSpawn] 바리게이트 위치 설정 : {center.position}");
+    }
+    private void DeactivateBarricade()
+    {
+        if (barricadeInstance != null)
+            barricadeInstance.SetActive(false);
     }
     //풀 되돌리기
     public void ReturnEnemy(GameObject obj)
@@ -91,6 +143,10 @@ public class EnemySpawner : MonoBehaviour
 
         foreach(var e in enemies)
         {
+            if (e.name == "Barricade")
+                continue;
+
+
             ps.ReturnOrDestroyGameObject(e);
         }
     }

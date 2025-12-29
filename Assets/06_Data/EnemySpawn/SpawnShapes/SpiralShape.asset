@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
-  m_Name: m_EliteZombie Data
+  m_Script: {fileID: 11500000, guid: 76407073a22f8624baa15c906e370739, type: 3}
+  m_Name: SpiralShape
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7150319513743221602, guid: 755dc9e544cb5ff4e8d89232e8dabf55, type: 3}
-  enemyID: 101
-  poolCount: 1
-  maxHp: 600
-  attack: 10
-  speed: 2
+  rotateSpeed: 10

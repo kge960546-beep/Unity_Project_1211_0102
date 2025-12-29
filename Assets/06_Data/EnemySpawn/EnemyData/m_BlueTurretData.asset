@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_BlueTurretData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 943061139239816333, guid: 86986dabfffb5c64e830125ac98a3770, type: 3}
-  enemyName: BlueTurret
+  enemyID: 1
   poolCount: 0
   maxHp: 0
   attack: 0

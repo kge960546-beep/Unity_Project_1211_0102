@@ -9,6 +9,7 @@ public class BossPatternSO : SpawnPatternSO
     public bool clearOtherEnemies = true;
     public bool isLockedArena = true;
     public bool isShowWaring = true;
+    public bool isLastBoss = false;
 
     public Vector3 spawnPoint;
 }
