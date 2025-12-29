@@ -31,6 +31,7 @@ public class EquipmentSO : ScriptableObject
     public int plusEquimentAttack;
     public EquipmentPart partType;
     public Sprite itemSprite;
+    public int weight;
 
     [Header("SkillID")]
     public int skillId;
