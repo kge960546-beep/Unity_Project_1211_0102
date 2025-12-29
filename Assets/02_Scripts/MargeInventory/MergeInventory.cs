@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MergeInventory : MonoBehaviour
-{    
+{
+    public enum SortMode { Parts, Class }
+    [SerializeField] private SortMode sortMode;
+    [SerializeField] private TextMeshProUGUI sortModeText;
+
     [SerializeField] Transform mergeGrid;
     [SerializeField] GameObject itemPrefab;
 
@@ -45,7 +50,10 @@ public class MergeInventory : MonoBehaviour
 
         var myItems = InventoryManager.Instance.GetInventoryList();
 
-        foreach (var data in myItems)
+        var sorted = (sortMode == SortMode.Parts) ? InventorySortComparer.SortByPart(myItems) :
+                                                    InventorySortComparer.SortDescendingOrderByRank(myItems);
+
+        foreach (var data in sorted)
         {
             GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
 
@@ -92,5 +100,14 @@ public class MergeInventory : MonoBehaviour
                 LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
         }
         Canvas.ForceUpdateCanvases();
+    }
+    public void ToggleSort()
+    {
+        sortMode = (sortMode == SortMode.Parts) ? SortMode.Class : SortMode.Parts;
+        if (sortModeText != null)
+        {
+            sortModeText.text = (sortMode == SortMode.Parts) ? "부위별" : "등급별";
+        }
+        RefreshMergeUI();
     }
 }
