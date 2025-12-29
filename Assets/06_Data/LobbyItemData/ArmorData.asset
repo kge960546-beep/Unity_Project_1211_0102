@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArmorData
   m_EditorClassIdentifier: 
   equipmentName: 
-  equipmentID: 0
+  equipmentID: 2
   plusEquimentHP: 0
   plusEquimentAttack: 0
   partType: 1

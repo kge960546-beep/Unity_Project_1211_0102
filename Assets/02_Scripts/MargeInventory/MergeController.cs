@@ -54,7 +54,7 @@ public class MergeController : MonoBehaviour
         for(int i = 0; i < recipes.Count; i++)
         {
             MergeRecipe r = recipes[i];
-            if(r.inputType == baseItem.Type && r.inputStep == baseItem.Step)
+            if(r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step)
             {
                 recipe = r;
                 break;
@@ -75,7 +75,7 @@ public class MergeController : MonoBehaviour
     {
         if (baseItem == null || baseItem.Data == null) return false;
 
-        var recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.Type && r.inputStep == baseItem.Step);
+        var recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step);
         if (recipe == null) return false;
 
         if (ingredients.Count != recipe.needCount) return false;
@@ -88,7 +88,7 @@ public class MergeController : MonoBehaviour
     {
         if (baseItem == null || baseItem.Data == null) return false;
 
-        MergeRecipe recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.Type && r.inputStep == baseItem.Step);
+        MergeRecipe recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step);
 
         if (recipe == null)
         {
@@ -128,14 +128,14 @@ public class MergeController : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        Debug.Log($"[Merge] baseItem.Type={baseItem.Type}, baseItem.Step={baseItem.Step}");
+        Debug.Log($"[Merge] baseItem.Type={baseItem.ClassType}, baseItem.Step={baseItem.Step}");
 #endif
 
         //var recipe = recipes.FirstOrDefault(r => r.type == baseItem.Type && r.inputStep == baseItem.Step);
         MergeRecipe recipe = null;
         foreach (MergeRecipe r in recipes)
         {
-            if (r.inputType == baseItem.Type && r.inputStep == baseItem.Step)
+            if (r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step)
             {
                 recipe = r;
                 break;
@@ -168,9 +168,9 @@ public class MergeController : MonoBehaviour
         if (baseItem == null || baseItem.Data == null) { Debug.Log("[Merge] base null/data null"); return false; }
 
 
-        if (item.Type != recipe.needType)
+        if (item.ClassType != recipe.needType)
         {
-            Debug.Log($"[Merge] FAIL Type mat={item.Type} need={recipe.needType}");
+            Debug.Log($"[Merge] FAIL Type mat={item.ClassType} need={recipe.needType}");
             return false;
         }
 
@@ -217,14 +217,22 @@ public class MergeController : MonoBehaviour
             inventoryManager.RemoveUid(mat.inventoryUid);
             Destroy(mat.gameObject);
         }
+
+        //var baseData = inventoryManager.FindUid(baseItem.inventoryUid);
+        //if (baseData != null)
+        //{
+        //    baseData.classType = recipe.resultType;
+        //    baseData.step = recipe.resultStep;
+        //}
+
+        bool updated = inventoryManager.UpdateUid(baseItem.inventoryUid, recipe.resultType, recipe.resultStep);
         
-        var baseData = inventoryManager.FindUid(baseItem.inventoryUid);
-        if (baseData != null)
+        if(!updated)
         {
-            baseData.classType = recipe.resultType;
-            baseData.step = recipe.resultStep;
+            Debug.Log($"실패한 uid = {baseItem.inventoryUid}");
+            return false; 
         }
-        
+
         baseItem.Initialize(baseItem.Data, recipe.resultType, recipe.resultStep);
 
         ingredients.Clear();
@@ -235,23 +243,62 @@ public class MergeController : MonoBehaviour
     //병합 규칙
     private void InitializeDefaultRecipes()
     {
-        //Better(파랑등급) 까지는 같은 종류면 상관x
-        AddRecipe(EquipmentSO.EquipmentClassType.Normal,
-                  0, 2, EquipmentSO.EquipmentClassType.Normal, 0, EquipmentSO.EquipmentClassType.Good, 0, true);
-        AddRecipe(EquipmentSO.EquipmentClassType.Good,
-                  0, 2, EquipmentSO.EquipmentClassType.Good, 0, EquipmentSO.EquipmentClassType.Better, 0, true);
+        recipes.Clear();
 
-        AddRecipe(EquipmentSO.EquipmentClassType.Better,
-                  0, 2, EquipmentSO.EquipmentClassType.Better, 0, EquipmentSO.EquipmentClassType.Excellent, 0, true);
+        // 0) 초록까지: 같은 부위면 종류(장비ID) 상관없음(= step2 승급도 sameId false)
+        AddTierRecipes(
+            type: EquipmentSO.EquipmentClassType.Normal,
+            nextType: EquipmentSO.EquipmentClassType.Good,
+            sameIdOnStep2ToNext: false
+        );
 
-        AddRecipe(EquipmentSO.EquipmentClassType.Excellent,
-                  0, 1, EquipmentSO.EquipmentClassType.Excellent, 0, EquipmentSO.EquipmentClassType.Excellent, 1, false);
-        
-        AddRecipe(EquipmentSO.EquipmentClassType.Excellent,
-                  1, 2, EquipmentSO.EquipmentClassType.Excellent, 0, EquipmentSO.EquipmentClassType.Excellent, 2, false);
+        AddTierRecipes(
+            type: EquipmentSO.EquipmentClassType.Good,
+            nextType: EquipmentSO.EquipmentClassType.Better,
+            sameIdOnStep2ToNext: false
+        );
 
-        AddRecipe(EquipmentSO.EquipmentClassType.Excellent,
-                  2, 1, EquipmentSO.EquipmentClassType.Excellent, 2, EquipmentSO.EquipmentClassType.Epic, 0, true);
+        // 1) 파랑부터: step2 -> 다음 등급에서만 종류(장비ID) 같아야 함
+        AddTierRecipes(
+            type: EquipmentSO.EquipmentClassType.Better,
+            nextType: EquipmentSO.EquipmentClassType.Excellent,
+            sameIdOnStep2ToNext: true
+        );
+
+        AddTierRecipes(
+            type: EquipmentSO.EquipmentClassType.Excellent,
+            nextType: EquipmentSO.EquipmentClassType.Epic,
+            sameIdOnStep2ToNext: true
+        );
+
+        AddTierRecipes(
+            type: EquipmentSO.EquipmentClassType.Epic,
+            nextType: EquipmentSO.EquipmentClassType.Legend,
+            sameIdOnStep2ToNext: true
+        );
+
+        // 2) 빨강(마지막 티어): 내부 단계만(0->1, 1->2). step2 승급은 없음.
+        AddFinalTierRecipes(EquipmentSO.EquipmentClassType.Legend);
+    }
+
+    private void AddTierRecipes(EquipmentSO.EquipmentClassType type,
+                                EquipmentSO.EquipmentClassType nextType, bool sameIdOnStep2ToNext)
+    {
+        //재료 1개 같은 부위면 종류 무관
+        AddRecipe(type, 0, 1, type, 0, type, 1, sameId: false);
+
+        //재료 2개 같은 부위면 종류 무관
+        AddRecipe(type, 1, 2, type, 1, type, 2, sameId: false);
+
+        // step2 -> nextType step0 : 재료 1개
+        // - Normal ~ Good: sameId=false
+        // - Better 이상: sameId=true
+        AddRecipe(type, 2, 1, type, 2, nextType, 0, sameId: sameIdOnStep2ToNext);
+    }
+    private void AddFinalTierRecipes(EquipmentSO.EquipmentClassType type)
+    {
+        AddRecipe(type, 0, 1, type, 0, type, 1, sameId: false);
+        AddRecipe(type, 1, 2, type, 1, type, 2, sameId: false);        
     }
 
     //병합 레시피 추가메서드

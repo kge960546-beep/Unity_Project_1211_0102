@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,10 +13,11 @@ public class InventoryItemData
 }
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance;    
+    public static InventoryManager Instance;
+
+    private event Action onInventoryChanged;
 
     [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
-
     public List<EquipmentSO> acquisitionItemsInStage = new List<EquipmentSO>();
 
     [Header("Test")]
@@ -58,6 +60,19 @@ public class InventoryManager : MonoBehaviour
             return;
         }
     }
+    private void InventoryChanged()
+    {
+        onInventoryChanged?.Invoke();
+    }
+    public void SubscribeOnInventoryChanged(Action action)
+    {
+        onInventoryChanged += action;
+    }
+    public void UnsubscribeOnInventoryChanged(Action action)
+    {
+        onInventoryChanged -= action;
+    }
+            
     public void AddItem(EquipmentSO itemData)
     {
         InventoryItemData newData = new InventoryItemData();
@@ -66,7 +81,8 @@ public class InventoryManager : MonoBehaviour
         newData.classType = EquipmentSO.EquipmentClassType.Normal;
         newData.step = 0;
 
-        inventoryItems.Add(newData);        
+        inventoryItems.Add(newData);
+        InventoryChanged();
     }
     public List<InventoryItemData> GetInventoryList()
     {
@@ -84,9 +100,27 @@ public class InventoryManager : MonoBehaviour
 #endif
     }
     public InventoryItemData FindUid(string uid) => inventoryItems.Find(x => x.uid == uid);
-    public void RemoveUid(string uid) => inventoryItems.RemoveAll(x => x.uid == uid);    
+    public bool RemoveUid(string uid)
+    {
+        int remove = inventoryItems.RemoveAll(x => x.uid == uid);
+        if (remove > 0)
+            InventoryChanged();
+        return remove > 0;
+    }
+    public bool UpdateUid(string uid, EquipmentSO.EquipmentClassType classType, int step)
+    {
+        var data = FindUid(uid);
+        if (data == null) return false;
+
+        data.classType = classType;
+        data.step = step;
+
+        InventoryChanged();
+        return true;
+    }
     public void ClearStageData()
     {
         acquisitionItemsInStage.Clear();
+        InventoryChanged();
     }
 }

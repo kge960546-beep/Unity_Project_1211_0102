@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class EquipmentItem : MonoBehaviour
 {
     [SerializeField] private EquipmentSO data;
-    [SerializeField] private EquipmentSO.EquipmentClassType type;    
+    [SerializeField] private EquipmentSO.EquipmentClassType classType;
+    [SerializeField] private EquipmentSO.EquipmentPart partType;
     [Range(0, 2)] public int step;
 
     [SerializeField] private Image iconImage;
@@ -20,7 +21,8 @@ public class EquipmentItem : MonoBehaviour
     public string inventoryUid {  get; private set; }
     public EquipmentSO Data => data;
     public int EquipmentId { get { return data != null ? data.equipmentID : -1; } }
-    public EquipmentSO.EquipmentClassType Type => type;    
+    public EquipmentSO.EquipmentClassType ClassType => classType;   
+    public EquipmentSO.EquipmentPart PartType => partType;
     public int Step => step;
 
     private void Awake()
@@ -35,7 +37,7 @@ public class EquipmentItem : MonoBehaviour
     public void Initialize(EquipmentSO newData, EquipmentSO.EquipmentClassType newtype,int newStep)
     {
         data = newData;
-        type = newtype;
+        classType = newtype;
         step = Mathf.Clamp(newStep, 0, 2);
         
         UpdateItem();
@@ -53,7 +55,7 @@ public class EquipmentItem : MonoBehaviour
         }
         if(frameImage != null)
         {
-           SetColor(type);
+           SetColor(classType);
         }
         UpdateMergeLevel();
     }

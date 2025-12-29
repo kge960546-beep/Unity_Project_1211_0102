@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MergeUIWindow : MonoBehaviour
 {
-    [SerializeField] private MergeController mergeController;
+    [SerializeField] private MergeController mergeController;    
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private Button actionMergeButton;
 
@@ -61,8 +61,9 @@ public class MergeUIWindow : MonoBehaviour
     }
     //다시 로비로가기
     public void CloseMergeScene()
-    {
+    {        
         SceneManager.UnloadSceneAsync("MergeScene");
+       
     }
 
     //업그래이드할 장비등록
@@ -150,12 +151,12 @@ public class MergeUIWindow : MonoBehaviour
         if (selectedItem == null) return;
 
         //예상 결과 계산      
-        EquipmentSO.EquipmentClassType nextType = selectedItem.Type;
+        EquipmentSO.EquipmentClassType nextType = selectedItem.ClassType;
         int nextStep = selectedItem.Step;
 
         if (selectedItem.Step >= 2)
         {
-            nextType = selectedItem.Type + 1;
+            nextType = selectedItem.ClassType + 1;
             nextStep = 0;
         }
         else
@@ -259,7 +260,7 @@ public class MergeUIWindow : MonoBehaviour
         EnsureIgnoreLayout(movement);
 
         EquipmentItem uiItem = movement.GetComponent<EquipmentItem>();
-        uiItem.Initialize(item.Data, item.Type, item.Step);
+        uiItem.Initialize(item.Data, item.ClassType, item.Step);
         uiItem.BindInventory(item.inventoryUid);
 
         uiItem.SetOnClickAction(() =>
