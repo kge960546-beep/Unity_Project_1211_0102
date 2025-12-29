@@ -32,6 +32,9 @@ public class EquipmentSO : ScriptableObject
     public EquipmentPart partType;
     public Sprite itemSprite;
 
+    [Header("SkillID")]
+    public int skillId;
+
     [Header("Upgrade")]
     public GameObject[] upgradePrefabs = new GameObject[18];
 
