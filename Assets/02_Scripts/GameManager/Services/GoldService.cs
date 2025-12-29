@@ -85,6 +85,25 @@ public class GoldService : MonoBehaviour, IGameManagementService
             SaveGold();
         }
     }
+    //테스트용 골드획득 나중에 지울예정
+    #region
+    public void AddGold(int amount)
+    {
+        savedGold += amount;
+        earnedGold += amount; // 필요에 따라 earnedGold는 뺄 수도 있음
+
+        SaveGold(); // 저장
+        onGoldAmountChanged?.Invoke(savedGold, earnedGold);
+    }
+    public void ReverseAddGold(int amount)
+    {
+        savedGold -= amount;
+        earnedGold -= amount; // 필요에 따라 earnedGold는 뺄 수도 있음
+
+        SaveGold(); // 저장
+        onGoldAmountChanged?.Invoke(savedGold, earnedGold);
+    }
+    #endregion
     void SaveGold()
     {
         if (instance != this) return;

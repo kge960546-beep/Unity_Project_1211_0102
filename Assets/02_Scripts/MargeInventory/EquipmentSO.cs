@@ -25,6 +25,7 @@ public class EquipmentSO : ScriptableObject
     [Header("Identity")]
     public string equipmentName;
     public int equipmentID;
+    public EquipmentClassType classType;
 
     [Header("Stats")]
     public int plusEquimentHP;
@@ -32,6 +33,7 @@ public class EquipmentSO : ScriptableObject
     public EquipmentPart partType;
     public Sprite itemSprite;
     public int weight;
+    
 
     [Header("SkillID")]
     public int skillId;
