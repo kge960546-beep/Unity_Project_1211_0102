@@ -140,7 +140,6 @@ public class MergeUIWindow : MonoBehaviour
     //병합하면 어떻게 되는지 예시 창 로직
     void UpdateResult()
     {
-        //ClearChildren(resultSlotParent);        
 
         foreach (Transform child in resultSlotParent)
         {
@@ -151,21 +150,17 @@ public class MergeUIWindow : MonoBehaviour
         if (selectedItem == null) return;
 
         //예상 결과 계산      
-        EquipmentSO.EquipmentClassType nextType = selectedItem.ClassType;
-        int nextStep = selectedItem.Step;
+        EquipmentSO.EquipmentClassType nextType;
+        int nextStep;
 
-        if (selectedItem.Step >= 2)
+        if(!mergeController.ResultPreview(selectedItem.ClassType, selectedItem.Step, out nextType, out nextStep))
         {
-            nextType = selectedItem.ClassType + 1;
-            nextStep = 0;
-        }
-        else
-        {
-            nextStep = selectedItem.Step + 1;
-        }
+            nextType = selectedItem.ClassType;
+            nextStep = selectedItem.Step;
+        }      
 
-        //결과 장비 생성
-        GameObject resultObj = Instantiate(itemPrefab);
+            //결과 장비 생성
+            GameObject resultObj = Instantiate(itemPrefab);
         RectTransform resultRect = resultObj.GetComponent<RectTransform>();
         resultRect.SetParent(resultSlotParent, false);
 
