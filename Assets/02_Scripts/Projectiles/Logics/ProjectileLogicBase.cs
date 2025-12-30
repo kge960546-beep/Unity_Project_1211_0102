@@ -10,7 +10,6 @@ public struct ProjectileInstanceInitializationData
     public float currentProjectorAzimuth;
     public int sequenceCount;
     public int sequenceNumber;
-    //public int level; // TODO: This may not required. Remove this appropriately.
     public int layer;
 }
 
@@ -62,11 +61,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
     public void CallbackAtFixedUpdate(ref ProjectileInstanceContext context)
     {
         context.timer += Time.fixedDeltaTime;
-        if (context.timer >= LifeTime)
-        {
-            GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(context.obj);
-            // TODO: refine destruction, defer it and make some destruction animation etc.
-        }
+        if (context.timer >= LifeTime) GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(context.obj);
         CallbackAtFixedUpdateInternal(ref context);
     }
 

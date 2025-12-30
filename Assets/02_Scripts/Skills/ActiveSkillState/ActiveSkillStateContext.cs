@@ -11,7 +11,7 @@ public struct ActiveSkillStateContext
     public ProjectileLogicBase logic;
     public LeveledProjectionTimingTable[] leveledTimingTables;
     public Rigidbody2D skillUserRB;
-    public GameObject tempSharedCommonProjectilePrefab;
+    public GameObject SharedCommonProjectilePrefab;
     public ProjectileInstanceInitializationData cachedInitData;
     public float period;
     public int level;
