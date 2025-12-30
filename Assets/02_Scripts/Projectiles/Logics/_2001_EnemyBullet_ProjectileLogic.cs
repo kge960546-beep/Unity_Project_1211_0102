@@ -13,19 +13,11 @@ public class _2001_EnemyBullet_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
-        GameContextService gcs = GameManager.Instance.GetService<GameContextService>(); // TODO: rework gcs
-        GameObject player = gcs.Player;
-        if (null != player)
-        {
-            Vector2 dir = ((Vector2)player.transform.position - instanceData.rb.position).normalized;
-            instanceData.rb.velocity = dir * DefaultSpeed;
-            instanceData.rb.rotation = Mathf.Atan2(dir.y, dir.x);
-        }
-        else
-        {
-            instanceData.rb.velocity = Vector2.zero;
-            instanceData.rb.rotation = 0f;
-        }
+        PlayerFeedService pfs = GameManager.Instance.GetService<PlayerFeedService>();
+
+        Vector2 dir = (pfs.playerPosition - instanceData.rb.position).normalized;
+        instanceData.rb.velocity = dir * DefaultSpeed;
+        instanceData.rb.rotation = Mathf.Atan2(dir.y, dir.x);
     }
 
     protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData) { }
