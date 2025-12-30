@@ -9,7 +9,7 @@ public enum EquipmentBadgeType
     Upgrade,
     Evolution
 }
-public class EquipmentOptionUI : MonoBehaviour
+public class SkillCardLayout : MonoBehaviour
 {
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI nameText;

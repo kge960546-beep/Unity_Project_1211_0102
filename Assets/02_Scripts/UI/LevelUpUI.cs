@@ -7,7 +7,7 @@ using Unity.Content;
 public class LevelUpUI : MonoBehaviour
 {
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private EquipmentOptionUI optionPrefab;
+    [SerializeField] private SkillCardLayout optionPrefab;
     [SerializeField] private Transform optionRoot;
     [SerializeField] private Button skipButton;
 
@@ -16,7 +16,7 @@ public class LevelUpUI : MonoBehaviour
     public event Action OnClosed;
     private void Awake()
     {
-        equipmentService = GameManager .Instance.GetService<EquipmentService>();
+        equipmentService = GameManager.Instance.GetService<EquipmentService>();
         HideInstant();
     }
     public void Open(List<EquipmentOption> options)
