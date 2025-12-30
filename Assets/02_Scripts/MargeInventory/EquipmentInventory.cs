@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +12,9 @@ public class EquipmentInventory : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private TextMeshProUGUI sortModeText;
 
-    private Coroutine refreshCo;
     
+    private Coroutine refreshCo;
+
     private void OnEnable()
     {
         if (InventoryManager.Instance != null)
@@ -27,7 +26,7 @@ public class EquipmentInventory : MonoBehaviour
         if (InventoryManager.Instance != null)
             InventoryManager.Instance.UnsubscribeOnInventoryChanged(RefreshLobbyUI);
 
-        if(refreshCo != null)
+        if (refreshCo != null)
         {
             StopCoroutine(refreshCo);
             refreshCo = null;
@@ -36,12 +35,7 @@ public class EquipmentInventory : MonoBehaviour
     public void RefreshLobbyUI()
     {
         if (lobbyGrid == null) return;
-
-        foreach (Transform child in lobbyGrid)
-        {
-            Destroy(child.gameObject);
-        }
-
+       
         if(InventoryManager.Instance == null) return;
 
         var myItems = InventoryManager.Instance.GetInventoryList();
@@ -49,17 +43,48 @@ public class EquipmentInventory : MonoBehaviour
         var sorted = (sortMode == SortMode.Parts) ? InventorySortComparer.SortByPart(myItems) :
                                                     InventorySortComparer. SortDescendingOrderByRank(myItems);
 
-        foreach (var data in sorted)
+        int dataCount = sorted.Count;
+        int currentSlotCount = lobbyGrid.childCount;
+
+        for(int i = 0; i<dataCount; i++)
         {
-            GameObject newSlot = Instantiate(itemPrefab, lobbyGrid);
+            EquipmentItem EItem = null;
 
-            EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-
-            if (item != null)
+            if(i < currentSlotCount)
             {
-                item.Initialize(data.soData, data.classType, data.step);
-                item.BindInventory(data.uid);
+                Transform child = lobbyGrid.GetChild(i);
+                child.gameObject.SetActive(true);
+                EItem = child.GetComponent<EquipmentItem>();
             }
+            else
+            {
+                GameObject newSlot = Instantiate(itemPrefab, lobbyGrid);
+                EItem = newSlot.GetComponent<EquipmentItem>();
+            }
+
+            if(EItem != null)
+            {
+                var data = sorted[i];
+                EItem.Initialize(data.scriptableObjectData, data.classType, data.step);
+                EItem.BindInventory(data.uid);
+
+                var slotItem = EItem;                
+                var btn = EItem.GetComponent<Button>();
+                if (btn != null)
+                {
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(() => GetEquipped(slotItem));
+                }
+                else
+                {
+                    EItem.SetOnClickAction(() => GetEquipped(slotItem));
+                }
+            }            
+        }
+
+        for(int i = dataCount; i < currentSlotCount; i++)
+        {
+            lobbyGrid.GetChild(i).gameObject.SetActive(false);
         }
 
         if(refreshCo != null)
@@ -67,6 +92,10 @@ public class EquipmentInventory : MonoBehaviour
             StopCoroutine(refreshCo);
         }
         refreshCo = StartCoroutine(RefreshTiming());
+    }
+    public void GetEquipped(EquipmentItem item)
+    {
+        //TODO: 장비 작착 및 데이터 합치기
     }
     IEnumerator RefreshTiming()
     {

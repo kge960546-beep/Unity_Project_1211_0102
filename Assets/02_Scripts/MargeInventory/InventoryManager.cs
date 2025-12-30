@@ -7,9 +7,22 @@ using UnityEngine.SceneManagement;
 public class InventoryItemData
 {
     public string uid;
-    public EquipmentSO soData;
+    public EquipmentSO scriptableObjectData;
     public EquipmentSO.EquipmentClassType classType;
     public int step;
+}
+[System.Serializable]
+public class ItemSaveData
+{
+    public string uid;
+    public int scriptableObjectData;
+    public int classType;
+    public int step;
+}
+[System.Serializable]
+public class InventorySaveFile
+{
+    public List<ItemSaveData> saveItems = new List<ItemSaveData>();
 }
 public class InventoryManager : MonoBehaviour
 {
@@ -17,8 +30,11 @@ public class InventoryManager : MonoBehaviour
 
     private event Action onInventoryChanged;
 
-    [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
     public List<EquipmentSO> acquisitionItemsInStage = new List<EquipmentSO>();
+    [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
+
+    public List<EquipmentSO> allItems;
+    private Dictionary<int, EquipmentSO> itemById;
 
     [Header("Test")]
     public EquipmentSO debugWeapon;
@@ -53,12 +69,29 @@ public class InventoryManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            ConversionItemData();
+            LoadInventory();
         }
         else
         {
             Destroy(gameObject);
             return;
         }
+    }
+    private void OnApplicationQuit()
+    {
+        SaveInventory();
+    }
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+            SaveInventory();
+    }
+    private void OnApplicationFocus(bool focus)
+    {
+        if(!focus)
+            SaveInventory();
     }
     private void InventoryChanged()
     {
@@ -72,13 +105,31 @@ public class InventoryManager : MonoBehaviour
     {
         onInventoryChanged -= action;
     }
-            
+    public void ConversionItemData()
+    {
+        if(allItems == null || allItems.Count == 0)
+        {
+            itemById = null;
+            return;
+        }
+
+        itemById = new Dictionary<int, EquipmentSO>(allItems.Count);
+
+        foreach(var item in allItems)
+        {
+            if(item == null) continue;
+
+            if (itemById.ContainsKey(item.equipmentID)) continue;
+            itemById.Add(item.equipmentID, item);
+        }
+    }
     public void AddItem(EquipmentSO itemData)
     {
         InventoryItemData newData = new InventoryItemData();
         newData.uid = System.Guid.NewGuid().ToString();
-        newData.soData = itemData;
-        newData.classType = EquipmentSO.EquipmentClassType.Normal;
+        newData.scriptableObjectData = itemData;
+        //newData.classType = EquipmentSO.EquipmentClassType.Normal;
+        newData.classType = itemData.classType;
         newData.step = 0;
 
         inventoryItems.Add(newData);
@@ -100,10 +151,10 @@ public class InventoryManager : MonoBehaviour
 #endif
     }
     public InventoryItemData FindUid(string uid) => inventoryItems.Find(x => x.uid == uid);
-    public bool RemoveUid(string uid)
+    public bool RemoveUid(string uid, bool mergeEvent = true)
     {
         int remove = inventoryItems.RemoveAll(x => x.uid == uid);
-        if (remove > 0)
+        if (remove > 0 && mergeEvent)
             InventoryChanged();
         return remove > 0;
     }
@@ -117,6 +168,65 @@ public class InventoryManager : MonoBehaviour
 
         InventoryChanged();
         return true;
+    }
+    public void SaveInventory()
+    {
+        InventorySaveFile basket = new InventorySaveFile();
+
+        foreach(var item in inventoryItems)
+        {
+            if (item.scriptableObjectData == null) continue;
+
+            ItemSaveData saveData = new ItemSaveData();
+            saveData.uid = item.uid;
+            saveData.scriptableObjectData = item.scriptableObjectData.equipmentID;
+            saveData.classType = (int)item.classType;
+            saveData.step = item.step;
+
+            
+            basket.saveItems.Add(saveData);
+        }
+
+        string json = JsonUtility.ToJson(basket);
+        GoldService.SaveEncryptedData("myEquipment", json);
+        Debug.Log("Json 저장완료");
+    }
+    public void LoadInventory()
+    {
+        if (itemById == null || itemById.Count == 0) return;
+
+        string json = GoldService.LoadEncryptedData("myEquipment");
+
+        if (string.IsNullOrEmpty(json)) return;
+
+        InventorySaveFile basket = JsonUtility.FromJson<InventorySaveFile>(json);
+
+        if (basket == null) return;
+
+        inventoryItems.Clear();
+
+        foreach(var item in basket.saveItems)
+        {
+            EquipmentSO originalSO = null;
+
+            itemById.TryGetValue(item.scriptableObjectData,  out originalSO);
+
+            if(originalSO != null)
+            {
+                InventoryItemData loadItem = new InventoryItemData();
+                loadItem.uid = item.uid;
+                loadItem.scriptableObjectData = originalSO;
+                loadItem.classType = (EquipmentSO.EquipmentClassType)item.classType;
+                loadItem.step = item.step;
+
+                inventoryItems.Add(loadItem);
+            }
+            else
+            {
+                Debug.Log("없다 찾아라 세상끝에 두고 왔으니");
+            }
+        }
+        InventoryChanged();
     }
     public void ClearStageData()
     {

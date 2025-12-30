@@ -13,7 +13,7 @@ public static class InventorySortComparer
     //부위별 정렬
     public static List<InventoryItemData> SortByPart(List<InventoryItemData> sorted) 
     {
-        return sorted.OrderBy(itemData => itemData.soData.partType).
+        return sorted.OrderBy(itemData => itemData.scriptableObjectData.partType).
             ThenByDescending(itemData => itemData.classType).
             ThenByDescending(itemData => itemData.step).ToList();        
     }
