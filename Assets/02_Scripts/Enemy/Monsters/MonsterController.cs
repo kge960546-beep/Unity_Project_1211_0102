@@ -131,10 +131,8 @@ public class MonsterController : MonoBehaviour
         
         // 최종이동 방향 =  플레이어를 향하는 힘 + 서로 밀어내는 힘
         Vector2 finalDir= (toPlayer + separation).normalized;
-         
-        Vector2 nextPos = rb.position + finalDir * moveSpeed * Time.fixedDeltaTime;
 
-        rb.MovePosition(nextPos);
+        rb.velocity = finalDir * moveSpeed;
     }
     Vector2 CalculateSeparation() 
     {

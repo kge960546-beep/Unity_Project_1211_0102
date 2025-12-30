@@ -60,7 +60,7 @@ public class TestPlayerController : MonoBehaviour
     }
     private void MoveCrossHair()
     {
-        Vector3 dir = new Vector3(inputX, inputY).normalized;
+        Vector3 dir = pfs.userInputDirection.normalized;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         indicator.transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
         indicator.transform.position = transform.position + (dir * 1.0f);

@@ -23,12 +23,8 @@ public class _0005_KatanaSlash_ProjectileLogic : ProjectileLogicBase
     {
         float timer = instanceData.timer;
 
-        Rigidbody2D playerRB = GameManager.Instance.GetService<GameContextService>().GetComponent<Rigidbody2D>();
-        // TODO: need to refactor not to use this gcs and instead utilize subscription based implementation
-
-        if (null == instanceData.rb || null == playerRB) return;
-
-        Vector2 playerPosition = playerRB.position;
+        PlayerFeedService pfs = GameManager.Instance.GetService<PlayerFeedService>();
+        Vector2 playerPosition = pfs.playerPosition;
 
         Unity.Mathematics.math.sincos(instanceData.rb.rotation * Mathf.Deg2Rad, out float sin, out float cos);
         Vector2 direction = new Vector2(cos, sin);

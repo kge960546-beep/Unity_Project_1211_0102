@@ -30,7 +30,7 @@ public class EquipmentData : ScriptableObject
     public string description;
 
     [Header("Skill Binding")]
-    public SkillDescriptor skill;
+    public ActiveSkillDescriptor skill;
 
     [Header("Progression")]
     public int maxLevel = 6;
