@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,12 +23,15 @@ public class SkillManagementBehaviour : MonoBehaviour
     private PassiveSkillControllerBehaviour[] passiveSkills = new PassiveSkillControllerBehaviour[6];
     private int playerProjectileLayer;
 
+    private DamageStatisticsService dss;
+
     private void Awake()
     {
         activeSkillDescriptorDictionary = activeSkillDescriptorInputTable.ToDictionary(desc => desc.SkillID);
         passiveSkillDescriptorDictionary = passiveSkillDescriptorInputTable.ToDictionary(desc => desc.SkillID);
         evoRouteDictionary = evoRouteInputTable.ToDictionary(r => r.EvolvedSkillID);
         playerProjectileLayer = GameManager.Instance.GetService<LayerService>().playerProjectileLayer;
+        dss = GameManager.Instance.GetService<DamageStatisticsService>();
     }
 
     public List<(SkillDescriptor descriptor, int nextLevel, bool isPassive)> ListUpUpgradableSkills()
@@ -54,6 +58,30 @@ public class SkillManagementBehaviour : MonoBehaviour
     }
 
     #region Active Skill Spceific Methods
+    public void EvolveActiveSkill(int skillID)
+    {
+        if (evoRouteDictionary.TryGetValue(skillID, out SkillEvolutionRoute route)) throw new System.InvalidOperationException("Cannot find the target skill.");
+
+        // base skill 1 is always an active skill.
+        if (null != dss) dss.OnActiveSkillEvolve(activeSkillDescriptorDictionary[route.BaseSkillID1], activeSkillDescriptorDictionary[skillID]);
+        UnbindActiveSkill(route.BaseSkillID1);
+
+        // base skill 2 can be either an active skill or a passive skill.
+        if (TryFindTargetActiveSkillCell(route.BaseSkillID2, out _))
+        {
+            if (null != dss) dss.OnActiveSkillEvolve(activeSkillDescriptorDictionary[route.BaseSkillID2], activeSkillDescriptorDictionary[skillID]);
+            UnbindActiveSkill(route.BaseSkillID2);
+        }
+
+        BindActiveSkill(skillID);
+    }
+
+    public void LevelUpActiveSkill(int skillID)
+    {
+        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
+        activeSkills[cellIndex].context.level++;
+    }
+
     public void BindActiveSkill(int skillID, bool isDefaultSkill = false)
     {
         if (activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException("Cannot find designated skill.");
@@ -73,32 +101,18 @@ public class SkillManagementBehaviour : MonoBehaviour
         skill.context.layer = playerProjectileLayer;
 
         activeSkills[cellIndex] = skill;
+
+        if (null != dss) dss.OnActiveSkillBind(descriptor);
     }
 
-    public void LevelUpActiveSkill(int skillID)
+    private void UnbindActiveSkill(int skillID)
     {
-        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
-        activeSkills[cellIndex].context.level++;
-    }
-
-    public void EvolveActiveSkill(int skillID)
-    {
-        if (evoRouteDictionary.TryGetValue(skillID, out SkillEvolutionRoute route)) throw new System.InvalidOperationException("Cannot find the target skill.");
-
-        // base skill 1 is always an active skill.
-        RemoveActiveSkill(route.BaseSkillID1);
-
-        // base skill 2 can be either an active skill or a passive skill.
-        if (TryFindTargetActiveSkillCell(route.BaseSkillID2, out _)) RemoveActiveSkill(route.BaseSkillID2);
-
-        BindActiveSkill(skillID);
-    }
-
-    private void RemoveActiveSkill(int skillID)
-    {
+        if (activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException("Cannot find designated skill.");
         if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
         Destroy(activeSkills[cellIndex]);
         activeSkills[cellIndex] = null;
+
+        if (null != dss) dss.OnActiveSkillUnbind(descriptor);
     }
 
     private bool TryFindEmptyActiveSkillCell(out int cellIndex)
