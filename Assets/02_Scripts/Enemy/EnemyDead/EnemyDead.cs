@@ -28,6 +28,7 @@ public class EnemyDead : MonoBehaviour
     [Header("Prefab")]    
     [SerializeField] private GameObject skillRandomBoxPrefab;
     [SerializeField] private GameObject[] consumablePrefabs;
+    [SerializeField] private GameObject equipmentBoxPRefab;
 
     [Header("UI")]
     [SerializeField] private GameObject clearPanel;    
@@ -81,6 +82,9 @@ public class EnemyDead : MonoBehaviour
                     }
                 }
                 SpawnItemPos(skillRandomBoxPrefab, deadPos, 1);
+
+                if(equipmentBoxPRefab != null)
+                    SpawnItemPos(equipmentBoxPRefab, deadPos, 2);
 
                 if(currentExp < expPrefabs.Count - 1)
                 {
