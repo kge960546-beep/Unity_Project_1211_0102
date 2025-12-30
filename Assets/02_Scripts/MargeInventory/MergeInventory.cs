@@ -41,10 +41,10 @@ public class MergeInventory : MonoBehaviour
     {
         if (mergeGrid == null) return;
 
-        foreach (Transform child in mergeGrid)
-        {
-            Destroy(child.gameObject);
-        }
+        //foreach (Transform child in mergeGrid)
+        //{
+        //    Destroy(child.gameObject);
+        //}
 
         if (InventoryManager.Instance == null) return;
 
@@ -53,26 +53,59 @@ public class MergeInventory : MonoBehaviour
         var sorted = (sortMode == SortMode.Parts) ? InventorySortComparer.SortByPart(myItems) :
                                                     InventorySortComparer.SortDescendingOrderByRank(myItems);
 
-        foreach (var data in sorted)
+        int dataCount = sorted.Count;
+        int currentSlotCount = mergeGrid.childCount;
+
+        for (int i = 0; i < dataCount; i++)
         {
-            GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
+            EquipmentItem EItem = null;
 
-            EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-
-            if (item != null)
+            if (i < currentSlotCount)
             {
-                item.Initialize(data.soData, data.classType, data.step);
-                item.BindInventory(data.uid);
-                
-                item.SetOnClickAction(() =>
-                {
-                    if (mergeWindow != null)
-                        mergeWindow.OnItemSelected(item);
-                });
-            } 
+                Transform child = mergeGrid.GetChild(i);
+                child.gameObject.SetActive(true);
+                EItem = child.GetComponent<EquipmentItem>();
+            }
+            else
+            {
+                GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
+                EItem = newSlot.GetComponent<EquipmentItem>();
+            }
+
+            if (EItem != null)
+            {
+                var data = sorted[i];
+                EItem.Initialize(data.soData, data.classType, data.step);
+                EItem.BindInventory(data.uid);
+            }
+
         }
 
-        if(refreshCo != null)
+        for (int i = dataCount; i < currentSlotCount; i++)
+        {
+            mergeGrid.GetChild(i).gameObject.SetActive(false);
+        }
+
+        //foreach (var data in sorted)
+        //{
+        //    GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
+        //
+        //    EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
+        //
+        //    if (item != null)
+        //    {
+        //        item.Initialize(data.soData, data.classType, data.step);
+        //        item.BindInventory(data.uid);
+        //        
+        //        item.SetOnClickAction(() =>
+        //        {
+        //            if (mergeWindow != null)
+        //                mergeWindow.OnItemSelected(item);
+        //        });
+        //    } 
+        //}
+
+        if (refreshCo != null)
         {
             StopCoroutine(refreshCo);
         }
