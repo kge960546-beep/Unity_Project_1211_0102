@@ -6,13 +6,7 @@ public class StoreResultSetActive : MonoBehaviour
 {
 
     [SerializeField] private GameObject turnOnOff;
-    [SerializeField] private GameObject resultPanel;
-
-    public void ClickResultPanel()
-    {
-        turnOnOff.SetActive(false);
-        resultPanel.SetActive(true);
-    }
+    [SerializeField] private GameObject resultPanel;   
     public void ClickGoBack()
     {
         turnOnOff.SetActive(true);

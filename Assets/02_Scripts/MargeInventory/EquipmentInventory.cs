@@ -31,17 +31,11 @@ public class EquipmentInventory : MonoBehaviour
             StopCoroutine(refreshCo);
             refreshCo = null;
         }
-    }    
-
+    }
     public void RefreshLobbyUI()
     {
         if (lobbyGrid == null) return;
-
-        //foreach (Transform child in lobbyGrid)
-        //{
-        //    Destroy(child.gameObject);
-        //}
-
+       
         if(InventoryManager.Instance == null) return;
 
         var myItems = InventoryManager.Instance.GetInventoryList();
@@ -71,10 +65,21 @@ public class EquipmentInventory : MonoBehaviour
             if(EItem != null)
             {
                 var data = sorted[i];
-                EItem.Initialize(data.soData, data.classType, data.step);
+                EItem.Initialize(data.scriptableObjectData, data.classType, data.step);
                 EItem.BindInventory(data.uid);
-            }
-            
+
+                var slotItem = EItem;                
+                var btn = EItem.GetComponent<Button>();
+                if (btn != null)
+                {
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(() => GetEquipped(slotItem));
+                }
+                else
+                {
+                    EItem.SetOnClickAction(() => GetEquipped(slotItem));
+                }
+            }            
         }
 
         for(int i = dataCount; i < currentSlotCount; i++)
@@ -82,25 +87,15 @@ public class EquipmentInventory : MonoBehaviour
             lobbyGrid.GetChild(i).gameObject.SetActive(false);
         }
 
-        //foreach (var data in sorted)
-        //{
-        //    GameObject newSlot = Instantiate(itemPrefab, lobbyGrid);
-        //
-        //    EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-        //
-        //    if (item != null)
-        //    {
-        //        item.Initialize(data.soData, data.classType, data.step);
-        //        item.BindInventory(data.uid);
-        //    }
-        //}
-
-
         if(refreshCo != null)
         {            
             StopCoroutine(refreshCo);
         }
         refreshCo = StartCoroutine(RefreshTiming());
+    }
+    public void GetEquipped(EquipmentItem item)
+    {
+        //TODO: 장비 작착 및 데이터 합치기
     }
     IEnumerator RefreshTiming()
     {

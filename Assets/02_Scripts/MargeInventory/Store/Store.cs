@@ -1,9 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Store : MonoBehaviour
 {
     [SerializeField] private StoreResultUI resultUI;
+    [SerializeField] GameObject reLoad;
+    [SerializeField] private GameObject turnOnOff;
+    [SerializeField] private GameObject resultPanel;
+
     [SerializeField] private List<EquipmentSO> items = new List<EquipmentSO>();
 
     [SerializeField] private int[] gradWeights;
@@ -12,6 +17,7 @@ public class Store : MonoBehaviour
 
     private void Awake()
     {
+        reLoad.SetActive(false);
         totalWeight = 0;
         Recalculate();
     }
@@ -65,6 +71,9 @@ public class Store : MonoBehaviour
     {
         if(GoldService.instance.UseGold(drawPrice))
         {
+            turnOnOff.SetActive(false);
+            resultPanel.SetActive(true);
+
             var reward = DrawEquipment();
 
             if (reward != null)
@@ -82,14 +91,24 @@ public class Store : MonoBehaviour
         }
         else
         {
+            StartCoroutine(notEnoughGold());
             Debug.Log("∞ÒµÂ∫Œ¡∑");
         }
+    }
+    IEnumerator notEnoughGold()
+    {
+        reLoad.SetActive(true);
+        yield return new WaitForSeconds(0.8f);
+        reLoad.SetActive(false);
     }
     public void OnClickDrawTenButton()
     {
         int totalPrice = drawPrice * 10;
         if(GoldService.instance.UseGold(totalPrice))
         {
+            turnOnOff.SetActive(false);
+            resultPanel.SetActive(true);
+
             List<EquipmentSO> resultList = new List<EquipmentSO>();
 
             for (int i = 0; i < 10; i++)
@@ -108,6 +127,7 @@ public class Store : MonoBehaviour
         }
         else
         {
+            StartCoroutine(notEnoughGold());
             Debug.Log("∞ÒµÂ∫Œ¡∑");
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class MergeInventory : MonoBehaviour
@@ -39,12 +40,7 @@ public class MergeInventory : MonoBehaviour
     }
     public void RefreshMergeUI()
     {
-        if (mergeGrid == null) return;
-
-        //foreach (Transform child in mergeGrid)
-        //{
-        //    Destroy(child.gameObject);
-        //}
+        if (mergeGrid == null) return;       
 
         if (InventoryManager.Instance == null) return;
 
@@ -75,35 +71,27 @@ public class MergeInventory : MonoBehaviour
             if (EItem != null)
             {
                 var data = sorted[i];
-                EItem.Initialize(data.soData, data.classType, data.step);
+                EItem.Initialize(data.scriptableObjectData, data.classType, data.step);
                 EItem.BindInventory(data.uid);
-            }
 
+                var slotItem = EItem;
+                var btn = EItem.GetComponent<Button>();
+                if(btn != null)
+                {
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(() => mergeWindow.OnItemSelected(slotItem));
+                }
+                else
+                {
+                    EItem.SetOnClickAction(() => mergeWindow.OnItemSelected(slotItem));
+                }
+            }
         }
 
         for (int i = dataCount; i < currentSlotCount; i++)
         {
             mergeGrid.GetChild(i).gameObject.SetActive(false);
-        }
-
-        //foreach (var data in sorted)
-        //{
-        //    GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
-        //
-        //    EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-        //
-        //    if (item != null)
-        //    {
-        //        item.Initialize(data.soData, data.classType, data.step);
-        //        item.BindInventory(data.uid);
-        //        
-        //        item.SetOnClickAction(() =>
-        //        {
-        //            if (mergeWindow != null)
-        //                mergeWindow.OnItemSelected(item);
-        //        });
-        //    } 
-        //}
+        }       
 
         if (refreshCo != null)
         {
