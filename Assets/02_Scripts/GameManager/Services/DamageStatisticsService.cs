@@ -42,7 +42,7 @@ public class DamageStatisticsService : MonoBehaviour, IGameManagementService
         else DamageStatisticsTable[skillID] = damage;
     }
 
-    private void OnSkillChange(SkillDescriptor source1, SkillDescriptor source2, SkillDescriptor destination)
+    private void OnSkillChange(ActiveSkillDescriptor source1, ActiveSkillDescriptor source2, ActiveSkillDescriptor destination)
     {
         if (null == destination.ProjectileLogic) return;
         int sum = 0;

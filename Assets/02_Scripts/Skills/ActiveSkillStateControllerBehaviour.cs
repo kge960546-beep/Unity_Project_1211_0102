@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class ActiveSkillStateControllerBehaviour : MonoBehaviour
 {
-    [SerializeField] private ActiveSkillStateContext context;
-    public ActiveSkillStateContext Context => context;
-
+    public int skillID;
+    public ActiveSkillStateContext context;
     public PlayerCoolTimeSlider coolTime;
-
-    [SerializeField] public bool isDefaultSkill;
+    public bool isDefaultSkill;
 
     private void OnEnable()
     {
