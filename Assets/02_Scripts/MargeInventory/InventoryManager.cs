@@ -78,7 +78,8 @@ public class InventoryManager : MonoBehaviour
         InventoryItemData newData = new InventoryItemData();
         newData.uid = System.Guid.NewGuid().ToString();
         newData.soData = itemData;
-        newData.classType = EquipmentSO.EquipmentClassType.Normal;
+        //newData.classType = EquipmentSO.EquipmentClassType.Normal;
+        newData.classType = itemData.classType;
         newData.step = 0;
 
         inventoryItems.Add(newData);

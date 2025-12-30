@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconImage: {fileID: 9116212159446408863}
+  iconBackGround: {fileID: 8600448238441724768}
   nameText: {fileID: 7791351358550568753}
 --- !u!1 &4854595677633165052
 GameObject:
@@ -232,7 +233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCFE0\uB098\uC774"
+  m_text: Neckiace
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4363968829adf0a4e971be7d091fd1a2, type: 2}
   m_sharedMaterial: {fileID: 6862797338895091252, guid: 4363968829adf0a4e971be7d091fd1a2, type: 2}
@@ -259,8 +260,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.01
-  m_fontSizeBase: 30.01
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

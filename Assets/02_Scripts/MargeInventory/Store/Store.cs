@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Schema;
-using Unity.VisualScripting;
 using UnityEngine;
-
 
 public class Store : MonoBehaviour
 {
@@ -12,7 +8,7 @@ public class Store : MonoBehaviour
 
     [SerializeField] private int[] gradWeights;
     [SerializeField] private int totalWeight = 0;
-    [SerializeField] private int drawPeice = 100;
+    [SerializeField] private int drawPrice = 100;
 
     private void Awake()
     {
@@ -57,25 +53,17 @@ public class Store : MonoBehaviour
             }
         }
 
-        List<EquipmentSO> resultItems = new List<EquipmentSO>();
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i] != null && items[i].classType == classType)
-            {
-                resultItems.Add(items[i]);
-            }
-        }
+        EquipmentSO orgItem = items[Random.Range(0, items.Count)];
+        EquipmentSO resultItems = Instantiate(orgItem);
 
-        if(resultItems.Count > 0)
-        {
-            return resultItems[Random.Range(0, resultItems.Count)];
-        }
+        resultItems.classType = classType;
+        resultItems.name = orgItem.name;
 
-        return null;
+        return resultItems;
     }
     public void OnClickDrawOneButton()
     {
-        if(GoldService.instance.UseGold(drawPeice))
+        if(GoldService.instance.UseGold(drawPrice))
         {
             var reward = DrawEquipment();
 
@@ -99,7 +87,7 @@ public class Store : MonoBehaviour
     }
     public void OnClickDrawTenButton()
     {
-        int totalPrice = drawPeice * 10;
+        int totalPrice = drawPrice * 10;
         if(GoldService.instance.UseGold(totalPrice))
         {
             List<EquipmentSO> resultList = new List<EquipmentSO>();

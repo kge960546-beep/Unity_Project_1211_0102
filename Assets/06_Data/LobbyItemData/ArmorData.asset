@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1907b7223b1c2489daae0e58e8f30f, type: 3}
   m_Name: ArmorData
   m_EditorClassIdentifier: 
-  equipmentName: 
-  equipmentID: 2
+  equipmentName: Armoe
+  equipmentID: 1
+  classType: 0
   plusEquimentHP: 0
   plusEquimentAttack: 0
   partType: 1
-  itemSprite: {fileID: 21300000, guid: 5105fe1d825990746b9a92407ea447ca, type: 3}
+  itemSprite: {fileID: 21300000, guid: bc9201243cc4884419f25b1c335375ce, type: 3}
+  weight: 0
+  skillId: 0
   upgradePrefabs:
   - {fileID: 0}
   - {fileID: 0}

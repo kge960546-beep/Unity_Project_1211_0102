@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +12,9 @@ public class EquipmentInventory : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private TextMeshProUGUI sortModeText;
 
-    private Coroutine refreshCo;
     
+    private Coroutine refreshCo;
+
     private void OnEnable()
     {
         if (InventoryManager.Instance != null)
@@ -27,12 +26,13 @@ public class EquipmentInventory : MonoBehaviour
         if (InventoryManager.Instance != null)
             InventoryManager.Instance.UnsubscribeOnInventoryChanged(RefreshLobbyUI);
 
-        if(refreshCo != null)
+        if (refreshCo != null)
         {
             StopCoroutine(refreshCo);
             refreshCo = null;
         }
-    }
+    }    
+
     public void RefreshLobbyUI()
     {
         if (lobbyGrid == null) return;
