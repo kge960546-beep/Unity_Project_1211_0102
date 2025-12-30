@@ -250,3 +250,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9313562a334df9346ad78b5807e7e1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DamageVariationRatio>k__BackingField: 0.1
