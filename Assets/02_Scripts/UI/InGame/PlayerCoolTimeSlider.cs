@@ -40,8 +40,7 @@ public class PlayerCoolTimeSlider : MonoBehaviour
         
         if(coolTimeController != null)
         {
-            ActiveSkillStateContext context = coolTimeController.Context;
-            maxCoolTime = context.period;
+            maxCoolTime = coolTimeController.context.period;
         }
 
         currentCoolTime = Mathf.Clamp(currentCoolTime, 0.0f, maxCoolTime);
@@ -72,10 +71,10 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     {
         if(coolTimeController != null)
         {
-            maxCoolTime = coolTimeController.Context.period;
+            maxCoolTime = coolTimeController.context.period;
         }
         //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
-        Debug.Log($"현재 period : {coolTimeController.Context.period}");
+        Debug.Log($"현재 period : {coolTimeController.context.period}");
 
         currentCoolTime = 0.0f;
         isCoolTime = true;
@@ -91,10 +90,10 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     {
         if (coolTimeController != null)
         {
-            maxCoolTime = coolTimeController.Context.period;
+            maxCoolTime = coolTimeController.context.period;
         }
         //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
-        Debug.Log($"현재 period : {coolTimeController.Context.period}");
+        Debug.Log($"현재 period : {coolTimeController.context.period}");
 
         currentCoolTime = 0.0f;
         isCoolTime = true;
