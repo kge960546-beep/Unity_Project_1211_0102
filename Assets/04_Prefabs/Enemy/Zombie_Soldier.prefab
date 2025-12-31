@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3032f3b8c5729774fbaf5872714706be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterData: {fileID: 11400000, guid: e75d15a1c45e74143bdd4eed60865a2e, type: 2}
+  enemyData: {fileID: 0}
   player: {fileID: 0}
   moveSpeed: 3.6
   damageInterval: 1

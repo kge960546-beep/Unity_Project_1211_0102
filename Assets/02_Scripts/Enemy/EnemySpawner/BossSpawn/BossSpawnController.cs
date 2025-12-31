@@ -23,13 +23,13 @@
 //        if (enemySpawner == null)
 //            enemySpawner = FindObjectOfType<EnemySpawner>();
 //    }
-//    public IEnumerator SpawnBossWithBarricade(BossData bossData)
+//    public IEnumerator SpawnBossWithBarricade(bossData bossData)
 //    {
 //        Debug.Log("[BossSpawn] SpawnBossWithBarricade »£√‚");
 
 //        Vector3[] positions = bossData.spawnShape.GetSpawnPositions(bossData.context);
 
-//        yield return StartCoroutine(countdownUI.ShowCountdown(3));
+//        yield return StartCoroutine(countdownUI.ShowBossWarningRoutine(3));
     
 //        ActivateBarricade(bossData.barricadeCenter);
 
@@ -58,7 +58,7 @@
 //        if (barricadeInstance != null)
 //            barricadeInstance.SetActive(false);
 //    }
-//    private IEnumerator WaitBossDead(BossData bossData)
+//    private IEnumerator WaitBossDead(bossData bossData)
 //    {
 //        int health = bossData.currentHp;
 

@@ -10,11 +10,13 @@ public class SpawnPatternController : MonoBehaviour
     [SerializeField] private Transform player;
 
     private bool isBossSpawned = false;
+    private bool isStagePaused = false;
 
     private void Start()
     {
         StartCoroutine(RunStagePatterns());
     }
+    // 스테이지 패턴 실행
     public IEnumerator RunStagePatterns()
     {
         foreach (var pattern in stagePattern.patterns)
@@ -22,12 +24,17 @@ public class SpawnPatternController : MonoBehaviour
             if (pattern == null)
                 continue;
 
+            //보스 페이즈 동안 정지
+            while(isStagePaused)
+                yield return null; 
+
             if (pattern.isAllowParallel)
                 StartCoroutine(RunSpawnPattern(pattern));
             else
                 yield return StartCoroutine(RunSpawnPattern(pattern));      
         }
     }
+    // 스폰 패턴 실행
     private IEnumerator RunSpawnPattern(SpawnPatternSO pattern)
     {
         //패턴 시작 시간 까지 대기
@@ -38,6 +45,10 @@ public class SpawnPatternController : MonoBehaviour
 
         while(timer < pattern.endTime)
         {
+            //보스 페이즈 동안 정지
+            while (isStagePaused)
+                yield return null;
+
             SpawnByPattern(pattern);
 
             timer += pattern.tick;
@@ -48,6 +59,7 @@ public class SpawnPatternController : MonoBehaviour
                 yield return null;
         }
     }
+    // 패턴에 의한 스폰 실행
     public void SpawnByPattern(SpawnPatternSO pattern)
     {
         // 보스 스폰 실행
@@ -63,12 +75,14 @@ public class SpawnPatternController : MonoBehaviour
 
             if (bossPattern == null || bossData == null)
             {
-                Debug.LogError("BossPatternSO 또는 BossData 캐스팅 실패");
+                Debug.LogError("BossPatternSO 또는 bossData 캐스팅 실패");
                 return;
             }
+            //스테이지 패턴 정지
+            PauseStage();
 
-            // 반드시 StartCoroutine 으로 실행해야 함
-            StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
+            // 보스 루틴 실행 + 콜백 등록
+            StartCoroutine(BossPhaseRoutine(bossPattern, bossData));
             return;
         }
 
@@ -85,5 +99,34 @@ public class SpawnPatternController : MonoBehaviour
 
         foreach (var pos in positions)
             enemySpawner.SpawnEnemy(pattern.enemyData, pos);
+    }
+    //보스 페이지 실행
+    private IEnumerator BossPhaseRoutine(BossPatternSO bossPattern, BossData bossData)
+    {
+        //EmemySpawner가 실제 보스 생성 + 바리게이트 처리
+        yield return StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
+
+        //보스 사망 이후 도달
+        while(bossData.currentHp > 0)
+            yield return null;
+
+        //마지막 보스라면
+        if(bossPattern.isLastBoss)
+        {
+            //TODO: 클리어 ui 연동
+            yield break;
+        }
+
+        //보스가 마지막이 아니라면 패턴 재개
+        isBossSpawned = false;
+        ResumeStage();
+    }
+    public void PauseStage()
+    {
+        isStagePaused = true;
+    }
+    public void ResumeStage()
+    {
+        isStagePaused = false;
     }
 }

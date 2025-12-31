@@ -57,7 +57,7 @@ Material:
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _Lerp: 0.017265366
+    - _Lerp: 30
     - _QueueOffset: 0
     - _SampleGI: 0
     - _SrcBlend: 1

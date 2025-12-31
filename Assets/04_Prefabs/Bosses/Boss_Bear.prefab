@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5327376538520104735}
   - component: {fileID: 6879329426859426955}
   - component: {fileID: 484990831893885618}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss_Bear
   m_TagString: Untagged
   m_Icon: {fileID: 0}

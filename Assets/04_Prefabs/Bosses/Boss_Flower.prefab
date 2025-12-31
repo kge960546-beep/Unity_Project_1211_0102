@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 497718321541422193}
   - component: {fileID: 7314436405862988264}
   - component: {fileID: 6642660834532244593}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss_Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,3 +219,4 @@ MonoBehaviour:
   dropExp: 1
   itemLayer: 0
   itemLayers: 0
+  enemyData: {fileID: 0}

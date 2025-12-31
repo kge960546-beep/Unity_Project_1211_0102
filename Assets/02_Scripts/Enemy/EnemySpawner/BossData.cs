@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BossData", menuName =("Game/Enemy/BossData SO"))]
+[CreateAssetMenu(fileName = "bossData", menuName =("Game/Enemy/bossData SO"))]
 public class BossData : EnemyData
 {
     [Header("Barricade Setting")]

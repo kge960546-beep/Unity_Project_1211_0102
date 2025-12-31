@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SwarmPattern
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
+  targetType: 0
   shape: {fileID: 11400000, guid: d9cacf97c455b4141a2148717b6d333e, type: 2}
   startTime: 5
   endTime: 6
   tick: 0
   radius: 15
   spawnCount: 30
-  isAllowParallel: 0
+  isAllowParallel: 1

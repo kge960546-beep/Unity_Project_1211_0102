@@ -6,14 +6,15 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public BossData testBossData;
+    [SerializeField] private CameraController cameraController;
 
     [SerializeField] private List<EnemyData> enemyDataList; 
 
     [SerializeField] private Transform spawnPos;
-    //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄것 
-    [SerializeField] private Rigidbody2D playerRb;
-    [SerializeField] private BossWarningUI countdownUI;
+    [SerializeField] private Rigidbody2D playerRb; //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄 것 
     [SerializeField] private GameObject barricadePrefab;
+    [SerializeField] private SpawnPatternController patternController;
+    [SerializeField] private WaveWarningUI bossWarningUI;
 
     private Dictionary<int, GameObject> enemyDataPrefab;
     //실행 중인 패턴 코루틴 관리
@@ -26,6 +27,12 @@ public class EnemySpawner : MonoBehaviour
     {
         ps = GameManager.Instance.GetService<PoolingService>();
         enemyDataPrefab = new();
+        
+        if(cameraController == null )
+            cameraController = FindObjectOfType<CameraController>();
+
+        if (patternController == null)
+            patternController = FindObjectOfType<SpawnPatternController>();
 
         if (spawnPos == null)
             spawnPos = GameObject.FindWithTag("Player").transform;
@@ -54,44 +61,7 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("EnemySpawner : SpawnPos 미할당");
 #endif
     }
-    //void Update()
-    //{
-        
-    //    // 테스트용: B 키를 누르면 강제 생성
-    //    if (Input.GetKeyDown(KeyCode.B))
-    //    {
-    //        Debug.Log("[TEST] B Key 입력됨");
-    //        // 여기 BossData를 직접 Drag&Drop 하거나, 참조 받아야 함
-    //        ForceSpawnBarricade(testBossData);
-    //    }
-    //}
-    //// 강제 바리게이트 스폰 테스트
-    //public void ForceSpawnBarricade(BossData bossData)
-    //{
-    //    Debug.Log("[TEST] ForceSpawnBarricade 실행");
-
-    //    if (bossData == null)
-    //    {
-    //        Debug.LogError("BossData가 null");
-    //        return;
-    //    }
-
-    //    if (bossData.barricadePattern == null)
-    //    {
-    //        Debug.LogError("BarricadePattern이 null");
-    //        return;
-    //    }
-
-    //    // 기본 중심은 BossData에서 지정한 center
-    //    Vector3 center = bossData.barricadeCenter != null
-    //        ? bossData.barricadeCenter.position
-    //        : Vector3.zero;
-
-    //    Debug.Log($"Barricade Center = {center}");
-
-    //    ActivateBarricade(bossData);
-    //}
-    // Normal / Elite Spawn
+    // 일반 & 엘리트 스폰
     public GameObject SpawnEnemy(EnemyData data, Vector3 position)
     {
         GameObject enemy = EnemyPool.instance.Get(data);
@@ -102,28 +72,31 @@ public class EnemySpawner : MonoBehaviour
 
         return enemy;
     }
-    //public IEnumerator PrepareBossSpawn(BossPatternSO bossPattern, BossData bossData)
-    //{
-    //    Debug.Log("[BossSpawn] PrepareBossSpawn 시작");
-
-    //    Vector3[] positions = bossData.spawnShape.GetSpawnPositions(bossData.context);
-    //    Vector3 bossPos = positions[0];
-
-
-    //}
-    // Boss Spawn
+    // 보스 스폰
     public IEnumerator SpawnBossRoutine(BossPatternSO bossPattern, BossData bossData)
     {
-
         bossData.currentHp = bossData.maxHp;
+#if UNITY_EDITOR
+        Debug.Log($"[BossSpawn] Set HP = {bossData.currentHp}");
+#endif
+        bossWarningUI.ShowBossWarning();
+
+
+        cameraController.ZoomOutForBoss();
+
+        ClearAllEnemies();
 
         if (bossPattern.isLockedArena)
-            ActivateBarricade(bossData);
+            ActivateBarricade(spawnPos);
+
+        yield return new WaitForSeconds(3f);
 
         GameObject boss = SpawnEnemy(bossData, bossPattern.spawnPoint);
 
         while (bossData.currentHp > 0)
             yield return null;
+
+        cameraController.ResetZoom();
 
         DeactivateBarricade();
     }
@@ -132,11 +105,9 @@ public class EnemySpawner : MonoBehaviour
         var inst = Instantiate(prefab, worldPos, Quaternion.identity);
         barricades.Add(inst);
     }
-    private void ActivateBarricade(BossData bossData)
+    private void ActivateBarricade(Transform centerTransform)
     {
-        Debug.Log("[BossSpawn] ActivateBarricade 호출");
-
-        var pattern = bossData.barricadePattern;
+        var pattern = testBossData.barricadePattern;
 
         if(pattern == null)
         {
@@ -147,26 +118,26 @@ public class EnemySpawner : MonoBehaviour
         //기존 바리게이드 제거
         DeactivateBarricade();
 
-        Vector3 center = bossData.barricadeCenter.position;
+        Vector3 center = centerTransform.position;
 
-        switch(pattern.patternType)
-        {
-            case BarricadePattern.Circle:
-                SpawnCirclePattern(pattern, center); 
-                break;
+            switch (pattern.patternType)
+            {
+                case BarricadePattern.Circle:
+                    SpawnCirclePattern(pattern, center);
+                    break;
 
-            case BarricadePattern.Square:
-                SpawnSquarePattern(pattern, center);
-                break;
+                case BarricadePattern.Square:
+                    SpawnSquarePattern(pattern, center);
+                    break;
 
-            case BarricadePattern.HorizontalLIne:
-                SpawnHorizontalLine(pattern, center);
-                break;
+                case BarricadePattern.HorizontalLIne:
+                    SpawnHorizontalLine(pattern, center);
+                    break;
 
-            case BarricadePattern.VerticalLIne:
-                SpawnVerticalLinePattern(pattern, center);
-                break;
-        }
+                case BarricadePattern.VerticalLIne:
+                    SpawnVerticalLinePattern(pattern, center);
+                    break;
+            }
     }
     private void DeactivateBarricade()
     {
@@ -184,7 +155,7 @@ public class EnemySpawner : MonoBehaviour
     {
         ps.ReturnOrDestroyGameObject(obj);
     }
-    //모든 적 제거
+    // 모든 적 제거
     private void ClearAllEnemies()
     {
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -194,11 +165,10 @@ public class EnemySpawner : MonoBehaviour
             if (e.name == "Barricade")
                 continue;
 
-
             ps.ReturnOrDestroyGameObject(e);
         }
     }
-    // 패턴 강제 정지
+    // 스폰 패턴 강제 정지
     public void StopAllSpawnPatterns()
     {
         foreach(var coroutine in runningPatterns)
@@ -262,89 +232,6 @@ public class EnemySpawner : MonoBehaviour
             SpawnBarricade(pattern.barricadePrefab, pos);
         }
     }
-    #endregion
-    #region Test
-    //void Awake()
-    //{
-    //    //spawnPoint = GetComponentsInChildren<Transform>();
-    //    waveCount = currentWave.waveCount;
-    //}
-    //private void Start()
-    //{
-    //    //StartCoroutine(SpawnWave());
-    //}
-    //void FixedUpdate()
-    //{
-    //    float playTime = TS.accumulatedFixedDeltaTime;
-    //    
-    //
-    //    Debug.Log(playTime);
-    //
-    //    foreach (var wave in currentWave.waveInfo)
-    //    {
-    //        if (IsSpawning(playTime, wave))
-    //        {
-    //            StartCoroutine(SpawnWave(wave));
-    //        }
-    //    }
-    //   
-    //}
-    //IEnumerator SpawnWave(WaveInfo wave)
-    //{
-    //
-    //    for (int i = 0; i < wave.spawnCount; i++)
-    //    {
-    //        GameObject enemy = enemyPool.GetQueue(wave.enemyID);
-    //        //에러 발생 지점 : 스폰포인트가 제대로 연결 안됨
-    //        //enemy.transform.position = spawnPoint[Random.Range(0, spawnPoint.Length)].position;
-    //        enemy.transform.position = spawnPos.GetSpawnPoint();
-    //        enemy.SetActive(true);
-    //        yield return new WaitForSeconds(wave.tick);
-    //    }
-    //}
-    //private bool IsSpawning(float playTime, WaveInfo wave)
-    //{
-    //    return playTime >= wave.startTime && playTime < wave.endTime;
-    //}
-    #endregion
-    #region OldSpawner
-    //private void FixedUpdate()
-    //{
-    //    playTime = spawnTimer.playTime;        
-    //}
-    //public void StartSpawn()
-    //{
-    //    GameObject selectPrefab = enemyPrefabs[selection];
-    //    GameObject enemy = Instantiate(selectPrefab);
-    //
-    //    if (currentWave.Length <= 0)
-    //    {
-    //        StartCoroutine(SpawnEnemy(0));
-    //    }
-    //}
-    //IEnumerator SpawnEnemy(int enemyArr)
-    //{
-    //    while(IsSpawnable())
-    //    {
-    //        int enemyIndex = currentWave[enemyArr].enemyID;
-    //        int spawnIndex = currentWave[enemyArr].spawnPointID;
-    //
-    //        GameObject clone = Instantiate(enemyPrefabs[enemyIndex], spawnPoints[spawnIndex]);
-    //        MonsterData monster = clone.GetComponent<MonsterData>();
-    //    }
-    //    yield return new WaitForSeconds(0.5f); 
-    //}
-    //public bool IsSpawnable()
-    //{
-    //    if(playTime <= 300f || 
-    //        (300f< playTime && playTime <= 600f) || 
-    //        (600f < playTime && playTime <= 900f))
-    //    {
-    //        return true;
-    //        }
-    //    else
-    //        return false;
-    //}
     #endregion
 }
 
