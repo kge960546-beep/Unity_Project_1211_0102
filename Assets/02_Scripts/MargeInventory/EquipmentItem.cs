@@ -31,11 +31,15 @@ public class EquipmentItem : MonoBehaviour
         if(btn != null)
             btn.onClick.AddListener(OnButtonClicked);
     }
+
+    //클릭시 외부에서 등록한 이벤트 실행
     private void OnButtonClicked()
     {
         if (onClickItemAction != null)
             onClickItemAction.Invoke();
     }
+
+    //UI슬롯에 표시할 내용 세팅
     public void Initialize(EquipmentSO newData, EquipmentSO.EquipmentClassType newtype,int newStep)
     {
         data = newData;
@@ -46,10 +50,14 @@ public class EquipmentItem : MonoBehaviour
         
         UpdateItem();
     }
+
+    //슬롯과 아이템 연결고리
     public void BindInventory(string uid)
     {
         inventoryUid = uid;
     }
+
+    //데이터, 등급, 단계 기반 UI갱신
     public void UpdateItem()
     {
         if (data == null)
@@ -67,6 +75,8 @@ public class EquipmentItem : MonoBehaviour
         }
         UpdateMergeLevel();
     }
+
+    //등급의 단계 표시
     void UpdateMergeLevel()
     {
         if (mergeLevel == null) return;
@@ -81,6 +91,8 @@ public class EquipmentItem : MonoBehaviour
             mergeLevel.gameObject.SetActive(false);            
         }
     }
+
+    //등급 색상을 슬롯 배경에 표시
     public void SetColor(EquipmentSO.EquipmentClassType type)
     {
         switch(type)
@@ -110,6 +122,8 @@ public class EquipmentItem : MonoBehaviour
                 break;
         }
     }
+
+    //슬롯 초기화
     public void ClearEquipmentSlot()
     {
         data = null;
@@ -122,9 +136,10 @@ public class EquipmentItem : MonoBehaviour
         if (frameImage != null) frameImage.color = Color.white;
         if (mergeLevel != null) mergeLevel.gameObject.SetActive(false);
     }
+
+    //실행할 이벤트 외부에서 주입시키는 함수 연결고리
     public void SetOnClickAction(Action action)
     {
         onClickItemAction = action;
-    }
-   
+    }   
 }

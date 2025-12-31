@@ -32,10 +32,10 @@ public class EquipmentInventory : MonoBehaviour
     [SerializeField] private EquipmentInfoPanel infoPanel;
 
     private bool isHideLobbyList = true;
-
     private Coroutine refreshCo;
-
     private event Action OnEquipmentChange;
+
+    //초기세팅
     private void Start()
     {
         int partCount = Enum.GetValues(typeof(EquipmentSO.EquipmentPart)).Length;
@@ -68,6 +68,8 @@ public class EquipmentInventory : MonoBehaviour
         
         inventoryRoot.SetActive(false);        
     }
+
+    //이벤트 구독/해지
     public void SubscribeOnEquipmentChange(Action action)
     {
         OnEquipmentChange -= action;
@@ -77,10 +79,14 @@ public class EquipmentInventory : MonoBehaviour
     {
         OnEquipmentChange -= action;
     }
+
+    //이벤트 내부호출
     private void IsChangeAction()
     {
         OnEquipmentChange?.Invoke();
     }
+
+    //변경 이벤트 구독 과 초기 UI 갱신
     private void OnEnable()
     {
         if (InventoryManager.Instance != null)
@@ -88,6 +94,8 @@ public class EquipmentInventory : MonoBehaviour
         RefreshLobbyUI();
 
     }
+
+    //이벤트 해제, 코루틴 중단
     private void OnDisable()
     {
         if (InventoryManager.Instance != null)
@@ -111,7 +119,7 @@ public class EquipmentInventory : MonoBehaviour
         }
         return null;
     }
-    //Uid 가지고있기
+    //장착된장비 Uid 반환
     public string GetInventoryEquipmentUid(EquipmentSO.EquipmentPart part)
     {
         var slot = FindSlot(part);
@@ -196,7 +204,8 @@ public class EquipmentInventory : MonoBehaviour
         
         refreshCo = StartCoroutine(RefreshTiming());
     }
-    //저장된장비불러오기
+
+    //저장된장착정보 복구
     private void RestoreSavedEquipment()
     {
         if (InventoryManager.Instance == null) return;
@@ -221,7 +230,8 @@ public class EquipmentInventory : MonoBehaviour
         }
         RefreshLobbyUI();
     }
-    //장착된 장비 가지고있기
+
+    //EquipmentItem 기반 장착/토글 처리(슬롯 UI 반영)
     public void GetEquipped(EquipmentItem item)
     {        
         if(item == null || item.Data == null) return;
@@ -250,7 +260,8 @@ public class EquipmentInventory : MonoBehaviour
 
         RefreshLobbyUI();
     }
-    //이건 장착한건지 판단
+
+    //장착한건지 판단
     public bool IsEquippedUid(string uid)
     {
         if (string.IsNullOrEmpty(uid)) return false;
@@ -258,6 +269,7 @@ public class EquipmentInventory : MonoBehaviour
             if (!slots[i].isEmpty && slots[i].equippedUid == uid) return true;
         return false;
     }
+
     //장비창 새로고침 실행순서 조절용
     IEnumerator RefreshTiming()
     {
@@ -283,12 +295,10 @@ public class EquipmentInventory : MonoBehaviour
         Canvas.ForceUpdateCanvases();        
     }
 
-    //아이템 장착
+    //InfoPanel에서 받은 EquipmentItem으로 장착 처리 와 저장 갱신
     public void EquipFromInfo(EquipmentItem item)
     {
-        Debug.Log($"[EQUIP_FROM_INFO] item.inventoryUid={item?.inventoryUid} so={item?.Data?.name} soClass={item?.Data?.classType}");
         var inv = InventoryManager.Instance.FindUid(item.inventoryUid);
-        Debug.Log($"[EQUIP_FROM_INFO] invClass={inv?.classType} invStep={inv?.step}");
 
         GetEquipped(item);
 
@@ -330,6 +340,7 @@ public class EquipmentInventory : MonoBehaviour
         if (infoPanel != null)
             infoPanel.ShowSlot(slot.view);
     }
+
     //장착 아이템 Uid 갱신 인벤토리 기준으로
     public void EquipFromUid(string uid)
     {

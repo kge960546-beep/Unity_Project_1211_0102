@@ -8,6 +8,12 @@ public enum StatModType
     PercentAdd,
     PercentMult
 }
+/// <summary>
+/// 보정값
+/// Value: 보정값
+/// Type: 보정 방식
+/// Source : 보정 출처 일괄처리용(지금은 안쓸듯)
+/// </summary>
 public class StatModifier
 {
     public float Value;
@@ -28,6 +34,7 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
 
     private readonly List<StatModifier> statModifiers = new List<StatModifier>();
 
+    //보정 1개 추가 후 재계산
     public void AddModifier(StatModifier mod)
     {
         if (mod == null) return;
@@ -35,6 +42,7 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
         UpdateStats();
     }
 
+    //보정 1개 제거후 재계산
     public void RemoveModifier(StatModifier mod)
     {
         if (mod == null) return;
@@ -42,6 +50,7 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
         UpdateStats();
     }
 
+    //모든 보정 출처 제거후 재계산
     public void RemoveAllModifier(object source)
     {
         if (source == null) return;
@@ -49,6 +58,7 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
         UpdateStats();
     }
 
+    //현재 최종 Value 계산
     public void UpdateStats()
     {
         float flatSum = 0f;

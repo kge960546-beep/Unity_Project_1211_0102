@@ -40,12 +40,17 @@ public class PlayerStatHandler : MonoBehaviour
     {
         if (eqInventory != null)
             eqInventory.UnsubscribeOnEquipmentChange(PlayerStatsUpdate);
+
+        if (inventoryManager != null)
+            inventoryManager.UnsubscribeOnInventoryChanged(PlayerStatsUpdate);
     }
     IEnumerator RefreshLater()
     {
         yield return new WaitForEndOfFrame();
         PlayerStatsUpdate();
     }
+
+    //장착 상태를 보고 계산후 UI 출력
     public void PlayerStatsUpdate()
     {
         if (maxHpStat == null || attackStat == null) return;
@@ -67,6 +72,8 @@ public class PlayerStatHandler : MonoBehaviour
         if(finalAtkText != null) 
             finalAtkText.text = $"{attackStat.Value}";
     }
+
+    //파츠별 스탯 계산해서 PlayerStat에 반영
     public void PartsInstallation(EquipmentSO.EquipmentPart part)
     {
         string uid = eqInventory.GetInventoryEquipmentUid(part);        

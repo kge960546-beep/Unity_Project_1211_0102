@@ -14,13 +14,13 @@ public class EquipmentInfoPanel : MonoBehaviour
     [SerializeField] private Button unequipButton;
     
     [SerializeField] private EquipmentInventory equipmentInventory;
-    private EquipmentItem selectedItem;
 
-    //수정 결과보고 판단할 변수들
+    private EquipmentItem selectedItem;    
     private string selectedUid;
 
     private bool isOpenSlot = false;
 
+    //초기화
     private void Awake()
     {
         if (root == null) root = gameObject;
@@ -28,6 +28,13 @@ public class EquipmentInfoPanel : MonoBehaviour
         if (unequipButton != null) unequipButton.onClick.AddListener(OnClickUnequip);
         root.SetActive(false);
     }
+
+    /// <summary>
+    /// 인벤목록 아이템 클릭했을시 호출되는 정보창
+    /// 아이템Uid 저장후 인벤토리에서 Uid 찾아옴
+    /// 인벤토리 기준으로 데이터 갱신
+    /// </summary>
+    /// <param name="item"></param>
     public void ShowFromInventory(EquipmentItem item)
     {
         if (item == null || item.Data == null) return;
@@ -114,6 +121,8 @@ public class EquipmentInfoPanel : MonoBehaviour
 
         root.SetActive(true);
     }
+
+    //장착슬롯 클릭할때 아이템 정보 호출용 
     public void ShowSlot(EquipmentItem slotItem)
     {
         if (slotItem == null || slotItem.Data == null) return;
