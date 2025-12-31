@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +28,8 @@ public class EquipmentItem : MonoBehaviour
 
     private void Awake()
     {
-        btn.onClick.AddListener(OnButtonClicked);
+        if(btn != null)
+            btn.onClick.AddListener(OnButtonClicked);
     }
     private void OnButtonClicked()
     {
@@ -39,6 +41,8 @@ public class EquipmentItem : MonoBehaviour
         data = newData;
         classType = newtype;
         step = Mathf.Clamp(newStep, 0, 2);
+
+        partType = (data != null) ? data.partType : EquipmentSO.EquipmentPart.Weapon;
         
         UpdateItem();
     }
@@ -48,7 +52,11 @@ public class EquipmentItem : MonoBehaviour
     }
     public void UpdateItem()
     {
-        if (data == null) return;
+        if (data == null)
+        {            
+            return;
+        }
+        
         if(iconImage != null)
         {
             iconImage.sprite = data.itemSprite;
@@ -101,6 +109,18 @@ public class EquipmentItem : MonoBehaviour
                 frameImage.color = Color.red;
                 break;
         }
+    }
+    public void ClearEquipmentSlot()
+    {
+        data = null;
+        classType = default;
+        partType = default;
+        step = 0;
+        inventoryUid = null;
+
+        if (iconImage != null) iconImage.sprite = null;
+        if (frameImage != null) frameImage.color = Color.white;
+        if (mergeLevel != null) mergeLevel.gameObject.SetActive(false);
     }
     public void SetOnClickAction(Action action)
     {

@@ -142,9 +142,7 @@ public class GoldService : MonoBehaviour, IGameManagementService
 
             //Convert encrypted data to a string and store it
             //암호화 데이터를 문자열로 변환하여 저장
-            string encryptedString = Convert.ToBase64String(encryptedData);
-
-            Debug.Log($"원본-> {data}, 암호화 -> {encryptedString}");
+            string encryptedString = Convert.ToBase64String(encryptedData);            
 
             PlayerPrefs.SetString(keyName, encryptedString);
             PlayerPrefs.Save();

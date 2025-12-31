@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,9 +22,16 @@ public class ItemSaveData
     public int step;
 }
 [System.Serializable]
+public class EquipmentEquippedSave
+{
+    public int partType;
+    public string uid;
+}
+[System.Serializable]
 public class InventorySaveFile
 {
     public List<ItemSaveData> saveItems = new List<ItemSaveData>();
+    public List<EquipmentEquippedSave> equippedItems = new List<EquipmentEquippedSave>();
 }
 public class InventoryManager : MonoBehaviour
 {
@@ -32,6 +41,7 @@ public class InventoryManager : MonoBehaviour
 
     public List<EquipmentSO> acquisitionItemsInStage = new List<EquipmentSO>();
     [SerializeField] private List<InventoryItemData> inventoryItems = new List<InventoryItemData>();
+    [SerializeField] private List<EquipmentEquippedSave> equippedSlots = new List<EquipmentEquippedSave>();
 
     public List<EquipmentSO> allItems;
     private Dictionary<int, EquipmentSO> itemById;
@@ -188,6 +198,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         string json = JsonUtility.ToJson(basket);
+        basket.equippedItems = new List<EquipmentEquippedSave>(equippedSlots);
         GoldService.SaveEncryptedData("myEquipment", json);
         Debug.Log("Json 저장완료");
     }
@@ -196,7 +207,6 @@ public class InventoryManager : MonoBehaviour
         if (itemById == null || itemById.Count == 0) return;
 
         string json = GoldService.LoadEncryptedData("myEquipment");
-
         if (string.IsNullOrEmpty(json)) return;
 
         InventorySaveFile basket = JsonUtility.FromJson<InventorySaveFile>(json);
@@ -226,7 +236,50 @@ public class InventoryManager : MonoBehaviour
                 Debug.Log("없다 찾아라 세상끝에 두고 왔으니");
             }
         }
+        equippedSlots.Clear();
+        if (basket.equippedItems != null)
+            equippedSlots.AddRange(basket.equippedItems);
+
+        for(int i = 0; i< equippedSlots.Count; i++)
+        {
+            string uid = equippedSlots[i].uid;
+
+            if (string.IsNullOrEmpty(uid)) continue;
+
+            if(FindUid(uid) == null)
+            {
+                equippedSlots[i].uid = null;
+            }
+        }
+
         InventoryChanged();
+    }
+    public string GetEquipmentUid(EquipmentSO.EquipmentPart part)
+    {
+        for(int i = 0; i< equippedSlots.Count; i++)
+        {
+            if (equippedSlots[i].partType == (int)part)
+            {
+                return equippedSlots[i].uid;
+            }
+        }
+        return null;
+    }
+    public void SetEquippedUid(EquipmentSO.EquipmentPart part, string uid)
+    {
+        int par = (int)part;
+
+        for(int i = 0; i< equippedSlots.Count; i++)
+        {
+            if(equippedSlots[i].partType == par)
+            {
+                equippedSlots[i].uid = uid;
+                SaveInventory();
+                return;
+            }
+        }
+        equippedSlots.Add(new EquipmentEquippedSave { partType = par, uid = uid });
+        SaveInventory();
     }
     public void ClearStageData()
     {

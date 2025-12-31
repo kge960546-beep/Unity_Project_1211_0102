@@ -1,10 +1,23 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
+[System.Serializable]
+public class SlotData
+{
+    public EquipmentSO.EquipmentPart partType;
+    public bool isEmpty = true;
+    public GameObject slotObj;
 
+    public string equippedUid;
+    public EquipmentItem view;
+}
 public class EquipmentInventory : MonoBehaviour
 {
+    [SerializeField] private GameObject inventoryRoot;
     public enum SortMode { Parts, Class }
     [SerializeField] private SortMode sortMode;
 
@@ -12,9 +25,66 @@ public class EquipmentInventory : MonoBehaviour
     [SerializeField] private GameObject itemPrefab;
     [SerializeField] private TextMeshProUGUI sortModeText;
 
-    
+
+    [SerializeField] private List<SlotData> slots = new List<SlotData>();    
+    [SerializeField] private RectTransform[] slotAnchors;
+    [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private EquipmentInfoPanel infoPanel;
+
+    private bool isHideLobbyList = true;
+
     private Coroutine refreshCo;
 
+    private event Action OnEquipmentChange;
+
+
+    private void Start()
+    {
+        
+
+        int partCount = Enum.GetValues(typeof(EquipmentSO.EquipmentPart)).Length;
+        if (slotAnchors == null || slotAnchors.Length != partCount) return;
+
+        slots.Clear();        
+
+        for (int i = 0; i < partCount; i++)
+        {
+            var part = (EquipmentSO.EquipmentPart)i;
+            var anchor = slotAnchors[i];                        
+
+            var view = anchor.GetComponentInChildren<EquipmentItem>(true);
+            if (view == null) continue;
+           
+            var capturedPart = part;
+            view.SetOnClickAction(() => OnClickEquipSlot(capturedPart));
+            view.ClearEquipmentSlot();
+
+            slots.Add(new SlotData
+            {
+                partType = part,
+                slotObj = anchor.gameObject,
+                view = view,
+                isEmpty = true,
+                equippedUid = null
+            });
+        }
+        RestoreSavedEquipment();
+
+        inventoryRoot.SetActive(false);
+    }
+    public void SubscribeOnEquipmentChange(Action action)
+    {
+        OnEquipmentChange -= action;
+        OnEquipmentChange += action;
+    }
+    public void UnsubscribeOnEquipmentChange(Action action)
+    {
+        OnEquipmentChange -= action;
+    }
+    private void IsChangeAction()
+    {
+        OnEquipmentChange?.Invoke();
+    }
     private void OnEnable()
     {
         if (InventoryManager.Instance != null)
@@ -32,10 +102,31 @@ public class EquipmentInventory : MonoBehaviour
             refreshCo = null;
         }
     }
+
+    //장착슬롯 찾기
+    public SlotData FindSlot(EquipmentSO.EquipmentPart part)
+    {
+        for(int i = 0; i < slots.Count; i++)
+        {
+            var sl = slots[i];
+            if (sl == null) continue;
+            if (sl.partType == part) return sl;
+        }
+        return null;
+    }
+    public string GetEquipmentUid(EquipmentSO.EquipmentPart part)
+    {
+        var slot = FindSlot(part);
+        if(slot == null) return null;
+        if(slot.isEmpty) return null;
+
+        return slot.equippedUid;
+    }
+
+    //장비창 UI 갱신
     public void RefreshLobbyUI()
     {
-        if (lobbyGrid == null) return;
-       
+        if (lobbyGrid == null) return;       
         if(InventoryManager.Instance == null) return;
 
         var myItems = InventoryManager.Instance.GetInventoryList();
@@ -43,7 +134,25 @@ public class EquipmentInventory : MonoBehaviour
         var sorted = (sortMode == SortMode.Parts) ? InventorySortComparer.SortByPart(myItems) :
                                                     InventorySortComparer. SortDescendingOrderByRank(myItems);
 
-        int dataCount = sorted.Count;
+        List<InventoryItemData> visible = new List<InventoryItemData>();
+
+        int equipmentFilter = 0;
+
+        for(int i = 0; i< sorted.Count; i++)
+        {
+            var d = sorted[i];
+            if (d == null) return;
+
+            if (isHideLobbyList && IsEquippedUid(d.uid)) 
+            {
+                equipmentFilter++;
+                continue;
+            }
+            
+            visible.Add(d);
+        }
+
+        int dataCount = visible.Count;
         int currentSlotCount = lobbyGrid.childCount;
 
         for(int i = 0; i<dataCount; i++)
@@ -64,21 +173,12 @@ public class EquipmentInventory : MonoBehaviour
 
             if(EItem != null)
             {
-                var data = sorted[i];
+                var data = visible[i];
                 EItem.Initialize(data.scriptableObjectData, data.classType, data.step);
                 EItem.BindInventory(data.uid);
 
-                var slotItem = EItem;                
-                var btn = EItem.GetComponent<Button>();
-                if (btn != null)
-                {
-                    btn.onClick.RemoveAllListeners();
-                    btn.onClick.AddListener(() => GetEquipped(slotItem));
-                }
-                else
-                {
-                    EItem.SetOnClickAction(() => GetEquipped(slotItem));
-                }
+                var slotItem = EItem;
+                EItem.SetOnClickAction(() => OnClickInventoryItem(slotItem));
             }            
         }
 
@@ -91,12 +191,75 @@ public class EquipmentInventory : MonoBehaviour
         {            
             StopCoroutine(refreshCo);
         }
+        if (inventoryRoot.activeSelf == false) return;
+
+        if (inventoryRoot != null && inventoryRoot.activeSelf == false)
+            return;
+        
         refreshCo = StartCoroutine(RefreshTiming());
     }
-    public void GetEquipped(EquipmentItem item)
+    private void RestoreSavedEquipment()
     {
-        //TODO: 장비 작착 및 데이터 합치기
+        if (InventoryManager.Instance == null) return;
+
+        for(int i = 0; i< slots.Count; i++)
+        {
+            var slot = slots[i];
+            if (slot == null || slot.view == null) continue;
+
+            Debug.Log($"slots.Count = {slots.Count}");
+            string uid = InventoryManager.Instance.GetEquipmentUid(slot.partType);
+            Debug.Log($"part = {slot.partType}, uid = {uid}");
+
+            if (string.IsNullOrEmpty(uid)) continue;
+
+            var data = InventoryManager.Instance.FindUid(uid);
+            if(data == null || data.scriptableObjectData == null) continue;
+
+            slot.view.Initialize(data.scriptableObjectData, data.classType, data.step);
+            slot.view.BindInventory(uid);
+
+            slot.isEmpty = false;
+            slot.equippedUid = uid;
+        }
+        RefreshLobbyUI();
     }
+    public void GetEquipped(EquipmentItem item)
+    {        
+        if(item == null || item.Data == null) return;
+        EquipmentSO so = item.Data;
+        string uid = item.inventoryUid;
+        if (string.IsNullOrEmpty(uid)) return;
+         
+
+        var slot = FindSlot(so.partType);
+        if (slot == null || slot.view == null)
+        {
+            return;
+        }
+        
+        if (!slot.isEmpty && slot.equippedUid == uid)
+        {
+            Unequipment(so.partType);
+            return;
+        }
+        
+        slot.view.Initialize(so, item.ClassType, item.Step);
+        slot.view.BindInventory(uid);
+
+        slot.isEmpty = false;
+        slot.equippedUid = uid;
+
+        RefreshLobbyUI();
+    }
+
+    public bool IsEquippedUid(string uid)
+    {
+        if (string.IsNullOrEmpty(uid)) return false;
+        for (int i = 0; i < slots.Count; i++)
+            if (!slots[i].isEmpty && slots[i].equippedUid == uid) return true;
+        return false;
+    }       
     IEnumerator RefreshTiming()
     {
         if (lobbyGrid == null || itemPrefab == null) yield break;
@@ -120,6 +283,52 @@ public class EquipmentInventory : MonoBehaviour
         }
         Canvas.ForceUpdateCanvases();        
     }
+
+    //아이템 장착
+    public void EquipFromInfo(EquipmentItem item)
+    {
+        GetEquipped(item);
+
+        InventoryManager.Instance.SetEquippedUid(item.Data.partType, item.inventoryUid);
+        IsChangeAction();
+    }
+
+    //아이템 해제
+    public void Unequipment(EquipmentSO.EquipmentPart part)
+    {
+        var slot = FindSlot(part);
+        if (slot.view == null) return;
+        if (slot.isEmpty) return;
+
+        slot.view.ClearEquipmentSlot();
+        slot.isEmpty = true;
+        slot.equippedUid = null;
+
+        InventoryManager.Instance.SetEquippedUid(part,null);
+
+        RefreshLobbyUI();
+        IsChangeAction();
+    }
+
+    //장비창 슬롯 아이템 클릭
+    public void OnClickInventoryItem(EquipmentItem item)
+    {
+        if (item == null) return;
+        if (infoPanel != null) infoPanel.ShowFromInventory(item);
+    }
+
+    //아이템 정보창
+    public void OnClickEquipSlot(EquipmentSO.EquipmentPart part)
+    {        
+        var slot = FindSlot(part);
+        if (slot == null || slot.view == null) return;
+        if (slot.isEmpty || slot.view.Data == null) return;
+
+        if (infoPanel != null)
+            infoPanel.ShowSlot(slot.view);
+    }
+
+    //정렬
     public void ToggleSort()
     {
         Debug.Log($"클릭했음 sortMode = {sortMode}");
