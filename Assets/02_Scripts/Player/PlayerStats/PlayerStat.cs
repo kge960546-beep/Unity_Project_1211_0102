@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum StatModType
@@ -22,7 +23,7 @@ public class StatModifier
 }
 public class PlayerStat : MonoBehaviour, IGameManagementService
 {
-    public float baseValue;
+    public float baseValue; //캐릭터 기본 스탯
     public float Value { get; protected set; }
 
     private readonly List<StatModifier> statModifiers = new List<StatModifier>();
@@ -59,14 +60,17 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
             var mod = statModifiers[i];
             switch (mod.Type)
             {
+                // 장비옵션 계산
                 case StatModType.Flat:
                     flatSum += mod.Value;
                     break;
-
+                    
+                    //인게임 패시브 스킬 체력10% 증가
                 case StatModType.PercentAdd:
                     percentAddSum += mod.Value; // 1f = +100%
                     break;
 
+                    //치명타 계산
                 case StatModType.PercentMult:
                     percentMult *= (1f + mod.Value);
                     break;
@@ -74,6 +78,8 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
         }
 
         Value = (baseValue + flatSum) * (1f + percentAddSum) * percentMult;
+
+        
     }
 }
 

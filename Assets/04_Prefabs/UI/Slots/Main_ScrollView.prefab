@@ -1347,7 +1347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b224ff90284544ab0b4b7c8365611a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryRoot: {fileID: 3459333524425367839}
+  inventoryRoot: {fileID: 0}
   sortMode: 0
   lobbyGrid: {fileID: 8198088510032727286}
   itemPrefab: {fileID: 4783613005417926786, guid: 6ebf0c177aa0f6b46bef2bf293df4d2f, type: 3}

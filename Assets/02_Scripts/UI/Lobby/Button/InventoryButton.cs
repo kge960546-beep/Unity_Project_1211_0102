@@ -1,19 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
-public class MergeInventoryButton : MonoBehaviour
+public class InventoryButton : MonoBehaviour
 {
     [SerializeField] GameObject startButton;
     [SerializeField] GameObject lobbyStageSelectButton;
     [SerializeField] GameObject mainScrollView;
-    [SerializeField] GameObject store;
-    
+    [SerializeField] GameObject store;   
     
 
     public void OnClickButton()
     {
         startButton.SetActive(false);
-        lobbyStageSelectButton.SetActive(false);
-        mainScrollView.SetActive(true);
+        lobbyStageSelectButton.SetActive(false);       
         store.SetActive(false);
+        mainScrollView.SetActive(true);
     }
 }

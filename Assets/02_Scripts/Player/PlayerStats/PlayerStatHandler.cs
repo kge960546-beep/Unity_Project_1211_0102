@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -13,22 +14,37 @@ public class PlayerStatHandler : MonoBehaviour
     [SerializeField] private PlayerStat maxHpStat;
     [SerializeField] private PlayerStat attackStat;
 
+    private Coroutine refreshCo;
+
     private void Awake()
     {
         if(eqInventory == null) eqInventory = FindAnyObjectByType<EquipmentInventory>();
-        if(inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();
-
-        if (eqInventory != null)
-            eqInventory.SubscribeOnEquipmentChange(PlayerStatsUpdate);
+        if(inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();        
     }
     private void Start()
     {
         PlayerStatsUpdate();
     }
+    private void OnEnable()
+    {
+        if (eqInventory != null)
+            eqInventory.SubscribeOnEquipmentChange(PlayerStatsUpdate);
+
+        if (inventoryManager != null)
+            inventoryManager.SubscribeOnInventoryChanged(PlayerStatsUpdate);
+
+        if (refreshCo != null) StopCoroutine(refreshCo);
+        refreshCo = StartCoroutine(RefreshLater());
+    }
     private void OnDestroy()
     {
         if (eqInventory != null)
             eqInventory.UnsubscribeOnEquipmentChange(PlayerStatsUpdate);
+    }
+    IEnumerator RefreshLater()
+    {
+        yield return new WaitForEndOfFrame();
+        PlayerStatsUpdate();
     }
     public void PlayerStatsUpdate()
     {
@@ -53,7 +69,7 @@ public class PlayerStatHandler : MonoBehaviour
     }
     public void PartsInstallation(EquipmentSO.EquipmentPart part)
     {
-        string uid = eqInventory.GetEquipmentUid(part);        
+        string uid = eqInventory.GetInventoryEquipmentUid(part);        
 
         if (string.IsNullOrEmpty(uid)) return;
 

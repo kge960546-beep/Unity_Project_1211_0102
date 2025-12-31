@@ -16,6 +16,9 @@ public class EquipmentInfoPanel : MonoBehaviour
     [SerializeField] private EquipmentInventory equipmentInventory;
     private EquipmentItem selectedItem;
 
+    //수정 결과보고 판단할 변수들
+    private string selectedUid;
+
     private bool isOpenSlot = false;
 
     private void Awake()
@@ -28,26 +31,35 @@ public class EquipmentInfoPanel : MonoBehaviour
     public void ShowFromInventory(EquipmentItem item)
     {
         if (item == null || item.Data == null) return;
+        if (InventoryManager.Instance == null) return;
         isOpenSlot = false;
-        selectedItem = item;        
 
-        var so = item.Data;
+        selectedItem = item;
+        selectedUid = item.inventoryUid;
+        if (string.IsNullOrEmpty(selectedUid)) return;
+
+        var inv = InventoryManager.Instance.FindUid(selectedUid);
+        if (inv == null || inv.scriptableObjectData == null) return;
+
+        var so = inv.scriptableObjectData;
 
         if (icon != null) icon.sprite = so.itemSprite;
         if (nameText != null) nameText.text = so.equipmentName;
         
         if (stepText != null)
         {
-            bool showStep = (item.ClassType >= EquipmentSO.EquipmentClassType.Excellent) && (item.Step > 0);
+            bool showStep = (inv.classType >= EquipmentSO.EquipmentClassType.Excellent) && (inv.step > 0);
             stepText.gameObject.SetActive(showStep);
 
             if(showStep)
-                stepText.text = item.Step.ToString();
+                stepText.text = inv.step.ToString();
         }
+        int finalHp, finalAttack;
+        so.GetFinalStats(inv.classType, inv.step, out finalHp, out finalAttack);
+
         if (statText != null)
         {
-            int finalHp, finalAttack;
-            so.GetFinalStats(item.ClassType, item.step, out finalHp, out finalAttack);
+           
             switch (so.partType)
             {
                 case (EquipmentSO.EquipmentPart.Weapon):
@@ -72,7 +84,7 @@ public class EquipmentInfoPanel : MonoBehaviour
         }
         if(frame != null)
         {
-            switch (item.ClassType)
+            switch (inv.classType)
             {
                 case (EquipmentSO.EquipmentClassType.Normal):
                     frame.color = Color.gray;
@@ -96,7 +108,7 @@ public class EquipmentInfoPanel : MonoBehaviour
         }      
 
         // 이미 장착된 아이템이면 해제 버튼 활성
-        bool isEquipped = equipmentInventory != null && equipmentInventory.IsEquippedUid(item.inventoryUid);
+        bool isEquipped = equipmentInventory != null && equipmentInventory.IsEquippedUid(selectedUid);
         if (equipButton != null) equipButton.gameObject.SetActive(!isEquipped);
         if (unequipButton != null) unequipButton.gameObject.SetActive(isEquipped);
 
@@ -112,22 +124,33 @@ public class EquipmentInfoPanel : MonoBehaviour
         ShowFromInventory(slotItem);
         isOpenSlot = true;
     }
+    //아이템 정보창 비활성화
     public void Hide()
     {
         if (root != null) root.SetActive(false);
         root.SetActive(false);
         selectedItem = null;
     }
+    //아이템 장착버튼
     private void OnClickEquip()
     {
+        if (string.IsNullOrEmpty(selectedUid)) return;
         if (equipmentInventory == null) return;
         if (selectedItem == null) return;
 
-        equipmentInventory.EquipFromInfo(selectedItem);
+        equipmentInventory.EquipFromUid(selectedUid);
+        if(isOpenSlot)
+        {
+            Hide();
+            return;
+        }
         ShowFromInventory(selectedItem); // 버튼 상태 갱신
+           
     }
+    //아이템 해제버튼
     private void OnClickUnequip()
-    {        
+    {       
+        
         if (equipmentInventory == null) return;
         if (selectedItem == null || selectedItem.Data == null) return;
 

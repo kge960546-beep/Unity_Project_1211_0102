@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+
 [System.Serializable]
 public class SlotData
 {
@@ -36,12 +36,8 @@ public class EquipmentInventory : MonoBehaviour
     private Coroutine refreshCo;
 
     private event Action OnEquipmentChange;
-
-
     private void Start()
     {
-        
-
         int partCount = Enum.GetValues(typeof(EquipmentSO.EquipmentPart)).Length;
         if (slotAnchors == null || slotAnchors.Length != partCount) return;
 
@@ -69,8 +65,8 @@ public class EquipmentInventory : MonoBehaviour
             });
         }
         RestoreSavedEquipment();
-
-        inventoryRoot.SetActive(false);
+        
+        inventoryRoot.SetActive(false);        
     }
     public void SubscribeOnEquipmentChange(Action action)
     {
@@ -90,6 +86,7 @@ public class EquipmentInventory : MonoBehaviour
         if (InventoryManager.Instance != null)
             InventoryManager.Instance.SubscribeOnInventoryChanged(RefreshLobbyUI);
         RefreshLobbyUI();
+
     }
     private void OnDisable()
     {
@@ -114,7 +111,8 @@ public class EquipmentInventory : MonoBehaviour
         }
         return null;
     }
-    public string GetEquipmentUid(EquipmentSO.EquipmentPart part)
+    //Uid 가지고있기
+    public string GetInventoryEquipmentUid(EquipmentSO.EquipmentPart part)
     {
         var slot = FindSlot(part);
         if(slot == null) return null;
@@ -198,6 +196,7 @@ public class EquipmentInventory : MonoBehaviour
         
         refreshCo = StartCoroutine(RefreshTiming());
     }
+    //저장된장비불러오기
     private void RestoreSavedEquipment()
     {
         if (InventoryManager.Instance == null) return;
@@ -206,10 +205,8 @@ public class EquipmentInventory : MonoBehaviour
         {
             var slot = slots[i];
             if (slot == null || slot.view == null) continue;
-
-            Debug.Log($"slots.Count = {slots.Count}");
-            string uid = InventoryManager.Instance.GetEquipmentUid(slot.partType);
-            Debug.Log($"part = {slot.partType}, uid = {uid}");
+            
+            string uid = InventoryManager.Instance.GetSaveEquipmentUid(slot.partType);            
 
             if (string.IsNullOrEmpty(uid)) continue;
 
@@ -224,6 +221,7 @@ public class EquipmentInventory : MonoBehaviour
         }
         RefreshLobbyUI();
     }
+    //장착된 장비 가지고있기
     public void GetEquipped(EquipmentItem item)
     {        
         if(item == null || item.Data == null) return;
@@ -252,14 +250,15 @@ public class EquipmentInventory : MonoBehaviour
 
         RefreshLobbyUI();
     }
-
+    //이건 장착한건지 판단
     public bool IsEquippedUid(string uid)
     {
         if (string.IsNullOrEmpty(uid)) return false;
         for (int i = 0; i < slots.Count; i++)
             if (!slots[i].isEmpty && slots[i].equippedUid == uid) return true;
         return false;
-    }       
+    }
+    //장비창 새로고침 실행순서 조절용
     IEnumerator RefreshTiming()
     {
         if (lobbyGrid == null || itemPrefab == null) yield break;
@@ -287,6 +286,10 @@ public class EquipmentInventory : MonoBehaviour
     //아이템 장착
     public void EquipFromInfo(EquipmentItem item)
     {
+        Debug.Log($"[EQUIP_FROM_INFO] item.inventoryUid={item?.inventoryUid} so={item?.Data?.name} soClass={item?.Data?.classType}");
+        var inv = InventoryManager.Instance.FindUid(item.inventoryUid);
+        Debug.Log($"[EQUIP_FROM_INFO] invClass={inv?.classType} invStep={inv?.step}");
+
         GetEquipped(item);
 
         InventoryManager.Instance.SetEquippedUid(item.Data.partType, item.inventoryUid);
@@ -327,12 +330,36 @@ public class EquipmentInventory : MonoBehaviour
         if (infoPanel != null)
             infoPanel.ShowSlot(slot.view);
     }
+    //장착 아이템 Uid 갱신 인벤토리 기준으로
+    public void EquipFromUid(string uid)
+    {
+        if (InventoryManager.Instance == null) return;
+        if (string.IsNullOrEmpty(uid)) return;
+
+        var inv = InventoryManager.Instance.FindUid(uid);
+        if (inv == null || inv.scriptableObjectData == null) return;
+
+        var part = inv.scriptableObjectData.partType;
+        
+        var slot = FindSlot(part);
+        if (slot != null && slot.view != null)
+        {
+            slot.view.Initialize(inv.scriptableObjectData, inv.classType, inv.step);
+            slot.view.BindInventory(uid);
+
+            slot.isEmpty = false;
+            slot.equippedUid = uid;
+        }
+        
+        InventoryManager.Instance.SetEquippedUid(part, uid);
+
+        RefreshLobbyUI();
+        IsChangeAction();
+    }
 
     //정렬
     public void ToggleSort()
     {
-        Debug.Log($"클릭했음 sortMode = {sortMode}");
-
         sortMode = (sortMode == SortMode.Parts) ? SortMode.Class : SortMode.Parts;
         if(sortModeText != null)
         {
