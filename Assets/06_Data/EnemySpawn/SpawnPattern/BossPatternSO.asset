@@ -16,12 +16,12 @@ MonoBehaviour:
   targetType: 2
   shape: {fileID: 11400000, guid: ba8d652bc71edd8498cc303093e835b8, type: 2}
   startTime: 10
-  endTime: 20
-  tick: 0.5
+  endTime: 10
+  tick: 1
   radius: 10
   spawnCount: 1
   isAllowParallel: 1
-  bossID: 111
+  spawnShape: {fileID: 11400000, guid: ba8d652bc71edd8498cc303093e835b8, type: 2}
   clearOtherEnemies: 1
   isLockedArena: 1
   isShowWaring: 1

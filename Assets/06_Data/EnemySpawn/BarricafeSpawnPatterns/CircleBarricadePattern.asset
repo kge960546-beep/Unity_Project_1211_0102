@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60fabb75e64e3244d8d4a7b1ca9d3d36, type: 3}
+  m_Name: CircleBarricadePattern
+  m_EditorClassIdentifier: 
+  barricadePrefab: {fileID: 2308625523346013713, guid: 3bb5ff024b11f4b428ed241c097f8969, type: 3}
+  patternType: 1
+  spacing: 1
+  circleRadius: 15
+  circleCount: 120
+  squaureWidth: 12
+  squaereHeight: 8
+  lineCount: 30
+  lineLength: 15
+  localPositions:
+  - {x: 0, y: 0, z: 0}

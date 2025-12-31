@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public BossData testBossData;
+
     [SerializeField] private List<EnemyData> enemyDataList; 
 
     [SerializeField] private Transform spawnPos;
@@ -13,10 +15,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private BossWarningUI countdownUI;
     [SerializeField] private GameObject barricadePrefab;
 
-    private GameObject barricadeInstance;
     private Dictionary<int, GameObject> enemyDataPrefab;
     //실행 중인 패턴 코루틴 관리
     private List<Coroutine> runningPatterns = new();
+    private List<GameObject> barricades = new();
 
     PoolingService ps;
 
@@ -52,6 +54,43 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("EnemySpawner : SpawnPos 미할당");
 #endif
     }
+    //void Update()
+    //{
+        
+    //    // 테스트용: B 키를 누르면 강제 생성
+    //    if (Input.GetKeyDown(KeyCode.B))
+    //    {
+    //        Debug.Log("[TEST] B Key 입력됨");
+    //        // 여기 BossData를 직접 Drag&Drop 하거나, 참조 받아야 함
+    //        ForceSpawnBarricade(testBossData);
+    //    }
+    //}
+    //// 강제 바리게이트 스폰 테스트
+    //public void ForceSpawnBarricade(BossData bossData)
+    //{
+    //    Debug.Log("[TEST] ForceSpawnBarricade 실행");
+
+    //    if (bossData == null)
+    //    {
+    //        Debug.LogError("BossData가 null");
+    //        return;
+    //    }
+
+    //    if (bossData.barricadePattern == null)
+    //    {
+    //        Debug.LogError("BarricadePattern이 null");
+    //        return;
+    //    }
+
+    //    // 기본 중심은 BossData에서 지정한 center
+    //    Vector3 center = bossData.barricadeCenter != null
+    //        ? bossData.barricadeCenter.position
+    //        : Vector3.zero;
+
+    //    Debug.Log($"Barricade Center = {center}");
+
+    //    ActivateBarricade(bossData);
+    //}
     // Normal / Elite Spawn
     public GameObject SpawnEnemy(EnemyData data, Vector3 position)
     {
@@ -63,73 +102,82 @@ public class EnemySpawner : MonoBehaviour
 
         return enemy;
     }
+    //public IEnumerator PrepareBossSpawn(BossPatternSO bossPattern, BossData bossData)
+    //{
+    //    Debug.Log("[BossSpawn] PrepareBossSpawn 시작");
+
+    //    Vector3[] positions = bossData.spawnShape.GetSpawnPositions(bossData.context);
+    //    Vector3 bossPos = positions[0];
+
+
+    //}
     // Boss Spawn
     public IEnumerator SpawnBossRoutine(BossPatternSO bossPattern, BossData bossData)
     {
-        Debug.Log("[EmemySpawner] SpawnBossRoutine 호출");
-        if (bossPattern.clearOtherEnemies)
-            ClearAllEnemies();
 
-        if (bossData == null)
-            Debug.LogError("bossData가 null");
-
-        if (bossData.shape == null)
-            Debug.LogError("bossData.Shape이 지정되지 못함");
-
-        // SpawnContext는 struct이므로 null 비교가 불가, 대신 기본값과 비교
-        if (bossData.context.Equals(default(SpawnContext)))
-            Debug.LogError("bossData.context가 초기화 되지 않음");
-
-        Vector3[] positions = bossData.shape.GetSpawnPositions(bossData.context);
-
-        for (int i = 0; i < positions.Length; i++)
-        {
-            positions[i].y += 5.0f;
-        }
+        bossData.currentHp = bossData.maxHp;
 
         if (bossPattern.isLockedArena)
-        {
-            Debug.Log("isLockedArena 활성화");
-            ActivateBarricade(bossData.barricadeCenter);
-        }
+            ActivateBarricade(bossData);
 
-        if (countdownUI != null)
-            yield return countdownUI.ShowCountdown(3);
-
-        if (!enemyDataPrefab.TryGetValue(bossPattern.bossID, out GameObject prefab))
-        {
-            Debug.LogError($"boss {bossPattern.bossID} 프리핍 없음");
-            yield break;
-        }
-
-        GameObject boss = ps.GetOrCreateInactivatedGameObject(prefab);
-        boss.transform.position = positions[0];
-        boss.transform.rotation = Quaternion.identity;
-        boss.SetActive(true);
+        GameObject boss = SpawnEnemy(bossData, bossPattern.spawnPoint);
 
         while (bossData.currentHp > 0)
             yield return null;
 
         DeactivateBarricade();
     }
-    private void ActivateBarricade(Transform center)
+    private void SpawnBarricade(GameObject prefab, Vector3 worldPos)
+    {
+        var inst = Instantiate(prefab, worldPos, Quaternion.identity);
+        barricades.Add(inst);
+    }
+    private void ActivateBarricade(BossData bossData)
     {
         Debug.Log("[BossSpawn] ActivateBarricade 호출");
-        if (barricadeInstance == null)
+
+        var pattern = bossData.barricadePattern;
+
+        if(pattern == null)
         {
-            Debug.LogError("[BossSpawn] 바리게이트가 프리팹 인스턴스 생성");
-            barricadeInstance = Instantiate(barricadePrefab);
+            Debug.LogWarning("BarricadePattern 지정되지 않음");
+            return;
         }
 
-        barricadeInstance.transform.position = center.position;
-        barricadeInstance.SetActive(true);
+        //기존 바리게이드 제거
+        DeactivateBarricade();
 
-        Debug.Log($"[BossSpawn] 바리게이트 위치 설정 : {center.position}");
+        Vector3 center = bossData.barricadeCenter.position;
+
+        switch(pattern.patternType)
+        {
+            case BarricadePattern.Circle:
+                SpawnCirclePattern(pattern, center); 
+                break;
+
+            case BarricadePattern.Square:
+                SpawnSquarePattern(pattern, center);
+                break;
+
+            case BarricadePattern.HorizontalLIne:
+                SpawnHorizontalLine(pattern, center);
+                break;
+
+            case BarricadePattern.VerticalLIne:
+                SpawnVerticalLinePattern(pattern, center);
+                break;
+        }
     }
     private void DeactivateBarricade()
     {
-        if (barricadeInstance != null)
-            barricadeInstance.SetActive(false);
+        foreach(var bar in barricades)
+        {
+            if(bar != null)
+            {
+                Destroy(bar);
+            }
+        }
+        barricades.Clear();
     }
     //풀 되돌리기
     public void ReturnEnemy(GameObject obj)
@@ -141,7 +189,7 @@ public class EnemySpawner : MonoBehaviour
     {
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        foreach(var e in enemies)
+        foreach (var e in enemies)
         {
             if (e.name == "Barricade")
                 continue;
@@ -150,6 +198,71 @@ public class EnemySpawner : MonoBehaviour
             ps.ReturnOrDestroyGameObject(e);
         }
     }
+    // 패턴 강제 정지
+    public void StopAllSpawnPatterns()
+    {
+        foreach(var coroutine in runningPatterns)
+        {
+            if(coroutine != null)
+                StopCoroutine(coroutine);
+        }
+
+        runningPatterns.Clear();
+    }
+    #region BarricadeSpawn
+    private void SpawnCirclePattern(BarricadePatternSO pattern, Vector3 center)
+    {
+        for(int i = 0; i< pattern.circleCount; i++)
+        {
+            float angle = Mathf.PI * 2f * (i/(float)pattern.circleCount);
+
+            Vector3 offset = new(Mathf.Cos(angle) * pattern.circleRadius, Mathf.Sin(angle) * pattern.circleRadius, 0f);
+
+            SpawnBarricade(pattern.barricadePrefab, center +  offset);
+        }
+    }
+    private void SpawnSquarePattern(BarricadePatternSO pattern, Vector3 center)
+    {
+        int countX = Mathf.RoundToInt(pattern.squaureWidth / pattern.spacing);
+        int countY = Mathf.RoundToInt(pattern.squaereHeight / pattern.spacing);
+
+        for (int x = -countX; x <= countX; x++)
+        {
+            // 상단
+            SpawnBarricade(pattern.barricadePrefab, center + new Vector3(x * pattern.spacing, pattern.squaereHeight * 0.5f, 0f));
+            // 하단
+            SpawnBarricade(pattern.barricadePrefab, center + new Vector3(x * pattern.spacing, -pattern.squaereHeight * 0.5f, 0f));
+        }
+
+        for (int y = -countY; y <= countY; y++)
+        {
+            // 상단
+            SpawnBarricade(pattern.barricadePrefab, center + new Vector3(-pattern.squaureWidth * 0.5f, y * pattern.spacing, 0f));
+            // 하단
+            SpawnBarricade(pattern.barricadePrefab, center + new Vector3(pattern.squaureWidth * 0.5f, y * pattern.spacing, 0f));
+        }
+    }
+    private void SpawnHorizontalLine(BarricadePatternSO pattern, Vector3 center)
+    {
+        for (int i = 0; i < pattern.lineCount; i++)
+        {
+            float t = (i - pattern.lineCount / 2f) * pattern.spacing;
+            Vector3 pos = center + new Vector3(t, 0, 0);
+
+            SpawnBarricade(pattern.barricadePrefab, pos);
+        }
+    }
+    private void SpawnVerticalLinePattern(BarricadePatternSO pattern, Vector3 center)
+    {
+        for (int i = 0; i < pattern.lineCount; i++)
+        {
+            float t = (i - pattern.lineCount / 2f) * pattern.spacing;
+            Vector3 pos = center + new Vector3(0, t, 0);
+
+            SpawnBarricade(pattern.barricadePrefab, pos);
+        }
+    }
+    #endregion
     #region Test
     //void Awake()
     //{

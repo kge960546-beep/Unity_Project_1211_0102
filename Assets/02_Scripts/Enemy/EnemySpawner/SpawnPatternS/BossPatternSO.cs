@@ -3,7 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BossPatternSO", menuName = "Game/Stage/SpawnPattern/BossSpawnPattern")]
 public class BossPatternSO : SpawnPatternSO
 {
-    public int bossID;
+    [Header("Spawn Shape")]
+    public SpawnShapeSO spawnShape;
+    public SpawnContext context;
 
     [Header("Boss Options")]
     public bool clearOtherEnemies = true;

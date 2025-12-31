@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5276531299807831767}
   - component: {fileID: 2645074795552064498}
-  - component: {fileID: 3499692211977527133}
+  - component: {fileID: 2086067517274734719}
+  - component: {fileID: 183554119525017837}
   m_Layer: 10
   m_Name: Barricade
   m_TagString: Untagged
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &3499692211977527133
+--- !u!58 &2086067517274734719
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,9 +115,24 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &183554119525017837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2308625523346013713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d56d6202242f81d4b9b0bbe2c8ce477c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  center: {fileID: 5276531299807831767}
+  radius: 5
+  pushStrenght: 5

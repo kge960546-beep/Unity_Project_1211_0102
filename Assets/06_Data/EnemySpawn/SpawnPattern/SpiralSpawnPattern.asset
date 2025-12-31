@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpiralSpawnPattern
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 408c601b09c7baf44adb5c412abd4f0f, type: 2}
-  targetType: 0
+  targetType: 1
   shape: {fileID: 11400000, guid: e1f19605334a959429d5aca0cf791bcf, type: 2}
   startTime: 0
   endTime: 60

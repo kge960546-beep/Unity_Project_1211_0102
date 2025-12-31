@@ -27,7 +27,7 @@
 //    {
 //        Debug.Log("[BossSpawn] SpawnBossWithBarricade »£√‚");
 
-//        Vector3[] positions = bossData.shape.GetSpawnPositions(bossData.context);
+//        Vector3[] positions = bossData.spawnShape.GetSpawnPositions(bossData.context);
 
 //        yield return StartCoroutine(countdownUI.ShowCountdown(3));
     

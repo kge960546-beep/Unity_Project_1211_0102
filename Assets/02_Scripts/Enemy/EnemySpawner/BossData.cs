@@ -3,8 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BossData", menuName =("Game/Enemy/BossData SO"))]
 public class BossData : EnemyData
 {
-    public SpawnShapeSO shape;
-    public SpawnContext context;
-
+    [Header("Barricade Setting")]
     public Transform barricadeCenter;
+    public BarricadePatternSO barricadePattern;
 }

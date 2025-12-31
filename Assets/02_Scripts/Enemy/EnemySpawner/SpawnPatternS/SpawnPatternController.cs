@@ -9,28 +9,23 @@ public class SpawnPatternController : MonoBehaviour
     [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private Transform player;
 
-    private EnemyType enemyType;
-    private Coroutine stageRoutine;
+    private bool isBossSpawned = false;
 
     private void Start()
     {
-        stageRoutine = StartCoroutine(RunStagePatterns());
+        StartCoroutine(RunStagePatterns());
     }
-    private IEnumerator RunStagePatterns()
+    public IEnumerator RunStagePatterns()
     {
         foreach (var pattern in stagePattern.patterns)
         {
             if (pattern == null)
                 continue;
 
-            if(pattern.isAllowParallel)
-            {
+            if (pattern.isAllowParallel)
                 StartCoroutine(RunSpawnPattern(pattern));
-            }
             else
-            {
-                yield return StartCoroutine(RunSpawnPattern(pattern));
-            }
+                yield return StartCoroutine(RunSpawnPattern(pattern));      
         }
     }
     private IEnumerator RunSpawnPattern(SpawnPatternSO pattern)
@@ -55,10 +50,30 @@ public class SpawnPatternController : MonoBehaviour
     }
     public void SpawnByPattern(SpawnPatternSO pattern)
     {
-        BossData bossData = ScriptableObject.CreateInstance<BossData>();
-        BossPatternSO bossPattern = ScriptableObject.CreateInstance<BossPatternSO>();
+        // 보스 스폰 실행
+        if (pattern.enemyData.enemyType == EnemyType.Boss)
+        {
+            if (isBossSpawned)
+                return;
 
-        bossData.context = new SpawnContext
+            isBossSpawned = true;
+
+            BossPatternSO bossPattern = pattern as BossPatternSO;
+            BossData bossData = pattern.enemyData as BossData;
+
+            if (bossPattern == null || bossData == null)
+            {
+                Debug.LogError("BossPatternSO 또는 BossData 캐스팅 실패");
+                return;
+            }
+
+            // 반드시 StartCoroutine 으로 실행해야 함
+            StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
+            return;
+        }
+
+        // 일반 몬스터 스폰 실행
+        SpawnContext context = new SpawnContext
         {
             playerPosition = player.position,
             radius = pattern.radius,
@@ -66,16 +81,9 @@ public class SpawnPatternController : MonoBehaviour
             targetType = pattern.targetType
         };
 
-        Vector3[] positions = pattern.shape.GetSpawnPositions(bossData.context);
+        Vector3[] positions = pattern.shape.GetSpawnPositions(context);
 
-        if(pattern.enemyData.enemyType == EnemyType.Boss)
-        {
-            StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
-        }
-
-        foreach(var pos in positions)
-        {
+        foreach (var pos in positions)
             enemySpawner.SpawnEnemy(pattern.enemyData, pos);
-        }
     }
 }
