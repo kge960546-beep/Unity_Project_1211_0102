@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerStatHandler : MonoBehaviour
 {
+    [SerializeField] PlayerHp playerHp;
+    [SerializeField] private bool isLobby = false;
+
     [SerializeField] private EquipmentInventory eqInventory;
     [SerializeField] private InventoryManager inventoryManager;    
 
@@ -18,8 +21,8 @@ public class PlayerStatHandler : MonoBehaviour
 
     private void Awake()
     {
-        if(eqInventory == null) eqInventory = FindAnyObjectByType<EquipmentInventory>();
-        if(inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();        
+        if (eqInventory == null) eqInventory = FindAnyObjectByType<EquipmentInventory>();
+        if(inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();          
     }
     private void Start()
     {
@@ -36,14 +39,14 @@ public class PlayerStatHandler : MonoBehaviour
         if (refreshCo != null) StopCoroutine(refreshCo);
         refreshCo = StartCoroutine(RefreshLater());
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (eqInventory != null)
             eqInventory.UnsubscribeOnEquipmentChange(PlayerStatsUpdate);
 
         if (inventoryManager != null)
             inventoryManager.UnsubscribeOnInventoryChanged(PlayerStatsUpdate);
-    }
+    }   
     IEnumerator RefreshLater()
     {
         yield return new WaitForEndOfFrame();
@@ -71,7 +74,18 @@ public class PlayerStatHandler : MonoBehaviour
 
         if(finalAtkText != null) 
             finalAtkText.text = $"{attackStat.Value}";
+
+        if (isLobby) return;
+
+        int finalHp = Mathf.RoundToInt(maxHpStat.Value);
+
+        if (playerHp == null)
+            playerHp = FindAnyObjectByType<PlayerHp>();
+
+        if (playerHp != null)
+            playerHp.ReflectMaxHp(finalHp, isMaintainProportion: true, isnotify: true);
     }
+
 
     //파츠별 스탯 계산해서 PlayerStat에 반영
     public void PartsInstallation(EquipmentSO.EquipmentPart part)

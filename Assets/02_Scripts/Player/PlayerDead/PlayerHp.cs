@@ -68,6 +68,26 @@ public class PlayerHp : MonoBehaviour, IDamageable
         maxHp = playerBaseData.playerMaxHp;
         currentHp = maxHp;
     }
+    public void ReflectMaxHp(int newMaxHp, bool isMaintainProportion = true, bool isnotify = true)
+    {
+        newMaxHp = Mathf.Max(1, newMaxHp);
+
+        if(isMaintainProportion && maxHp > 0)
+        {
+            float ratio = (float)currentHp / maxHp;
+            maxHp = newMaxHp;
+            currentHp = Mathf.Clamp(Mathf.RoundToInt(maxHp * ratio), 1, maxHp);
+        }
+        else
+        {
+            maxHp = newMaxHp;
+            currentHp = Mathf.Min(currentHp, maxHp);            
+        }
+        if(isnotify)
+        {
+            onTakeDamageEvent?.Invoke(currentHp, maxHp);
+        }
+    }
     public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
         LayerService ls = GameManager.Instance.GetService<LayerService>();
