@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5327376538520104735}
   - component: {fileID: 6879329426859426955}
   - component: {fileID: 484990831893885618}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss_Bear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -227,8 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  maxHp: 0
+  maxHp: 2000
   dropExp: 1
   itemLayer: 0
   itemLayers: 0
-  enemyData: {fileID: 0}
+  enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}

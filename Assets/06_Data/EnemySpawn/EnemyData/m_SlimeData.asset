@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_SlimeData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 6992080625944048982, guid: a781372ff6416754189d88dda6dec536, type: 3}
-  enemyName: Slime
+  enemyID: 6
   poolCount: 0
   maxHp: 0
   attack: 0

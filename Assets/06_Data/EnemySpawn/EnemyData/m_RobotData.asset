@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_RobotData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7338523707001636485, guid: bb46b6f7f1885d946964578369db70e7, type: 3}
-  enemyName: Robot
+  enemyID: 5
   poolCount: 0
   maxHp: 0
   attack: 0

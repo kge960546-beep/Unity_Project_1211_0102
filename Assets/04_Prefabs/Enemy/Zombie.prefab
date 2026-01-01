@@ -208,3 +208,4 @@ MonoBehaviour:
   dropExp: 1
   itemLayer: 0
   itemLayers: 0
+  enemyData: {fileID: 0}

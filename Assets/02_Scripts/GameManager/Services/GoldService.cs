@@ -135,12 +135,12 @@ public class GoldService : MonoBehaviour, IGameManagementService
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
             byte[] encryptedData = null;
 
-            //Encrypt plain data
+            //Encrypt plain stagePattern
             //일반 데이터를 암호화
             byte[] bytesToEncrypt = Encoding.UTF8.GetBytes(data);
             encryptedData = encryptor.TransformFinalBlock(bytesToEncrypt, 0, bytesToEncrypt.Length);
 
-            //Convert encrypted data to a string and store it
+            //Convert encrypted stagePattern to a string and store it
             //암호화 데이터를 문자열로 변환하여 저장
             string encryptedString = Convert.ToBase64String(encryptedData);            
 
@@ -162,12 +162,12 @@ public class GoldService : MonoBehaviour, IGameManagementService
                 //암호화 키와 초기화 벡터를 이용하여 복호화를 진행할 decryptor 생성
                 ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
-                //data decryption
+                //stagePattern decryption
                 //데이터 복호화
                 byte[] encryptedData = Convert.FromBase64String(encryptedString);
                 byte[] decryptedData = decryptor.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
 
-                //Return stored data using decrypted data
+                //Return stored stagePattern using decrypted stagePattern
                 //복호화된 데이터를 이용하여 저장된 데이터 반환
                 return Encoding.UTF8.GetString(decryptedData);
             }           

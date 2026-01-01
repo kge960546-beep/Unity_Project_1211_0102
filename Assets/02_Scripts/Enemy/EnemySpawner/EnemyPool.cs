@@ -3,111 +3,84 @@ using System.Collections;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.Design.Serialization;
+using System.Xml.Schema;
 
-//ÀÛµ¿ Å×½ºÆ®¿ë ÀÓ½Ã ¿ÀºêÁ§Æ® Ç®¸µ Å¥(ÃßÈÄ ¼öÁ¤ÇÏ°Å³ª »èÁ¦ÇØµµ µÊ)
+//ì‘ë™ í…ŒìŠ¤íŠ¸ìš© ì„ì‹œ ì˜¤ë¸Œì íŠ¸ í’€ë§ í(ì¶”í›„ ìˆ˜ì •í•˜ê±°ë‚˜ ì‚­ì œí•´ë„ ë¨)
 public class EnemyPool : MonoBehaviour
 {
     public static EnemyPool instance;
 
     [SerializeField] private List<EnemyData> enemyDataList;
 
-    public Dictionary<EnemyData,Queue<GameObject>> pools = new();
+    public Dictionary<EnemyData, GameObject> prefabMap;
 
-    public int poolCountPrefab = 250;
+    PoolingService ps;
 
     void Awake()
     {
         if (instance == null) instance = this;
-        Initialize();
-    }
-    void Start()
-    {
-        //Initialize();
-    }
-    public void Initialize()
-    {
-        //ÃÊ±âÈ­
-        pools.Clear();
+        
+        ps = GameManager.Instance.GetService<PoolingService>();
+
+        if (ps == null)
+        {
+            Debug.LogError("[EnemyPool] PoolingService ëª» ì°¾ìŒ");
+        }
+        else
+        {
+            Debug.Log("[EnemyPool] PoolingService ì—°ê²° ì„±ê³µ");
+        }
+
+        prefabMap = new();
 
         foreach(var data in enemyDataList)
         {
+            Debug.Log($"[EnemyPool] ë“±ë¡ ì‹œë„ -> {data?.name}, ep:{data?.enemyPrefab}");
 
             if (data == null || data.enemyPrefab == null)
             {
-#if UNITY_EDITOR
-                Debug.LogError("EnemyData ¶Ç´Â PrefabÀÌ ºñ¾îÀÖÀ½");
-#endif
-                continue;
-            }   
-            
-            if(pools.ContainsKey(data))
-            {
-#if UNITY_EDITOR
-                Debug.LogError($"Áßº¹ EnemyData : {data.name}");
-#endif
+                Debug.LogError($"EnemyData ì„¤ì • ì˜¤ë¥˜ : {data}");
                 continue;
             }
 
-
-            // Queue »ı¼º
-            Queue<GameObject> queue = new Queue<GameObject>();
-
-            // pool »ı¼º
-            for(int i = 0; i<data.poolCount; i++)
-            {
-                GameObject enemy = Instantiate(data.enemyPrefab, transform);
-                enemy.SetActive(false);
-                queue.Enqueue(enemy);
-            }
-            pools.Add(data, queue);
+            prefabMap[data] = data.enemyPrefab;
         }
+        Debug.Log($"[EnemyPool] enemyPrefab ë“±ë¡ ê°œìˆ˜ : {prefabMap.Count}");
     }
-    public GameObject GetQueue(EnemyData data)
+    
+    public GameObject Get(EnemyData data)
     {
+        Debug.Log($"[EnemyPool] Get ìš”ì²­ : {data?.name}");
 
-        if (data == null)
+        if(!prefabMap.TryGetValue(data, out var prefab))
         {
-#if UNITY_EDITOR
-            Debug.LogError("EnemyData°¡ null");
-#endif
+            Debug.LogError($"EnemyData ë§¤í•‘ ì—†ìŒ : {data}");
             return null;
         }
+        Debug.Log($"[EnemyPool] prefab í™•ì¸ : {prefab.name}");
 
-        if (!pools.TryGetValue(data, out Queue<GameObject> queue))
-        {
-#if UNITY_EDITOR
-            Debug.LogError($"EnemyPool¿¡ {data.name} Ç® ¾øÀ½");
-#endif
-            return null;
-        }
+        var ep = ps.GetOrCreateInactivatedGameObject(prefab);
 
+        Debug.Log($"[EnemyPool] í’€ì—ì„œ ë°˜í™˜ëœ ê°ì²´ : {ep.name}");
 
-        if (queue.Count > 0)
-        {
-            return queue.Dequeue();
-        }
-
-        GameObject enemy = Instantiate(data.enemyPrefab, transform);
-        enemy.SetActive(false);
-        return enemy;
+        return ep;
     }
     public void Return(EnemyData data, GameObject enemy)
     {
-        enemy.SetActive(false);
-        pools[data].Enqueue(enemy);
+        ps.ReturnOrDestroyGameObject(enemy);
     }
     //private void BuildEnemyDictionary()
     //{
     //    enemyID.Clear();
     //
-    //    foreach(var data in enemyDataList)
+    //    foreach(var stagePattern in enemyDataList)
     //    {
-    //        if(enemyID.ContainsKey(data.enemyID))
+    //        if(enemyID.ContainsKey(stagePattern.enemyID))
     //        {
-    //            Debug.LogError($"Áßº¹ enemyID : {data.enemyID}");
+    //            Debug.LogError($"ì¤‘ë³µ enemyID : {stagePattern.enemyID}");
     //            continue;
     //        }
-    //        enemyID.Add(data.enemyID, data);
+    //        enemyID.Add(stagePattern.enemyID, stagePattern);
     //    }
     //}
     //private void Initialize()
@@ -115,13 +88,13 @@ public class EnemyPool : MonoBehaviour
     //    foreach(var pair in enemyID)
     //    {
     //        int id = pair.Key;
-    //        EnemyData data = pair.Value;
+    //        EnemyData stagePattern = pair.Value;
     //
     //        Queue<GameObject> que = new Queue<GameObject>();
     //
-    //        for(int i = 0; i< data.poolCount; i++)
+    //        for(int i = 0; i< stagePattern.poolCount; i++)
     //        {
-    //            GameObject obj = Instantiate(data.enemyPrefab, transform);
+    //            GameObject obj = Instantiate(stagePattern.enemyPrefab, transform);
     //            var pool = obj.GetComponent<PoolableEnemy>();
     //            if (pool == null) pool = obj.AddComponent<PoolableEnemy>();
     //            pool.enemyID = id;
@@ -145,7 +118,7 @@ public class EnemyPool : MonoBehaviour
     //{
     //    if(!pools.ContainsKey(enemyID))
     //    {
-    //        Debug.LogError($"EnemyPool¿¡ {enemyID} °¡ Á¸ÀçÇÏÁö ¾ÊÀ½");
+    //        Debug.LogError($"EnemyPoolì— {enemyID} ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŒ");
     //        return null;
     //    }
     //    Queue<GameObject> queue = pools[enemyID];
@@ -156,22 +129,22 @@ public class EnemyPool : MonoBehaviour
     //    }
     //    else
     //    {
-    //        EnemyData data = GetMonsterData(enemyID);
-    //        GameObject newEnemy = Instantiate(data.enemyPrefab);
+    //        EnemyData stagePattern = GetMonsterData(enemyID);
+    //        GameObject newEnemy = Instantiate(stagePattern.enemyPrefab);
 
     //        return newEnemy;
     //    }
     //}
     //private EnemyData GetMonsterData(int enemyID)
     //{
-    //    foreach(var data in enemyDataList)
+    //    foreach(var stagePattern in enemyDataList)
     //    {
-    //        if(data.enemyID == enemyID)
+    //        if(stagePattern.enemyID == enemyID)
     //        {
-    //            return data;
+    //            return stagePattern;
     //        }
     //    }
-    //    Debug.LogError($"{enemyID}¿¡ ÇØ´çÇÏ´Â MonsterData°¡ ¾ø½À´Ï´Ù");
+    //    Debug.LogError($"{enemyID}ì— í•´ë‹¹í•˜ëŠ” MonsterDataê°€ ì—†ìŠµë‹ˆë‹¤");
     //    return null;
     //}
     #endregion

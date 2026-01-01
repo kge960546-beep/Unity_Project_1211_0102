@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7947841673784781446}
   - component: {fileID: 3534464165926426532}
   - component: {fileID: 3312710146181121920}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss_Wolf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,3 +231,4 @@ MonoBehaviour:
   dropExp: 1
   itemLayer: 0
   itemLayers: 0
+  enemyData: {fileID: 0}
