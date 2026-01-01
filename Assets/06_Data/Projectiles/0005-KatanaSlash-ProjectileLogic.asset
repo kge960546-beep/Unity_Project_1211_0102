@@ -15,8 +15,16 @@ MonoBehaviour:
   <AnimationController>k__BackingField: {fileID: 9100000, guid: 2ea0c61944b744242bd70199f4150287, type: 2}
   <DefaultSpeed>k__BackingField: 4
   <DefaultSearchDistance>k__BackingField: 0
-  <ColliderRadius>k__BackingField: 3
+  <DefaultColliderRadius>k__BackingField: 0
   <LifeTime>k__BackingField: 2
   <KnockBackForce>k__BackingField: 0
+  <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
+  <IsInflictingDamageOnTriggerStay>k__BackingField: 0
+  <CriticalRate>k__BackingField: 0
+  damageVariationRatio: 0
+  <OrdinaryDamageCoefficientTable>k__BackingField: []
+  <CriticalDamageMultiplier>k__BackingField: 0
   <DefaultExpansionTime>k__BackingField: 0.5
   <DefaultExpandedDisplacementMagnitude>k__BackingField: 1.5
+  <SharedCommonProjectilePrefab>k__BackingField: {fileID: 0}
+  <CatanaAuraLogic>k__BackingField: {fileID: 0}

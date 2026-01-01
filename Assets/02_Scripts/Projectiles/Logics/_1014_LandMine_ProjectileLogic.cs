@@ -35,8 +35,6 @@ public class _1014_LandMine_ProjectileLogic : ProjectileLogicBase
         //radialDistanceUI.transform.SetLocalPositionAndRotation(Vector2.zero, Quaternion.identity);
         //radialDistanceUI.transform.localScale = new Vector3(DefaultSearchDistance, DefaultSearchDistance, DefaultSearchDistance);
         //radialDistanceUI.SetActive(true);
-
-        if (instanceData.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb)) pcdb.enabled = false;
     }
 
     protected override void CallbackAtOnDisableInternal(ref ProjectileInstanceContext instanceData)
@@ -60,8 +58,6 @@ public class _1014_LandMine_ProjectileLogic : ProjectileLogicBase
         {
             if (target.TryGetComponent(out IDamageable damageable)) InflictDamage(ref instanceData, damageable);
         }
-
-        if (instanceData.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb)) pcdb.enabled = true;
     }
 
     protected override void CallbackAtFixedUpdateInternal(ref ProjectileInstanceContext instanceData)

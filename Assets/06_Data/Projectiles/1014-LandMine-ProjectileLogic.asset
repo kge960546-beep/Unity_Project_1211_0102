@@ -18,6 +18,7 @@ MonoBehaviour:
   <DefaultColliderRadius>k__BackingField: 3
   <LifeTime>k__BackingField: 5
   <KnockBackForce>k__BackingField: 0
+  <IsInflictingDamageOnTriggerEnter>k__BackingField: 0
   <IsInflictingDamageOnTriggerStay>k__BackingField: 0
   <CriticalRate>k__BackingField: 0.6
   damageVariationRatio: 0.3
@@ -30,5 +31,5 @@ MonoBehaviour:
   <CriticalDamageMultiplier>k__BackingField: 1.2
   <RadialDistanceUIPrefab>k__BackingField: {fileID: 3334767572514772906, guid: 25919531bc68aec46866ed850e8d7f61, type: 3}
   <ExplosionFXPrefab>k__BackingField: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
-  <DefaultSummonDistance>k__BackingField: 4.5
+  <DefaultSummonDistance>k__BackingField: 3.5
   <DefaultFuseDelayFrame>k__BackingField: 60
