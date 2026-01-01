@@ -21,8 +21,8 @@ public class MergeRecipe
 public class MergeController : MonoBehaviour
 {
     [Header("선택")]
-    [SerializeField] private EquipmentItem baseItem;
-    [SerializeField] private List<EquipmentItem> ingredients = new List<EquipmentItem>();
+    [SerializeField] private string baseUid;
+    [SerializeField] private List<string> ingredientUids = new List<string>();    
 
     [Header("규칙 리스트")]
     [SerializeField] private List<MergeRecipe> recipes = new List<MergeRecipe>();
@@ -35,151 +35,133 @@ public class MergeController : MonoBehaviour
     //병합대상 아이템 지정후 기존 재료는 초기화
     public void SetBase(EquipmentItem item)
     {
-        baseItem = item;
-        ingredients.Clear();
+        baseUid = (item != null) ? item.inventoryUid : null;
+        ingredientUids.Clear();
     }
 
     //재료를 선택/ 해제 하는 기능
     public bool ToggleIngredient(EquipmentItem item)
     {
-        if (item == null || item == baseItem || baseItem == null || baseItem.Data == null) return false;
+        if (item == null) return false;
         
-        if(ingredients.Contains(item))
+        string uid = item.inventoryUid;
+        if (string.IsNullOrEmpty(uid)) return false;
+        if (string.IsNullOrEmpty(baseUid)) return false;
+        if(uid == baseUid) return false;
+
+        if(ingredientUids.Contains(uid))
         {
-            ingredients.Remove(item);
+            ingredientUids.Remove(uid);
             return true;
         }
+        
+        if(!TryGetBaseData(out var baseData)) return false;
 
-        MergeRecipe recipe = null;
-        for(int i = 0; i < recipes.Count; i++)
-        {
-            MergeRecipe r = recipes[i];
-            if(r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step)
-            {
-                recipe = r;
-                break;
-            }
-        }
+        MergeRecipe recipe = recipes.FirstOrDefault(rec => rec.inputType == baseData.classType && rec.inputStep == baseData.step);
+
         if (recipe == null) return false;
-        if (ingredients.Count >= recipe.needCount) return false;
+        if (ingredientUids.Count >= recipe.needCount) return false;
+        if (!IsValidIngredientUid(uid, baseData, recipe)) return false;
 
-        if (!IsValidIngredient(item, recipe)) return false;
-
-        ingredients.Add(item);
+        ingredientUids.Add(uid);
         return true;
     }   
+    public bool TryGetBaseData(out InventoryItemData baseData)
+    {
+        baseData = null;
+        if (InventoryManager.Instance == null) return false;
+        if (string.IsNullOrEmpty(baseUid)) return false;
+
+        baseData = InventoryManager.Instance.FindUid(baseUid);
+
+        return baseData != null && baseData.scriptableObjectData != null;
+    }
+
 
     //병합을 할 수 있는지 판단
     public bool CanMerge()
     {
-        if (baseItem == null || baseItem.Data == null) return false;
+        if (!TryGetBaseData(out var baseData)) return false;
 
-        var recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step);
+        var recipe = recipes.FirstOrDefault(recipe => recipe.inputType == baseData.classType && recipe.inputStep == baseData.step);
         if (recipe == null) return false;
 
-        if (ingredients.Count != recipe.needCount) return false;
+        if (ingredientUids.Count != recipe.needCount) return false;
 
-        return ingredients.All(mat => IsValidIngredient(mat, recipe));
+        for (int i = 0; i < ingredientUids.Count; i++)
+        {
+            if (!IsValidIngredientUid(ingredientUids[i], baseData, recipe)) return false;
+        }
+
+        return true;
     }
 
     //병합 최종 체크하고 병합 실행
     public bool IsMarge()
     {
-        if (baseItem == null || baseItem.Data == null) return false;
+        if (!TryGetBaseData(out var baseData)) return false;
+        
 
-        MergeRecipe recipe = recipes.FirstOrDefault(r => r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step);
+        MergeRecipe recipe = recipes.FirstOrDefault(recipe => recipe.inputType == baseData.classType && recipe.inputStep == baseData.step);
 
         if (recipe == null)
         {
             return false;
         }
         
-        if(ingredients.Count != recipe.needCount)
+        if(ingredientUids.Count != recipe.needCount)
         {
             return false;
         }
-        bool isValid = ingredients.All(mat => IsValidIngredient(mat, recipe));
+        
+        for(int i = 0; i< ingredientUids.Count; i++)
+        {
+            if (!IsValidIngredientUid(ingredientUids[i], baseData, recipe)) return false;
+        }
 
-        if(!isValid)
-        {
-            return false;
-        }
-        Debug.Log("[Merge] IsMarge SUCCESS");
-        ProcessMergeSuccess(recipe);
-        return isValid;
+        return ProcessMergeSuccess(recipe);
     }
 
     //재료가 몇개 필요한지 판단
-    public int GetIngredientNeedCount()
+    public int GetIngredentNeedCount()
     {
-        if (baseItem == null || baseItem.Data == null)
-        {
-            return 0; 
-        }
+        if (!TryGetBaseData(out var baseData)) return 0;
 
         //var recipe = recipes.FirstOrDefault(r => r.type == baseItem.Type && r.inputStep == baseItem.Step);
         MergeRecipe recipe = null;
-        foreach (MergeRecipe r in recipes)
+        foreach (MergeRecipe rec in recipes)
         {
-            if (r.inputType == baseItem.ClassType && r.inputStep == baseItem.Step)
+            if (rec.inputType == baseData.classType && rec.inputStep == baseData.step)
             {
-                recipe = r;
+                recipe = rec;
                 break;
             }
-        }
+        }        
 
-        if (recipe == null)
-        {
-            return 0;
-        }
-
-        return recipe.needCount;
+        return (recipe != null)? recipe.needCount : 0;
     }
 
     //재료가 조건에 맞는지 판단
-    public bool IsValidIngredient(EquipmentItem item, MergeRecipe recipe)
+    public bool IsValidIngredientUid(string uid, InventoryItemData baseData, MergeRecipe recipe)
     {
-        if (item == null)
-        {
-            Debug.Log("[Merge] mat null");
-            return false;
-        }
+        if (string.IsNullOrEmpty(uid)) return false;
+        if(InventoryManager.Instance == null) return false;
 
-        if (item.Data == null) { Debug.Log("[Merge] mat.Data null"); return false; }
-        if (baseItem == null || baseItem.Data == null) { Debug.Log("[Merge] base null/data null"); return false; }
+        var mat = InventoryManager.Instance.FindUid(uid);
+        if (mat == null) return false;
+        if (mat.scriptableObjectData == null) return false;
+        if (baseData == null || baseData.scriptableObjectData == null) return false;        
 
+        if(mat.classType != recipe.needType) return false;
+        if (mat.step != recipe.needStep) return false;
 
-        if (item.ClassType != recipe.needType)
-        {
-            Debug.Log($"[Merge] FAIL Type mat={item.ClassType} need={recipe.needType}");
-            return false;
-        }
-
-        if (item.Step != recipe.needStep)
-        {
-            Debug.Log($"[Merge] FAIL Step mat={item.Step} need={recipe.needStep}");
-            return false;
-        }
-
-        if (item.Data.partType != baseItem.Data.partType)
-        {
-            Debug.Log($"[Merge] FAIL partType mat={item.Data.partType} base={baseItem.Data.partType}");
-            return false;
-        }
-
+        if(mat.scriptableObjectData.partType != baseData.scriptableObjectData.partType) return false;
+       
         if(recipe.isSameId)
         {
-            if (item.Data == null || baseItem.Data == null) return false;
-
-            int itemId = item.Data.equipmentID;
-            int baseId = baseItem.Data.equipmentID;
-
-            if (itemId != baseId)
-            {
-                Debug.Log($"[Merge] FAIL equipmentID mat={itemId} base={baseId}");
+            if (mat.scriptableObjectData.equipmentID != baseData.scriptableObjectData.equipmentID)
                 return false;
-            }
-        }
+        }          
 
         return true;
     }
@@ -187,40 +169,32 @@ public class MergeController : MonoBehaviour
     //병합성공시 실행
     public bool ProcessMergeSuccess(MergeRecipe recipe)
     {
-        if (baseItem == null || baseItem.Data == null) return false;
+        if (InventoryManager.Instance == null) return false;
+        if(string.IsNullOrEmpty(baseUid)) return false;
 
-        var inventoryManager = InventoryManager.Instance;
-        if (inventoryManager == null) return false;
+        if(InventoryManager.Instance.FindUid(baseUid) == null) return false;
         
-        foreach (var mat in ingredients)
+
+        for(int i = 0; i<ingredientUids.Count; i++)
         {
-            if (mat == null) continue;
-            inventoryManager.RemoveUid(mat.inventoryUid);
-            Destroy(mat.gameObject);
+            string matUid = ingredientUids[i];
+            if(string.IsNullOrEmpty(matUid)) continue;
+            if (matUid == baseUid) continue;
+
+            InventoryManager.Instance.RemoveUid(matUid, false);
         }
 
-        //var baseData = inventoryManager.FindUid(baseItem.inventoryUid);
-        //if (baseData != null)
-        //{
-        //    baseData.classType = recipe.resultType;
-        //    baseData.step = recipe.resultStep;
-        //}
+        bool updated = InventoryManager.Instance.UpdateUid(baseUid, recipe.resultType, recipe.resultStep);
 
-        bool updated = inventoryManager.UpdateUid(baseItem.inventoryUid, recipe.resultType, recipe.resultStep);
-        
-        if(!updated)
-        {
-            Debug.Log($"실패한 uid = {baseItem.inventoryUid}");
-            return false; 
-        }
+        if (!updated) return false;
 
-        baseItem.Initialize(baseItem.Data, recipe.resultType, recipe.resultStep);
-
-        ingredients.Clear();
-        baseItem = null;
+        ingredientUids.Clear();
+        baseUid = null;
         return true;        
-    }   
-
+    }
+    public string GetBaseUid() => baseUid;
+    public IReadOnlyList<string> GetIngredentUids() => ingredientUids;
+    public bool IsIngredientSelected(string uid) => ingredientUids.Contains(uid);
     //병합 규칙
     private void InitializeDefaultRecipes()
     {

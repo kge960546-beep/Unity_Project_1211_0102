@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 7147104876290689308}
   - component: {fileID: 7073849704538818789}
   - component: {fileID: 4425041058524200579}
+  - component: {fileID: 511023738940783883}
   - component: {fileID: 5379593493524740640}
   m_Layer: 8
   m_Name: Player
@@ -368,6 +369,26 @@ MonoBehaviour:
   currentHp: 0
   playerBaseData: {fileID: 11400000, guid: 7e3d131fea68ce34da411e6d6616d6e2, type: 2}
   bloodSplashVFX: {fileID: 6319258823091351783}
+--- !u!114 &511023738940783883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585711465689959475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8826bb762dcbd04d8181ac9172864c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHp: {fileID: 4425041058524200579}
+  isLobby: 0
+  eqInventory: {fileID: 0}
+  inventoryManager: {fileID: 0}
+  finalAtkText: {fileID: 0}
+  finalHpText: {fileID: 0}
+  maxHpStat: {fileID: 0}
+  attackStat: {fileID: 0}
 --- !u!114 &5379593493524740640
 MonoBehaviour:
   m_ObjectHideFlags: 0

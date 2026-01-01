@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,12 +38,7 @@ public class MergeInventory : MonoBehaviour
     }
     public void RefreshMergeUI()
     {
-        if (mergeGrid == null) return;
-
-        foreach (Transform child in mergeGrid)
-        {
-            Destroy(child.gameObject);
-        }
+        if (mergeGrid == null) return;       
 
         if (InventoryManager.Instance == null) return;
 
@@ -53,26 +47,51 @@ public class MergeInventory : MonoBehaviour
         var sorted = (sortMode == SortMode.Parts) ? InventorySortComparer.SortByPart(myItems) :
                                                     InventorySortComparer.SortDescendingOrderByRank(myItems);
 
-        foreach (var data in sorted)
+        int dataCount = sorted.Count;
+        int currentSlotCount = mergeGrid.childCount;
+
+        for (int i = 0; i < dataCount; i++)
         {
-            GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
+            EquipmentItem EItem = null;
 
-            EquipmentItem item = newSlot.GetComponent<EquipmentItem>();
-
-            if (item != null)
+            if (i < currentSlotCount)
             {
-                item.Initialize(data.soData, data.classType, data.step);
-                item.BindInventory(data.uid);
-                
-                item.SetOnClickAction(() =>
+                Transform child = mergeGrid.GetChild(i);
+                child.gameObject.SetActive(true);
+                EItem = child.GetComponent<EquipmentItem>();
+            }
+            else
+            {
+                GameObject newSlot = Instantiate(itemPrefab, mergeGrid);
+                EItem = newSlot.GetComponent<EquipmentItem>();
+            }
+
+            if (EItem != null)
+            {
+                var data = sorted[i];
+                EItem.Initialize(data.scriptableObjectData, data.classType, data.step);
+                EItem.BindInventory(data.uid);
+
+                var slotItem = EItem;
+                var btn = EItem.GetComponent<Button>();
+                if(btn != null)
                 {
-                    if (mergeWindow != null)
-                        mergeWindow.OnItemSelected(item);
-                });
-            } 
+                    btn.onClick.RemoveAllListeners();
+                    btn.onClick.AddListener(() => mergeWindow.OnItemSelected(slotItem));
+                }
+                else
+                {
+                    EItem.SetOnClickAction(() => mergeWindow.OnItemSelected(slotItem));
+                }
+            }
         }
 
-        if(refreshCo != null)
+        for (int i = dataCount; i < currentSlotCount; i++)
+        {
+            mergeGrid.GetChild(i).gameObject.SetActive(false);
+        }       
+
+        if (refreshCo != null)
         {
             StopCoroutine(refreshCo);
         }

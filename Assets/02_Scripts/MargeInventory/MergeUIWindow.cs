@@ -186,7 +186,7 @@ public class MergeUIWindow : MonoBehaviour
 
         int needCount = 0;
         if (selectedItem != null && mergeController != null)
-            needCount = mergeController.GetIngredientNeedCount();
+            needCount = mergeController.GetIngredentNeedCount();
 
         for (int i = 0; i < ingredientSlotParent.childCount; i++)
         {
