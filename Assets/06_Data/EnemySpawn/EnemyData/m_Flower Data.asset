@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
   m_Name: m_Flower Data
   m_EditorClassIdentifier: 
+  enemyType: 0
   enemyPrefab: {fileID: 5072729482443720922, guid: d35f142a7c9e463419c471614c1b5745, type: 3}
-  enemyName: Flower
+  enemyID: 2
   poolCount: 250
-  maxHp: 0
-  attack: 0
-  speed: 0
+  maxHp: 100
+  currentHp: 100
+  attack: 3
+  speed: 5

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5514590518395294189}
   - component: {fileID: 8948775839304505266}
   - component: {fileID: 4338047612791110244}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Boss_Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,3 +225,4 @@ MonoBehaviour:
   dropExp: 1
   itemLayer: 0
   itemLayers: 0
+  enemyData: {fileID: 0}
