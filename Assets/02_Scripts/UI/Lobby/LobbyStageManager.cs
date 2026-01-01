@@ -20,8 +20,11 @@ public class LobbyStageManager : MonoBehaviour
 
         startButton.onClick.RemoveAllListeners();
         startButton.onClick.AddListener(OnClickStart);
+        
+    }
+    private void Start()
+    {
         AudioManager.instance.PlayBgm(AudioManager.BgmType.Lobby);
-
     }
     public void SelectSatge(int index)
     {

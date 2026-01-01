@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -7,6 +8,14 @@ public class AudioManager : MonoBehaviour
 
     public enum BgmType { Lobby, StageA, StageB }
     public enum Sfx { Dead, Hit }
+
+    private string lobbyScene = "Lobby";
+    private string stage1 = "PlayerStage1";
+    private string stage2 = "PlayerStage2";
+    private string stage3 = "PlayerStage3";
+    private string stage4 = "PlayerStage4";
+    private string stage5 = "PlayerStage5";
+
 
     [Header("브금(BGM) 3종")]
     [SerializeField] private AudioClip lobbyBgm;
@@ -35,8 +44,18 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Init();
-    }
 
+        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+   
     void Init()
     {
         var bgmObject = new GameObject("BgmPlayer");
@@ -130,5 +149,40 @@ public class AudioManager : MonoBehaviour
         // 0 또는 1
         var pick = UnityEngine.Random.Range(0, 2);
         PlayBgm(pick == 0 ? BgmType.StageA : BgmType.StageB);
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        string name = scene.name;
+
+        if(name.Equals(lobbyScene, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayBgm(BgmType.Lobby);
+            return;
+        }
+        if(name.Equals(stage1, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayRandomStageBgm();
+            return;
+        }
+        if(name.Equals(stage2, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayRandomStageBgm();
+            return;
+        }
+        if(name.Equals(stage3, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayRandomStageBgm();
+            return;
+        }
+        if(name.Equals(stage4, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayRandomStageBgm();
+            return;
+        }
+        if(name.Equals(stage5, StringComparison.OrdinalIgnoreCase))
+        {
+            PlayRandomStageBgm();
+            return;
+        }
     }
 }
