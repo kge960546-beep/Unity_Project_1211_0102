@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerStatHandler : MonoBehaviour
 {
+    [SerializeField] private PlayerDataSO playerBaseDataSO;
+
     [SerializeField] PlayerHp playerHp;
     [SerializeField] private bool isLobby = false;
 
@@ -13,16 +15,34 @@ public class PlayerStatHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalAtkText;
     [SerializeField] private TextMeshProUGUI finalHpText;
 
-
     [SerializeField] private PlayerStat maxHpStat;
-    [SerializeField] private PlayerStat attackStat;
+    [SerializeField] private PlayerStat attackStat;    
 
     private Coroutine refreshCo;
 
     private void Awake()
     {
+        Debug.Log($"[PlayerStatHandler] Awake on {gameObject.scene.name} / {gameObject.name} / active={gameObject.activeInHierarchy}");
+
+        if(playerHp == null) playerHp = GetComponent<PlayerHp>();
+        
+        if(maxHpStat == null || attackStat == null)
+        {
+            var stats = GetComponents<PlayerStat>();
+            
+            for(int i = 0; i < stats.Length; i++)
+            {
+                var st = stats[i];
+                if (st == null) continue;
+
+                if (st.StatType == PlayerStatType.Hp) maxHpStat = st;
+                else if(st.StatType == PlayerStatType.Attack) attackStat = st;
+            }
+        }
+        if (inventoryManager == null) inventoryManager = InventoryManager.Instance;
+        if (inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();
+
         if (eqInventory == null) eqInventory = FindAnyObjectByType<EquipmentInventory>();
-        if(inventoryManager == null) inventoryManager = FindAnyObjectByType<InventoryManager>();          
     }
     private void Start()
     {
@@ -56,8 +76,18 @@ public class PlayerStatHandler : MonoBehaviour
     //장착 상태를 보고 계산후 UI 출력
     public void PlayerStatsUpdate()
     {
+        if (playerBaseDataSO == null && playerHp == null)
+            playerBaseDataSO = playerHp.playerBaseData;
+
+        if (playerBaseDataSO == null) return;
         if (maxHpStat == null || attackStat == null) return;
-        if (inventoryManager == null || eqInventory == null) return;
+        if (isLobby && (inventoryManager == null || eqInventory == null)) return;
+
+        maxHpStat.baseValue = playerBaseDataSO.playerMaxHp;
+        attackStat.baseValue = playerBaseDataSO.playerAttack;
+
+        maxHpStat.isRecalculate = false;
+        attackStat.isRecalculate = false;
 
         maxHpStat.RemoveAllModifier(this);
         attackStat.RemoveAllModifier(this);
@@ -69,28 +99,38 @@ public class PlayerStatHandler : MonoBehaviour
         PartsInstallation(EquipmentSO.EquipmentPart.Gloves);
         PartsInstallation(EquipmentSO.EquipmentPart.Shoes);
 
-        if(finalHpText != null)
-            finalHpText.text = $"{maxHpStat.Value}";
+        maxHpStat.isRecalculate = true;
+        attackStat.isRecalculate = true;
+
+        int finalHp = Mathf.RoundToInt(maxHpStat.value);
+        int finalAtk = Mathf.RoundToInt(attackStat.value);
+
+        maxHpStat.UpdateStats();
+        attackStat.UpdateStats();
+
+        if (finalHpText != null)
+            finalHpText.text = $"{maxHpStat.value}";
 
         if(finalAtkText != null) 
-            finalAtkText.text = $"{attackStat.Value}";
+            finalAtkText.text = $"{attackStat.value}";
 
-        if (isLobby) return;
-
-        int finalHp = Mathf.RoundToInt(maxHpStat.Value);
+        if (isLobby) return;        
 
         if (playerHp == null)
             playerHp = FindAnyObjectByType<PlayerHp>();
 
         if (playerHp != null)
+        {
+            Debug.Log($"[PlayerStatsUpdate] finalHp={finalHp}, isLobby={isLobby}, playerHp={(playerHp != null ? playerHp.name : "NULL")}");
             playerHp.ReflectMaxHp(finalHp, isMaintainProportion: true, isnotify: true);
+        }
     }
 
 
     //파츠별 스탯 계산해서 PlayerStat에 반영
     public void PartsInstallation(EquipmentSO.EquipmentPart part)
     {
-        string uid = eqInventory.GetInventoryEquipmentUid(part);        
+        string uid = inventoryManager.GetSaveEquipmentUid(part);
 
         if (string.IsNullOrEmpty(uid)) return;
 

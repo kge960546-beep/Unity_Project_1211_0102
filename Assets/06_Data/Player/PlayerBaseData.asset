@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerBaseData
   m_EditorClassIdentifier: 
   playerMaxHp: 250
-  playerAttack: 0
+  playerAttack: 100
