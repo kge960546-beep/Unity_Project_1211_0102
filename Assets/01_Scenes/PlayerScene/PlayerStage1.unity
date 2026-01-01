@@ -34554,6 +34554,7 @@ MonoBehaviour:
   - {fileID: 6377509416705521859, guid: 06f68eb8fcef4ed4aa5605bb7387a27e, type: 3}
   - {fileID: 1076951460487789384, guid: 96b059e1591b4ed4d83b4c545ca493f1, type: 3}
   - {fileID: 1446529393574218148, guid: d2a682637f2f0e64db18680883438681, type: 3}
+  equipmentBoxPRefab: {fileID: 0}
   clearPanel: {fileID: 1449855136}
 --- !u!114 &1893541540
 MonoBehaviour:
@@ -43894,10 +43895,6 @@ PrefabInstance:
     - target: {fileID: 3195360653602422880, guid: f0bc9a4eb7533d7468fc96380ff7c83d, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3663112374136624302, guid: f0bc9a4eb7533d7468fc96380ff7c83d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4272463069209767815, guid: f0bc9a4eb7533d7468fc96380ff7c83d, type: 3}
       propertyPath: m_Pivot.x

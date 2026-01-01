@@ -11,8 +11,6 @@ public class ActiveSkillStateControllerBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        // TODO: init context dynamically with skill input
-
         context.nextState = ActiveSkillStateUtility.GetStateType<ActiveSkillWaitingState>();
         context.isStateChanged = true;
         if (coolTime == null)

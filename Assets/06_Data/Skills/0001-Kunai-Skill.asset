@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b300990dfefbf90449b0551f39d0c6a0, type: 3}
+  m_Name: 0001-Kunai-Skill
+  m_EditorClassIdentifier: 
+  <SkillID>k__BackingField: 1
+  <SkillType>k__BackingField: 0
+  <SkillName>k__BackingField: "\uCFE0\uB098\uC774"
+  <SkillThumbnail>k__BackingField: {fileID: 21300000, guid: 6a59960a6ececbe4ca26e3e8d8f0ac94, type: 3}
+  skillDescription: "\uD55C\uB54C \uACE0\uB300\uC758 \uB2CC\uC790 \uBB34\uAE30\uC600\uC73C\uB098
+    \uC9C0\uAE08\uC740 \uAC04\uD3B8\uD55C \uC6D0\uAC70\uB9AC \uBC1C\uC0AC\uCCB4\uB85C
+    \uC0AC\uC6A9\uD568"
+  <ProjectileLogic>k__BackingField: {fileID: 11400000, guid: 3bae87512cc548d489601eb9c191ce5a, type: 2}
+  <LeveledProjectionTimingTables>k__BackingField:
+  - <RequiredLevel>k__BackingField: 1
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+  - <RequiredLevel>k__BackingField: 2
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.2
+  - <RequiredLevel>k__BackingField: 3
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.2
+    - 0.4
+  - <RequiredLevel>k__BackingField: 4
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.2
+    - 0.4
+    - 0.6
+  - <RequiredLevel>k__BackingField: 5
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.2
+    - 0.4
+    - 0.6
+    - 0.8
+  <DefaultCooldown>k__BackingField: 1.2

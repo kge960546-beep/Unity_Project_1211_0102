@@ -11,4 +11,7 @@ public struct ProjectileInstanceContext
     public Rigidbody2D rb;
     public float timer;
     public int hitCount;
+    public int level;
+    public int sequenceCount;
+    public int sequenceNumber;
 }

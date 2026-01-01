@@ -6,7 +6,7 @@ public class ProjectileCollisionDamageBehaviour : MonoBehaviour
     public float CriticalRate { set; private get; }
     public int OrdinaryDamage { set; private get; }
     public int CriticalDamage { set; private get; }
-    [Tooltip("Random value with uniform distribution from (1 - ratio) to (1 + ratio)")] [field: SerializeField] public float DamageVariationRatio { set; private get; }
+    [HideInInspector] public float DamageVariationRatio { set; private get; }
 
     public struct Cooldown
     {
