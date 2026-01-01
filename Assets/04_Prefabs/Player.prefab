@@ -381,6 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8826bb762dcbd04d8181ac9172864c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerBaseDataSO: {fileID: 0}
   playerHp: {fileID: 4425041058524200579}
   isLobby: 0
   eqInventory: {fileID: 0}
@@ -406,6 +407,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4d18a1ac253247429f5f8d306a5acaa, type: 2}
   - {fileID: 11400000, guid: 871b7c60583b8c64d9830d9c13503e15, type: 2}
   - {fileID: 11400000, guid: 1222865cc8854ec42bc145fa3bbddd60, type: 2}
+  - {fileID: 11400000, guid: 2eb805598efd82f4a937a9238c03f6f0, type: 2}
   - {fileID: 11400000, guid: 669020026deb9f244b9a0d9f7780f049, type: 2}
   evoRouteInputTable: []
   SharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}

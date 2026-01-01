@@ -14,12 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <AnimationController>k__BackingField: {fileID: 9100000, guid: b7103301264006b41b786ef756944932, type: 2}
   <DefaultSpeed>k__BackingField: 0
-  <DefaultSearchDistance>k__BackingField: 0
-  <ColliderRadius>k__BackingField: 3
+  <DefaultSearchDistance>k__BackingField: 3
+  <DefaultColliderRadius>k__BackingField: 3
   <LifeTime>k__BackingField: 5
   <KnockBackForce>k__BackingField: 0
-  <RadialDistanceUIPrefab>k__BackingField: {fileID: 0}
-  <DefaultExplosionDamageRadius>k__BackingField: {fileID: 0}
-  <ExplosionEffectPrefab>k__BackingField: {fileID: 0}
-  <DefaultSummonDistance>k__BackingField: 8
+  <IsInflictingDamageOnTriggerStay>k__BackingField: 0
+  <CriticalRate>k__BackingField: 0.6
+  damageVariationRatio: 0.3
+  <OrdinaryDamageCoefficientTable>k__BackingField:
+  - 10
+  - 10
+  - 20
+  - 20
+  - 20
+  <CriticalDamageMultiplier>k__BackingField: 1.2
+  <RadialDistanceUIPrefab>k__BackingField: {fileID: 3334767572514772906, guid: 25919531bc68aec46866ed850e8d7f61, type: 3}
+  <ExplosionFXPrefab>k__BackingField: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
+  <DefaultSummonDistance>k__BackingField: 4.5
   <DefaultFuseDelayFrame>k__BackingField: 60
