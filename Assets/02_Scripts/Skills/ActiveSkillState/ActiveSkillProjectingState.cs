@@ -32,8 +32,26 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
             context.cachedInitData.level = context.level;
         }
 
-        context.cachedInitData.currentProjectorPosition = (null == rb) ? Vector2.zero : rb.position;
-        context.cachedInitData.currentProjectorAzimuth = (null == rb) ? 0f : Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+        if (null == rb)
+        {
+            context.cachedInitData.currentProjectorPosition = Vector2.zero;
+            context.cachedInitData.currentProjectorAzimuth = 0f;
+        }
+        else
+        {
+            context.cachedInitData.currentProjectorPosition = rb.position;
+
+            if (Vector2.zero == rb.velocity)
+            {
+                if (rb.TryGetComponent(out SpriteRenderer sr)) context.cachedInitData.currentProjectorAzimuth = sr.flipX ? 180f : 0;
+                else context.cachedInitData.currentProjectorAzimuth = 0f;
+            }
+            else
+            {
+                context.cachedInitData.currentProjectorAzimuth = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+            }
+
+        }
 
         for (int i = 0; i < targetTable.Count; i++)
         {
