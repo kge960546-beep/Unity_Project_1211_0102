@@ -15,10 +15,17 @@ MonoBehaviour:
   <AnimationController>k__BackingField: {fileID: 9100000, guid: 732c7e82f62ca374d8cfd1ecd9b68db6, type: 2}
   <DefaultSpeed>k__BackingField: 5
   <DefaultSearchDistance>k__BackingField: 8
-  <ColliderRadius>k__BackingField: 1
-  <LifeTime>k__BackingField: 5
+  <DefaultColliderRadius>k__BackingField: 0.1
+  <LifeTime>k__BackingField: 1.6
   <KnockBackForce>k__BackingField: 0
+  <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
   <IsInflictingDamageOnTriggerStay>k__BackingField: 0
   <CriticalRate>k__BackingField: 0.5
-  <OrdinaryDamage>k__BackingField: 300
-  <CriticalDamage>k__BackingField: 600
+  damageVariationRatio: 0.1
+  <OrdinaryDamageCoefficientTable>k__BackingField:
+  - 1.5
+  - 2
+  - 3
+  - 4
+  - 5.6
+  <CriticalDamageMultiplier>k__BackingField: 1.5

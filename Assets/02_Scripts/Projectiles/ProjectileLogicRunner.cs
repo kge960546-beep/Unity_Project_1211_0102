@@ -32,10 +32,10 @@ public class ProjectileLogicRunner : MonoBehaviour
         Logic?.CallbackAtOnEnable(ref context, InitData);
     }
 
-    //private void OnDisable()
-    //{
-    //    logic?.CallbackAtOnDisable(Context);
-    //}
+    private void OnDisable()
+    {
+        Logic?.CallbackAtOnDisable(ref context);
+    }
 
     private void OnDrawGizmos()
     {

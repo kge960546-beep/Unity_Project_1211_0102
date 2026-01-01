@@ -26,23 +26,23 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     }
     void Start()
     {
-        if (coolTimeController == null)
-            coolTimeController = FindObjectsOfType<ActiveSkillStateControllerBehaviour>().Where(obj => obj.isDefaultSkill).First(); ;
-
         if (coolTimeSlider == null)
             coolTimeSlider = GetComponent<Slider>();
 
         coolTimeSlider.minValue = 0.0f;
         coolTimeSlider.maxValue = 1.0f;
 
-        if (coolTimeController != null)
-        {
-            maxCoolTime = coolTimeController.context.period;
-        }
 
         currentCoolTime = Mathf.Clamp(currentCoolTime, 0.0f, maxCoolTime);
         UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);
     }
+
+    public void OnDefaultSkillBound(ActiveSkillStateControllerBehaviour behaviour)
+    {
+        coolTimeController = behaviour;
+        maxCoolTime = coolTimeController.context.period;
+    }
+
     private void Update()
     {
         if (!isCoolTime) return;
@@ -57,21 +57,20 @@ public class PlayerCoolTimeSlider : MonoBehaviour
         }
         UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);
     }
+
     public void UpdateCoolTimeSlider(float currentCoolTime, float maxCoolTime)
     {
         if (coolTimeSlider == null) return;
         if (maxCoolTime <= 0) return;
-
         coolTimeSlider.value = currentCoolTime / maxCoolTime;
     }
+
     public void StartCoolTime()
     {
         if (coolTimeController != null)
         {
             maxCoolTime = coolTimeController.context.period;
         }
-        //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
-        Debug.Log($"현재 period : {coolTimeController.context.period}");
 
         currentCoolTime = 0.0f;
         isCoolTime = true;
@@ -89,8 +88,6 @@ public class PlayerCoolTimeSlider : MonoBehaviour
         {
             maxCoolTime = coolTimeController.context.period;
         }
-        //Debug.Log($"[테스트] 갱신된 MaxTime: {maxCoolTime}");
-        Debug.Log($"현재 period : {coolTimeController.context.period}");
 
         currentCoolTime = 0.0f;
         isCoolTime = true;

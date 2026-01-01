@@ -11,6 +11,7 @@ public struct ProjectileInstanceInitializationData
     public int sequenceCount;
     public int sequenceNumber;
     public int layer;
+    public int level;
 }
 
 public abstract class ProjectileLogicBase : ScriptableObject
@@ -19,14 +20,16 @@ public abstract class ProjectileLogicBase : ScriptableObject
     [field: SerializeField] protected RuntimeAnimatorController AnimationController { get; private set; }
     [field: SerializeField] protected float DefaultSpeed { get; private set; }
     [field: SerializeField] public    float DefaultSearchDistance { get; private set; }
-    [field: SerializeField] protected float ColliderRadius { get; private set; }
+    [field: SerializeField] protected float DefaultColliderRadius { get; private set; }
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float KnockBackForce { get; private set; }
 
-    [field: SerializeField] protected bool IsInflictingDamageOnTriggerStay { set; private get; }
-    [field: SerializeField] protected float CriticalRate { set; private get; }
-    [field: SerializeField] protected int OrdinaryDamage { set; private get; }
-    [field: SerializeField] protected int CriticalDamage { set; private get; }
+    [field: SerializeField] protected bool IsInflictingDamageOnTriggerEnter { set; get; }
+    [field: SerializeField] protected bool IsInflictingDamageOnTriggerStay { set; get; }
+    [field: SerializeField] protected float CriticalRate { set; get; }
+    [Tooltip("Random value with uniform distribution from (1 - ratio) to (1 + ratio)")][SerializeField] protected float damageVariationRatio;
+    [field: SerializeField] protected float[] OrdinaryDamageCoefficientTable { set; get; }
+    [field: SerializeField] protected float CriticalDamageMultiplier { set; get; }
 
     // TODO: add more common values
     // TODO: consider storing implementation-specific stagePattern and do not require context stagePattern store
@@ -34,7 +37,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
 
     public void CallbackOnDrawGizmos(ref ProjectileInstanceContext context)
     {
-        Gizmos.DrawWireSphere(context.rb.position, ColliderRadius);
+        Gizmos.DrawWireSphere(context.rb.position, DefaultColliderRadius);
     }
 
     public bool IsTargetInRange(Vector2 projectorPosition, float projectorAzimuth) => IsTargetInRangeInternal(projectorPosition, projectorAzimuth);
@@ -43,19 +46,34 @@ public abstract class ProjectileLogicBase : ScriptableObject
     {
         context.obj.layer = initData.layer;
         context.anim.runtimeAnimatorController = AnimationController;
-        context.cc.radius = ColliderRadius;
+        context.cc.radius = DefaultColliderRadius;
         context.timer = 0f;
         context.hitCount = 0;
+        context.level = initData.level;
+        context.sequenceCount = initData.sequenceCount;
+        context.sequenceNumber = initData.sequenceNumber;
 
         if (context.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb))
         {
+            pcdb.IsInflictingDamageOnTriggerEnter = IsInflictingDamageOnTriggerEnter;
             pcdb.IsInflictingDamageOnTriggerStay = IsInflictingDamageOnTriggerStay;
             pcdb.CriticalRate = CriticalRate;
-            pcdb.OrdinaryDamage = OrdinaryDamage;
-            pcdb.CriticalDamage = CriticalDamage;
+            pcdb.DamageVariationRatio = damageVariationRatio;
+            int baseDamage = 100; // TODO: calculate damage from context.obj.{STAT_RELATED_COMPONENT}
+            int ordinaryDamage = (int)(baseDamage * OrdinaryDamageCoefficientTable[context.level - 1]);
+            pcdb.OrdinaryDamage = ordinaryDamage;
+            pcdb.CriticalDamage = (int)(ordinaryDamage * CriticalDamageMultiplier);
         }
 
+        context.rb.rotation = 0f;
+        context.obj.transform.localScale = Vector3.one;
+
         CallbackAtOnEnableInternal(ref context, initData);
+    }
+
+    public void CallbackAtOnDisable(ref ProjectileInstanceContext context)
+    {
+        CallbackAtOnDisableInternal(ref context);
     }
 
     public void CallbackAtFixedUpdate(ref ProjectileInstanceContext context)

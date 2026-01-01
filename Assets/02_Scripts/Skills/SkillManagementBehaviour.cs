@@ -8,59 +8,98 @@ using UnityEngine.EventSystems;
 public class SkillManagementBehaviour : MonoBehaviour
 {
     [Header("Skill Database")]
-    [SerializeField] private GameObject SharedCommonProjectilePrefab;
-    [SerializeField] private ActiveSkillDescriptor[] activeSkillDescriptorInputTable;
-    Dictionary<int, ActiveSkillDescriptor> activeSkillDescriptorDictionary;
-    [SerializeField] private PassiveSkillDescriptor[] passiveSkillDescriptorInputTable;
-    Dictionary<int, PassiveSkillDescriptor> passiveSkillDescriptorDictionary;
+    [SerializeField] private SkillDescriptor[] skillDescriptorInputTable;
     [SerializeField] private SkillEvolutionRoute[] evoRouteInputTable;
-    Dictionary<int, SkillEvolutionRoute> evoRouteDictionary;
 
     [Header("Settings")]
+    [SerializeField] private GameObject SharedCommonProjectilePrefab;
     [SerializeField] private int maxSkillLevel;
+
+    Dictionary<int, ActiveSkillDescriptor> activeSkillDescriptorDictionary;
+    Dictionary<int, ActiveSkillDescriptor> activeEvoSkillDescriptorDictionary;
+    Dictionary<int, PassiveSkillDescriptor> passiveSkillDescriptorDictionary;
+    Dictionary<int, SkillDescriptor> DefaultGainableSkillDescriptorDictionary;
+    Dictionary<int, SkillEvolutionRoute> evoRouteDictionary;
 
     private ActiveSkillStateControllerBehaviour[] activeSkills = new ActiveSkillStateControllerBehaviour[6];
     private PassiveSkillControllerBehaviour[] passiveSkills = new PassiveSkillControllerBehaviour[6];
     private int playerProjectileLayer;
-
     private DamageStatisticsService dss;
 
     private void Awake()
     {
-        activeSkillDescriptorDictionary = activeSkillDescriptorInputTable.ToDictionary(desc => desc.SkillID);
-        passiveSkillDescriptorDictionary = passiveSkillDescriptorInputTable.ToDictionary(desc => desc.SkillID);
+        activeSkillDescriptorDictionary =
+            skillDescriptorInputTable
+                .Where(d => d.SkillType == SkillDescriptor.Type.Active)
+                .Select(d => new KeyValuePair<int, ActiveSkillDescriptor>(d.SkillID, d as ActiveSkillDescriptor))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+
+        activeEvoSkillDescriptorDictionary =
+            skillDescriptorInputTable
+                .Where(d => d.SkillType == SkillDescriptor.Type.ActiveEvo)
+                .Select(d => new KeyValuePair<int, ActiveSkillDescriptor>(d.SkillID, d as ActiveSkillDescriptor))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+
+        passiveSkillDescriptorDictionary =
+            skillDescriptorInputTable
+                .Where(d => d.SkillType == SkillDescriptor.Type.Passive)
+                .Select(d => new KeyValuePair<int, PassiveSkillDescriptor>(d.SkillID, d as PassiveSkillDescriptor))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+
+        DefaultGainableSkillDescriptorDictionary =
+            activeSkillDescriptorDictionary.Select(kv => (kv.Key, kv.Value as SkillDescriptor))
+                .Concat(passiveSkillDescriptorDictionary.Select(kv => (kv.Key, kv.Value as SkillDescriptor)))
+                .DistinctBy(kv => kv.Key)
+                .ToDictionary(kv => kv.Key, kv => kv.Item2);
+
+        // TODO: exclude default skill which is not equipped at the start
+
         evoRouteDictionary = evoRouteInputTable.ToDictionary(r => r.EvolvedSkillID);
+
         playerProjectileLayer = GameManager.Instance.GetService<LayerService>().playerProjectileLayer;
         dss = GameManager.Instance.GetService<DamageStatisticsService>();
+
+        BindActiveSkill(1); // 0001-Kunai-Skill, need to change according to inventory data
+        PlayerCoolTimeSlider cooldownSlider = FindFirstObjectByType<PlayerCoolTimeSlider>();
+        if (null != cooldownSlider) cooldownSlider.OnDefaultSkillBound(activeSkills[0]);
+        activeSkills[0].isDefaultSkill = true;
     }
 
-    public List<(SkillDescriptor descriptor, int nextLevel, bool isPassive)> ListUpUpgradableSkills()
+    public List<(SkillDescriptor descriptor, int nextLevel)> ListUpUpgradableAndBindableSkills()
     {
-        List<(SkillDescriptor descriptor, int nextLevel, bool isPassive)> result = new List<(SkillDescriptor descriptor, int nextLevel, bool isPassive)>();
+        Dictionary<int, (SkillDescriptor descriptor, int nextLevel)> result = DefaultGainableSkillDescriptorDictionary.ToDictionary(kv => kv.Key, kv => (kv.Value, 1));
 
         foreach (ActiveSkillStateControllerBehaviour behaviour in activeSkills)
-            if (behaviour.context.level < maxSkillLevel)
-                result.Add((activeSkillDescriptorDictionary[behaviour.skillID], behaviour.context.level + 1, false));
+        {
+            if (null == behaviour) continue;
+            if (behaviour.context.level == maxSkillLevel) result.Remove(behaviour.skillID);
+            else result[behaviour.skillID] = (result[behaviour.skillID].descriptor, behaviour.context.level + 1);
+        }
 
         foreach (PassiveSkillControllerBehaviour behaviour in passiveSkills)
-            if (behaviour.level < maxSkillLevel)
-                result.Add((passiveSkillDescriptorDictionary[behaviour.skillID], behaviour.level + 1, true));
+        {
+            if (null == behaviour) continue;
+            if (behaviour.level == maxSkillLevel) result.Remove(behaviour.skillID);
+            else result[behaviour.skillID] = (result[behaviour.skillID].descriptor, behaviour.level + 1);
+        }
 
         foreach (SkillEvolutionRoute route in evoRouteDictionary.Values)
         {
-            if (activeSkills.Any(behaviour => behaviour.skillID == route.BaseSkillID1)
-                && (activeSkills.Any(behaviour => behaviour.skillID == route.BaseSkillID2)
+            if (activeSkills.Any(behaviour => behaviour.skillID == route.BaseSkillID1 && behaviour.context.level == maxSkillLevel)
+                && (activeSkills.Any(behaviour => behaviour.skillID == route.BaseSkillID2 && behaviour.context.level == maxSkillLevel)
                     || passiveSkills.Any(behaviour => behaviour.skillID == route.BaseSkillID2)))
-                result.Add((activeSkillDescriptorDictionary[route.EvolvedSkillID], 1, false));
+                result.Add(route.EvolvedSkillID, (activeEvoSkillDescriptorDictionary[route.EvolvedSkillID], 1));
         }
-
-        return result;
+        return result.Values.ToList();
     }
 
     #region Active Skill Spceific Methods
     public void EvolveActiveSkill(int skillID)
     {
-        if (evoRouteDictionary.TryGetValue(skillID, out SkillEvolutionRoute route)) throw new System.InvalidOperationException("Cannot find the target skill.");
+        if (!evoRouteDictionary.TryGetValue(skillID, out SkillEvolutionRoute route)) throw new System.InvalidOperationException($"Cannot find designated skill. (Skill ID: {skillID})");
 
         // base skill 1 is always an active skill.
         if (null != dss) dss.OnActiveSkillEvolve(activeSkillDescriptorDictionary[route.BaseSkillID1], activeSkillDescriptorDictionary[skillID]);
@@ -78,13 +117,13 @@ public class SkillManagementBehaviour : MonoBehaviour
 
     public void LevelUpActiveSkill(int skillID)
     {
-        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
+        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException($"Cannot find designated skill. (Skill ID: {skillID})");
         activeSkills[cellIndex].context.level++;
     }
 
     public void BindActiveSkill(int skillID, bool isDefaultSkill = false)
     {
-        if (activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException("Cannot find designated skill.");
+        if (!activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException($"Cannot find designated skill. (Skill ID: {skillID})");
         if (!TryFindEmptyActiveSkillCell(out int cellIndex)) throw new System.InvalidOperationException($"Cannot bind more than {activeSkills.Length} skills.");
 
         ActiveSkillStateControllerBehaviour skill = gameObject.AddComponent<ActiveSkillStateControllerBehaviour>();
@@ -107,8 +146,8 @@ public class SkillManagementBehaviour : MonoBehaviour
 
     private void UnbindActiveSkill(int skillID)
     {
-        if (activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException("Cannot find designated skill.");
-        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
+        if (!activeSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException($"Cannot find designated skill. (Skill ID: {skillID})");
+        if (!TryFindTargetActiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException($"Cannot find designated skill. (Skill ID: {skillID})");
         Destroy(activeSkills[cellIndex]);
         activeSkills[cellIndex] = null;
 
@@ -148,7 +187,7 @@ public class SkillManagementBehaviour : MonoBehaviour
     #region Passive Skill Spceific Methods
     public void BindPassiveSkill(int skillID, bool isDefaultSkill = false)
     {
-        if (passiveSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException("Cannot find designated skill.");
+        if (!passiveSkillDescriptorDictionary.TryGetValue(skillID, out var descriptor)) throw new System.ArgumentNullException($"Cannot find designated skill. (Skill ID: {skillID})");
         if (!TryFindEmptyPassiveSkillCell(out int cellIndex)) throw new System.InvalidOperationException($"Cannot bind more than {activeSkills.Length} skills.");
 
         PassiveSkillControllerBehaviour skill = gameObject.AddComponent<PassiveSkillControllerBehaviour>();
@@ -164,7 +203,7 @@ public class SkillManagementBehaviour : MonoBehaviour
 
     public void LevelUpPassiveSkill(int skillID)
     {
-        if (!TryFindTargetPassiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException("Cannot find the target skill.");
+        if (!TryFindTargetPassiveSkillCell(skillID, out int cellIndex)) throw new System.InvalidOperationException($"Cannot find designated skill. (Skill ID: {skillID})");
         passiveSkills[cellIndex].level++;
     }
 

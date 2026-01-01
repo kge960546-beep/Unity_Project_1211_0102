@@ -79,7 +79,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -126,7 +126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &986840173406086191
 Transform:
   m_ObjectHideFlags: 0
@@ -250,4 +250,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9313562a334df9346ad78b5807e7e1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DamageVariationRatio>k__BackingField: 0.1

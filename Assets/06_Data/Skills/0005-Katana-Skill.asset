@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b300990dfefbf90449b0551f39d0c6a0, type: 3}
+  m_Name: 0005-Katana-Skill
+  m_EditorClassIdentifier: 
+  <SkillID>k__BackingField: 5
+  <SkillType>k__BackingField: 0
+  <SkillName>k__BackingField: "\uCE74\uD0C0\uB098"
+  <SkillThumbnail>k__BackingField: {fileID: 21300000, guid: 5b7381522f15ee04f847e1f28e23156f, type: 3}
+  skillDescription: "\uC885\uB9D0 \uC2DC\uB300\uC5D0\uC11C \uC0DD\uAE40\uC0C8\uB9CC
+    \uBA4B\uC9C4 \uBB3C\uAC74\uC774 \uC544\uB2D8"
+  <ProjectileLogic>k__BackingField: {fileID: 11400000, guid: 9ee1d7b3775f92a43bb843b17fa95198, type: 2}
+  <LeveledProjectionTimingTables>k__BackingField:
+  - <RequiredLevel>k__BackingField: 1
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+  - <RequiredLevel>k__BackingField: 2
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.3
+  - <RequiredLevel>k__BackingField: 3
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.3
+    - 0.6
+  - <RequiredLevel>k__BackingField: 4
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.3
+    - 0.6
+    - 0.9
+  - <RequiredLevel>k__BackingField: 5
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.3
+    - 0.6
+    - 0.9
+    - 1.2
+  <DefaultCooldown>k__BackingField: 2.5

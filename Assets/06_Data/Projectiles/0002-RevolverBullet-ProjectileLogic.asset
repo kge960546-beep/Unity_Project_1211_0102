@@ -13,9 +13,20 @@ MonoBehaviour:
   m_Name: 0002-RevolverBullet-ProjectileLogic
   m_EditorClassIdentifier: 
   <AnimationController>k__BackingField: {fileID: 9100000, guid: 0dd2a94e01b306d4aa0aea3614a5f725, type: 2}
-  <DefaultSpeed>k__BackingField: 20
+  <DefaultSpeed>k__BackingField: 15
   <DefaultSearchDistance>k__BackingField: 30
-  <ColliderRadius>k__BackingField: 0.2
+  <DefaultColliderRadius>k__BackingField: 0.1
   <LifeTime>k__BackingField: 2
   <KnockBackForce>k__BackingField: 0
-  <DefaultShotAngle>k__BackingField: 60
+  <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
+  <IsInflictingDamageOnTriggerStay>k__BackingField: 0
+  <CriticalRate>k__BackingField: 0.4
+  damageVariationRatio: 0.3
+  <OrdinaryDamageCoefficientTable>k__BackingField:
+  - 2.5
+  - 5
+  - 10
+  - 20
+  - 40
+  <CriticalDamageMultiplier>k__BackingField: 1.8
+  <DefaultShotAngle>k__BackingField: 35

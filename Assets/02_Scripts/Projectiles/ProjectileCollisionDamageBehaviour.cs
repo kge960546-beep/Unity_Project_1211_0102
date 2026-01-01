@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class ProjectileCollisionDamageBehaviour : MonoBehaviour
 {
+    public bool IsInflictingDamageOnTriggerEnter{ set; private get; }
     public bool IsInflictingDamageOnTriggerStay{ set; private get; }
     public float CriticalRate { set; private get; }
     public int OrdinaryDamage { set; private get; }
     public int CriticalDamage { set; private get; }
-    [Tooltip("Random value with uniform distribution from (1 - ratio) to (1 + ratio)")] [field: SerializeField] public float DamageVariationRatio { set; private get; }
+    [HideInInspector] public float DamageVariationRatio { set; private get; }
 
     public struct Cooldown
     {
@@ -29,6 +30,7 @@ public class ProjectileCollisionDamageBehaviour : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // expects to be filtered with collision matrix
+        if (!IsInflictingDamageOnTriggerEnter) return;
         if (collision.gameObject.TryGetComponent(out IDamageable damagable)) InflictDamage(damagable);
     }
 

@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 572, y: 60}
+  m_AnchoredPosition: {x: 0, y: -600}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &449714144882540012
@@ -559,9 +559,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 862389336222794407}
-  optionPrefab: {fileID: 8744689957264166096, guid: cf656c46b0e1a3a4f94d8efa802bf6c3, type: 3}
+  skillCardPrefab: {fileID: 292039799071306759, guid: cf656c46b0e1a3a4f94d8efa802bf6c3, type: 3}
   optionRoot: {fileID: 6114501461732753430}
   skipButton: {fileID: 7807286069323273066}
+  buttonCount: 3
 --- !u!225 &862389336222794407
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -747,7 +748,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 600, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6046953354546081577

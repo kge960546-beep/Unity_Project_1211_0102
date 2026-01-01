@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "2001-EnemyBullet-ProjectileLogic", menuName = "Game/Projectile/2001 Enemy bullet Projectile Logic")]
 public class _2001_EnemyBullet_ProjectileLogic : ProjectileLogicBase
 {
     protected override bool IsTargetInRangeInternal(Vector2 projectorPosition, float projectorAzimuth)

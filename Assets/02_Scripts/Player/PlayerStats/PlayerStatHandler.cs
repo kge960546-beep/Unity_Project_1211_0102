@@ -100,17 +100,17 @@ public class PlayerStatHandler : MonoBehaviour
         maxHpStat.isRecalculate = true;
         attackStat.isRecalculate = true;
 
-        int finalHp = Mathf.RoundToInt(maxHpStat.value);
-        int finalAtk = Mathf.RoundToInt(attackStat.value);
+        int finalHp = Mathf.RoundToInt(maxHpStat.CalculatedValue);
+        int finalAtk = Mathf.RoundToInt(attackStat.CalculatedValue);
 
         maxHpStat.UpdateStats();
         attackStat.UpdateStats();
 
         if (finalHpText != null)
-            finalHpText.text = $"{maxHpStat.value}";
+            finalHpText.text = $"{maxHpStat.CalculatedValue}";
 
         if(finalAtkText != null) 
-            finalAtkText.text = $"{attackStat.value}";
+            finalAtkText.text = $"{attackStat.CalculatedValue}";
 
         if (isLobby) return;        
 
