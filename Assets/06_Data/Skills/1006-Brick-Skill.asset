@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b300990dfefbf90449b0551f39d0c6a0, type: 3}
   m_Name: 1006-Brick-Skill
   m_EditorClassIdentifier: 
-  <SkillID>k__BackingField: 0
+  <SkillID>k__BackingField: 1006
   <SkillType>k__BackingField: 0
   <SkillName>k__BackingField: 
   <SkillThumbnail>k__BackingField: {fileID: 0}
