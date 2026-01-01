@@ -21,7 +21,7 @@ public class BarricadeSquareSpawner : MonoBehaviour
     {
         onBarricadeSquareSpawnEvent -= action;
     }
-    public void CallSquareBarricadeSpawn()
+    public void CallSquareBarricadeSpawn(bool enableBoundary = true, bool spawnBarricade = true)
     {
         if (spawner == null)
         {
@@ -30,9 +30,11 @@ public class BarricadeSquareSpawner : MonoBehaviour
 #endif
             return;
         }
+        if (enableBoundary)
+            onBarricadeSquareSpawnEvent?.Invoke(spawner);
 
-        SpawnSquare();
-        onBarricadeSquareSpawnEvent?.Invoke(spawner);
+        if (spawnBarricade)
+            SpawnSquare();
     }
     public void ClearSquareBarricade()
     {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DefaultExecutionOrder(10)]
+[RequireComponent(typeof(ProjectileCollisionDamageBehaviour))]
 public class ProjectileLogicRunner : MonoBehaviour
 {
+    public int SkillID { get; private set; }    // TODO: set skill ID
     public ProjectileLogicBase Logic { set; private get; }
     private ProjectileInstanceContext context;
     public ProjectileInstanceContext Context => context;

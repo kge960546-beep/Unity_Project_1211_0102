@@ -8,18 +8,19 @@ public class LineBoundaryLimiter : MonoBehaviour
     public float topY = 5f;
     public float bottomY = -5f;
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (GameManager.Instance == null) return;
         GameContextService gcs = GameManager.Instance.GetService<GameContextService>();
 
-        LimitPosition(gcs.Player.transform);
-        LimitPosition(gcs.BossMonster.transform);
+        if (gcs.Player != null)
+            LimitPosition(gcs.Player.transform);
+        if (gcs.BossMonster != null)
+            LimitPosition(gcs.BossMonster.transform);
     }
-
     private void LimitPosition(Transform target)
     {
-        if (center == null) return;
+        if (center == null || target == null) return;
 
         Vector2 pos = target.position;
         Vector2 c = center.position;

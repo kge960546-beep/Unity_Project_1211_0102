@@ -40,7 +40,7 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
             if (time <= prevTimer) continue;
             if (currentTimer < time) break;
             context.cachedInitData.sequenceNumber = i;
-            ProjectileSpawnUtility.Spawn(context.tempSharedCommonProjectilePrefab, context.logic, context.cachedInitData);
+            ProjectileSpawnUtility.Spawn(context.SharedCommonProjectilePrefab, context.logic, context.cachedInitData);
         }
 
         if (0 == count || targetTable[count - 1] <= currentTimer)

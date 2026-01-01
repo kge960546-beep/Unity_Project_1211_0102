@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.Design.Serialization;
 using System.Xml.Schema;
 
-//ÀÛµ¿ Å×½ºÆ®¿ë ÀÓ½Ã ¿ÀºêÁ§Æ® Ç®¸µ Å¥(ÃßÈÄ ¼öÁ¤ÇÏ°Å³ª »èÁ¦ÇØµµ µÊ)
+//ì‘ë™ í…ŒìŠ¤íŠ¸ìš© ì„ì‹œ ì˜¤ë¸Œì íŠ¸ í’€ë§ í(ì¶”í›„ ìˆ˜ì •í•˜ê±°ë‚˜ ì‚­ì œí•´ë„ ë¨)
 public class EnemyPool : MonoBehaviour
 {
     public static EnemyPool instance;
@@ -24,44 +24,44 @@ public class EnemyPool : MonoBehaviour
 
         if (ps == null)
         {
-            Debug.LogError("[EnemyPool] PoolingService ¸ø Ã£À½");
+            Debug.LogError("[EnemyPool] PoolingService ëª» ì°¾ìŒ");
         }
         else
         {
-            Debug.Log("[EnemyPool] PoolingService ¿¬°á ¼º°ø");
+            Debug.Log("[EnemyPool] PoolingService ì—°ê²° ì„±ê³µ");
         }
 
         prefabMap = new();
 
         foreach(var data in enemyDataList)
         {
-            Debug.Log($"[EnemyPool] µî·Ï ½Ãµµ -> {data?.name}, ep:{data?.enemyPrefab}");
+            Debug.Log($"[EnemyPool] ë“±ë¡ ì‹œë„ -> {data?.name}, ep:{data?.enemyPrefab}");
 
             if (data == null || data.enemyPrefab == null)
             {
-                Debug.LogError($"EnemyData ¼³Á¤ ¿À·ù : {data}");
+                Debug.LogError($"EnemyData ì„¤ì • ì˜¤ë¥˜ : {data}");
                 continue;
             }
 
             prefabMap[data] = data.enemyPrefab;
         }
-        Debug.Log($"[EnemyPool] enemyPrefab µî·Ï °³¼ö : {prefabMap.Count}");
+        Debug.Log($"[EnemyPool] enemyPrefab ë“±ë¡ ê°œìˆ˜ : {prefabMap.Count}");
     }
     
     public GameObject Get(EnemyData data)
     {
-        Debug.Log($"[EnemyPool] Get ¿äÃ» : {data?.name}");
+        Debug.Log($"[EnemyPool] Get ìš”ì²­ : {data?.name}");
 
         if(!prefabMap.TryGetValue(data, out var prefab))
         {
-            Debug.LogError($"EnemyData ¸ÅÇÎ ¾øÀ½ : {data}");
+            Debug.LogError($"EnemyData ë§¤í•‘ ì—†ìŒ : {data}");
             return null;
         }
-        Debug.Log($"[EnemyPool] prefab È®ÀÎ : {prefab.name}");
+        Debug.Log($"[EnemyPool] prefab í™•ì¸ : {prefab.name}");
 
         var ep = ps.GetOrCreateInactivatedGameObject(prefab);
 
-        Debug.Log($"[EnemyPool] Ç®¿¡¼­ ¹İÈ¯µÈ °´Ã¼ : {ep.name}");
+        Debug.Log($"[EnemyPool] í’€ì—ì„œ ë°˜í™˜ëœ ê°ì²´ : {ep.name}");
 
         return ep;
     }
@@ -77,7 +77,7 @@ public class EnemyPool : MonoBehaviour
     //    {
     //        if(enemyID.ContainsKey(stagePattern.enemyID))
     //        {
-    //            Debug.LogError($"Áßº¹ enemyID : {stagePattern.enemyID}");
+    //            Debug.LogError($"ì¤‘ë³µ enemyID : {stagePattern.enemyID}");
     //            continue;
     //        }
     //        enemyID.Add(stagePattern.enemyID, stagePattern);
@@ -118,7 +118,7 @@ public class EnemyPool : MonoBehaviour
     //{
     //    if(!pools.ContainsKey(enemyID))
     //    {
-    //        Debug.LogError($"EnemyPool¿¡ {enemyID} °¡ Á¸ÀçÇÏÁö ¾ÊÀ½");
+    //        Debug.LogError($"EnemyPoolì— {enemyID} ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŒ");
     //        return null;
     //    }
     //    Queue<GameObject> queue = pools[enemyID];
@@ -144,7 +144,7 @@ public class EnemyPool : MonoBehaviour
     //            return stagePattern;
     //        }
     //    }
-    //    Debug.LogError($"{enemyID}¿¡ ÇØ´çÇÏ´Â MonsterData°¡ ¾ø½À´Ï´Ù");
+    //    Debug.LogError($"{enemyID}ì— í•´ë‹¹í•˜ëŠ” MonsterDataê°€ ì—†ìŠµë‹ˆë‹¤");
     //    return null;
     //}
     #endregion

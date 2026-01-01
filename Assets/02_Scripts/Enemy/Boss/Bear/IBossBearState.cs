@@ -4,5 +4,3 @@ public interface IBossBearState
     void UpdateState(BossBear boss);
     void ExitState(BossBear boss);
 }
-
-

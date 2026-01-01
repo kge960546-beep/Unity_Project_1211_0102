@@ -36,12 +36,13 @@ public class FieldBomb : MonoBehaviour
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, bombDamageRange, enemyLayer);
 
+        DamageManagementService dms = GameManager.Instance.GetService<DamageManagementService>();
         foreach(var hit in hits)
         {
             var enemy = hit.GetComponent<EnemyHp>();
             if (enemy == null) continue;
-           
-            enemy.TakeDamage(bombDamage);//ÆøÅº µ¥¹ÌÁö
+
+            dms.QueueDamage(bombDamage, gameObject, enemy, false);
         }
     }
     private void OnDrawGizmosSelected()

@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class LayerService : MonoBehaviour, IGameManagementService
 {
+    public int defaultLayer {  get; private set; }
     public int playerLayer { get; private set; }
     public int enemyLayer { get; private set; }
     public int bossLayer { get; private set; }
@@ -18,6 +19,7 @@ public class LayerService : MonoBehaviour, IGameManagementService
 
     private void OnEnable()
     {
+        defaultLayer = LayerMask.NameToLayer("Default");
         playerLayer = LayerMask.NameToLayer("Player");
         enemyLayer = LayerMask.NameToLayer("Enemy");
         bossLayer = LayerMask.NameToLayer("Boss");

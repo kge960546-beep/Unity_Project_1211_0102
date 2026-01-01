@@ -18,6 +18,10 @@ MonoBehaviour:
   <ColliderRadius>k__BackingField: 0.2
   <LifeTime>k__BackingField: 5
   <KnockBackForce>k__BackingField: 0
+  <IsInflictingDamageOnTriggerStay>k__BackingField: 0
+  <CriticalRate>k__BackingField: 0.5
+  <OrdinaryDamage>k__BackingField: 400
+  <CriticalDamage>k__BackingField: 1200
   <DefaultGravity>k__BackingField: -15
   <DefaultSearchDistanceAspectRatio>k__BackingField: 0.25
   <DefaultSearchAreaVerticalOffsetRatio>k__BackingField: -0.1

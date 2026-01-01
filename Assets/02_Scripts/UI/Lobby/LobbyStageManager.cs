@@ -39,6 +39,9 @@ public class LobbyStageManager : MonoBehaviour
     }
     public void OnClickStart()
     {
+        if (InventoryManager.Instance != null)
+            InventoryManager.Instance.ClearStageData();
+
         string scene = stages[selectStageIndex].SceneName;
         SceneTransitionManager.Instance.LoadScene(scene);
     }

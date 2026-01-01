@@ -26,8 +26,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
 
     //임시 레이어 지정
     [Header("Layer")]
-    [SerializeField] int itemLayer;
-    [SerializeField] int itemLayers;
+    [SerializeField] int playerLayer;   
 
     private int currentHp;
     private bool isDead = false;
@@ -36,15 +35,19 @@ public class EnemyHp : MonoBehaviour, IDamageable
     public EnemyData enemyData;
     private MonsterController mController;
     private KillCount kill;
+    private PlayerHp playerHp;
     private void Awake()
-    {
+    {        
         anim = GetComponent<Animator>();
         mController = GetComponent<MonsterController>();
 
         kill = FindAnyObjectByType<KillCount>();
+        
+        if(playerHp == null)
+            playerHp = FindAnyObjectByType<PlayerHp>();
 
-        itemLayer = LayerMask.NameToLayer("Item");
-        itemLayers = LayerMask.NameToLayer("PlayerProjectile");
+        playerLayer = LayerMask.NameToLayer("Player");
+        
     }
     private void Start()
     {
@@ -91,7 +94,9 @@ public class EnemyHp : MonoBehaviour, IDamageable
         isDead = false;
         StopAllCoroutines();
 
-        if(EnemyDead.instance != null)
+        gameObject.layer = GameManager.Instance.GetService<LayerService>().enemyLayer;
+
+        if (EnemyDead.instance != null)
         {
             EnemyDead.instance.RegisterEnemy(this);
         }
@@ -117,13 +122,13 @@ public class EnemyHp : MonoBehaviour, IDamageable
         currentHp = maxHp;
         isDead = false;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
         if (isDead) return;
 
         int finalDamage = Mathf.Max(damage, 0);
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
-        // TODO: 히트 이펙트 있으면 여기서 재생        
+        // TODO: 히트 이펙트 있으면 여기서 재생
 
         onEnemyTakeDamageEvent?.Invoke(currentHp, maxHp);
 
@@ -141,8 +146,9 @@ public class EnemyHp : MonoBehaviour, IDamageable
         if (anim != null)
             anim.SetTrigger("isDead");        
 
-        onEnemyDeadEvent?.Invoke(enemyType, transform.position, dropExp);        
-        
+        onEnemyDeadEvent?.Invoke(enemyType, transform.position, dropExp);
+
+        gameObject.layer = GameManager.Instance.GetService<LayerService>().defaultLayer;
         StartCoroutine(DeadTime());
         kill.AddKillCount(1);
     }
@@ -151,19 +157,4 @@ public class EnemyHp : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(0.6f);
         gameObject.SetActive(false);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("콜리이더가 잘 작동 합니다");
-        if (isDead) return;
-
-        //TODO: 레이어 정의하면 수정
-
-        int layer = collision.gameObject.layer;
-        if (layer == itemLayer || layer == itemLayers)
-        {
-            //TODO: 투사체나 무기 데미지 불러오기 임시로 20데미지
-            Debug.Log("데미지가 들어갔냐?");
-            TakeDamage(20);
-        }
-    }   
 }

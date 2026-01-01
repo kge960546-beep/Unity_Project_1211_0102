@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RandomService : MonoBehaviour, IGameManagementService
 {
-    public Unity.Mathematics.Random Random { get; private set; }
+    public Unity.Mathematics.Random random;
 
     private void OnEnable()
     {
-        Random = new Unity.Mathematics.Random();
+        random = new Unity.Mathematics.Random((uint)System.DateTime.Now.Ticks);
+        SceneManager.sceneLoaded += SetSeed;
+    }
+
+    private void SetSeed(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        random.InitState((uint)System.DateTime.Now.Ticks);
     }
 }

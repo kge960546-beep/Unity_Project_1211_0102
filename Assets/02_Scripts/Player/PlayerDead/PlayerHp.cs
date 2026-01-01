@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerHp : MonoBehaviour
+public class PlayerHp : MonoBehaviour, IDamageable
 {
     /// <summary>
     /// onPlayerDeadEvent: 플레이어가 죽었을 때 발생하는 이벤트
@@ -22,6 +22,9 @@ public class PlayerHp : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
     public PlayerDataSO playerBaseData;
+
+    [SerializeField] private GameObject bloodSplashVFX;
+
     #region DeathSubscriptionAndCancellation
     /// <summary>
     /// 데드 이벤트 구독 & 해지
@@ -65,14 +68,17 @@ public class PlayerHp : MonoBehaviour
         maxHp = playerBaseData.playerMaxHp;
         currentHp = maxHp;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
-        if (isDead) return;
+        LayerService ls = GameManager.Instance.GetService<LayerService>();
 
+        if (isDead) return;
+        if (source.layer != ls.enemyLayer && source.layer != ls.enemyProjectileLayer) return;
         int finalDamage = Mathf.Max(damage, 0);
 
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
         // TODO: 히트 이펙트 있으면 여기서 재생
+        if (!bloodSplashVFX.activeSelf) bloodSplashVFX.SetActive(true);
 
         onTakeDamageEvent?.Invoke(currentHp, maxHp);
 
@@ -106,15 +112,5 @@ public class PlayerHp : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.0f);
         onPlayerDeadEvent?.Invoke();
-    }   
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (isDead) return;
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            // TODO: 데미지 적 정보로 불러오기 임시로 20 데미지
-            TakeDamage(20);
-        }
     }
 }

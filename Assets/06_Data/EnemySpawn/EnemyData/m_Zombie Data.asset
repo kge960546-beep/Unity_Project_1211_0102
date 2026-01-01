@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: m_Zombie Data
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7150319513743221602, guid: 17797c4d09a91b94193e87ebd7de34e8, type: 3}
-  enemyID: 0
-  poolCount: 50
-  maxHp: 100
+  enemyName: Zombie
+  poolCount: 20
+  maxHp: 500
   attack: 20
-  speed: 3
+  speed: 2

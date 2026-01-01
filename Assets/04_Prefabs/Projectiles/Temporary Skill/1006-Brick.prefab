@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99c9c81229b410942968854e8708e29b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillID: 0
   context:
     isStateChanged: 0
     logic: {fileID: 11400000, guid: 3a9318ec7b361354293f170cf161b4ee, type: 2}
@@ -61,8 +62,10 @@ MonoBehaviour:
       - 0.8
       - 1.6
     skillUserRB: {fileID: 0}
-    tempSharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
+    SharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
     period: 3
     level: 1
-    layer: 8
+    layer: 11
     timer: 0
+  coolTime: {fileID: 0}
+  isDefaultSkill: 0

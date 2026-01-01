@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BarricadeMiddleman : MonoBehaviour
@@ -46,11 +44,10 @@ public class BarricadeMiddleman : MonoBehaviour
     private void OnCircleBarricadeSpawned(Transform center)
     {
         AllDisable();
-
-        if (circleLimiter == null) return;
-        if (center == null) return;
+        if (circleLimiter == null || center == null) return;        
 
         circleLimiter.center = center;
+        circleLimiter.radius = circleSpawner != null ? circleSpawner.radius : circleLimiter.radius;
         circleLimiter.enabled = true;
     }
     private void OnLineBarricadeSpawned(Transform center)
@@ -60,17 +57,32 @@ public class BarricadeMiddleman : MonoBehaviour
         if (lineLimiter == null) return;
         if (center == null) return;
 
-        lineLimiter.center = center;        
+        lineLimiter.center = center;
+
+        if(lineSpawner != null)
+        {
+            float totalHorizontalLength  = (lineSpawner.cellCount - 1) * lineSpawner.cellSize;
+            lineLimiter.lineWidth = totalHorizontalLength;
+
+            lineLimiter.topY = center.position.y + lineSpawner.heightOffset;
+            lineLimiter.bottomY = center.position.y - lineSpawner.heightOffset;            
+        }
+        
         lineLimiter.enabled = true;
     }
     private void OnSquareBarricadeSpawned(Transform center)
     {
         AllDisable();
+        if (squareLimiter == null || center == null) return;       
 
-        if (squareLimiter == null) return;
-        if (center == null) return;
+        squareLimiter.center = center;   
+        
+        if(squareSpawner != null)
+        {
+            squareLimiter.width = squareSpawner.width;
+            squareLimiter.height = squareSpawner.height;
+        }
 
-        squareLimiter.center = center;        
         squareLimiter.enabled = true;
     }
 }

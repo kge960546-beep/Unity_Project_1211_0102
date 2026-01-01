@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +11,7 @@ public class GoLobby : MonoBehaviour
     }
     public void GoHomeLoad()
     {
-        timeService.ResumeGame();
+        timeService.ResumeGame();        
         SceneManager.LoadScene("Lobby");
     }
 }
