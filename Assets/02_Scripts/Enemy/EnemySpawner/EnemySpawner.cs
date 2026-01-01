@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public BossData testBossData;
-    [SerializeField] private CameraController cameraController;
+    [Header("EnemyDataList")]
+    public List<BossData> bossDataList;
+    [SerializeField] private List<EnemyData> enemyDataList;
+    //[SerializeField] private CameraController cameraController;
 
-    [SerializeField] private List<EnemyData> enemyDataList; 
-
+    [Header("Spawn Setting")]
     [SerializeField] private Transform spawnPos;
     [SerializeField] private Rigidbody2D playerRb; //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄 것 
     [SerializeField] private GameObject barricadePrefab;
@@ -21,6 +22,8 @@ public class EnemySpawner : MonoBehaviour
     private List<Coroutine> runningPatterns = new();
     private List<GameObject> barricades = new();
 
+    private BossData currentBoss;
+
     PoolingService ps;
 
     void Awake()
@@ -28,8 +31,8 @@ public class EnemySpawner : MonoBehaviour
         ps = GameManager.Instance.GetService<PoolingService>();
         enemyDataPrefab = new();
         
-        if(cameraController == null )
-            cameraController = FindObjectOfType<CameraController>();
+        //if(cameraController == null )
+        //    cameraController = FindObjectOfType<CameraController>();
 
         if (patternController == null)
             patternController = FindObjectOfType<SpawnPatternController>();
@@ -75,19 +78,22 @@ public class EnemySpawner : MonoBehaviour
     // 보스 스폰
     public IEnumerator SpawnBossRoutine(BossPatternSO bossPattern, BossData bossData)
     {
+        Debug.Log("[BossSpawn] SpawnBossRoutine 실행");
+
         bossData.currentHp = bossData.maxHp;
 #if UNITY_EDITOR
         Debug.Log($"[BossSpawn] Set HP = {bossData.currentHp}");
 #endif
+        SetCurrentBoss(bossData);
+
         bossWarningUI.ShowBossWarning();
 
-
-        cameraController.ZoomOutForBoss();
-
-        ClearAllEnemies();
+        //cameraController.ZoomOutForBoss();
 
         if (bossPattern.isLockedArena)
             ActivateBarricade(spawnPos);
+
+        ClearAllEnemies();
 
         yield return new WaitForSeconds(3f);
 
@@ -96,7 +102,7 @@ public class EnemySpawner : MonoBehaviour
         while (bossData.currentHp > 0)
             yield return null;
 
-        cameraController.ResetZoom();
+        //cameraController.ResetZoom();
 
         DeactivateBarricade();
     }
@@ -107,7 +113,10 @@ public class EnemySpawner : MonoBehaviour
     }
     private void ActivateBarricade(Transform centerTransform)
     {
-        var pattern = testBossData.barricadePattern;
+        Debug.Log(currentBoss == null ? "bossDataList is NULL" : "bossDataList OK");
+        Debug.Log(currentBoss?.barricadePattern == null ? "pattern is NULL" : "pattern OK");
+
+        var pattern = currentBoss.barricadePattern;
 
         if(pattern == null)
         {
@@ -178,6 +187,10 @@ public class EnemySpawner : MonoBehaviour
         }
 
         runningPatterns.Clear();
+    }
+    public void SetCurrentBoss(BossData boss)
+    {
+        currentBoss = boss;
     }
     #region BarricadeSpawn
     private void SpawnCirclePattern(BarricadePatternSO pattern, Vector3 center)

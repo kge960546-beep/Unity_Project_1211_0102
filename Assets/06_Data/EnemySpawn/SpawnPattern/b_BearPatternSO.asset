@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3498838cead6f54797704fa536f13b9, type: 3}
+  m_Name: b_BearPatternSO
+  m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
+  targetType: 2
+  shape: {fileID: 11400000, guid: ba8d652bc71edd8498cc303093e835b8, type: 2}
+  startTime: 20
+  endTime: 23
+  tick: 5
+  radius: 10
+  spawnCount: 1
+  isAllowParallel: 1
+  clearOtherEnemies: 1
+  isLockedArena: 1
+  isShowWaring: 1
+  isLastBoss: 0
+  spawnPoint: {x: 0, y: 5, z: 0}
