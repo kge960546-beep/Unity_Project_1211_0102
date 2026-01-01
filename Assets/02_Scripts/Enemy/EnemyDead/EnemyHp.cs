@@ -129,7 +129,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
         int finalDamage = Mathf.Max(damage, 0);
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
         // TODO: 히트 이펙트 있으면 여기서 재생
-
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
         onEnemyTakeDamageEvent?.Invoke(currentHp, maxHp);
 
         if (currentHp <= 0)
@@ -142,7 +142,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
         if (isDead) return;
 
         isDead = true;
-        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
         if (anim != null)
             anim.SetTrigger("isDead");        
 

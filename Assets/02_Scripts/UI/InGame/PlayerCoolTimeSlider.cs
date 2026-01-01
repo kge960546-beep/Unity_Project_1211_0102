@@ -16,13 +16,13 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     private TimeService timeService;
 
 
-    
+
     private void Awake()
     {
-        if(GameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
             timeService = GameManager.Instance.GetService<TimeService>();
-        }       
+        }
     }
     void Start()
     {
@@ -30,12 +30,12 @@ public class PlayerCoolTimeSlider : MonoBehaviour
             coolTimeController = FindObjectsOfType<ActiveSkillStateControllerBehaviour>().Where(obj => obj.isDefaultSkill).First(); ;
 
         if (coolTimeSlider == null)
-            coolTimeSlider = GetComponent<Slider>();        
+            coolTimeSlider = GetComponent<Slider>();
 
         coolTimeSlider.minValue = 0.0f;
-        coolTimeSlider.maxValue = 1.0f;      
-        
-        if(coolTimeController != null)
+        coolTimeSlider.maxValue = 1.0f;
+
+        if (coolTimeController != null)
         {
             maxCoolTime = coolTimeController.context.period;
         }
@@ -50,12 +50,12 @@ public class PlayerCoolTimeSlider : MonoBehaviour
 
         currentCoolTime += Time.deltaTime;
 
-        if(currentCoolTime >= maxCoolTime)
+        if (currentCoolTime >= maxCoolTime)
         {
             currentCoolTime = maxCoolTime;
-            isCoolTime = false;           
+            isCoolTime = false;
         }
-        UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);        
+        UpdateCoolTimeSlider(currentCoolTime, maxCoolTime);
     }
     public void UpdateCoolTimeSlider(float currentCoolTime, float maxCoolTime)
     {
@@ -66,7 +66,7 @@ public class PlayerCoolTimeSlider : MonoBehaviour
     }
     public void StartCoolTime()
     {
-        if(coolTimeController != null)
+        if (coolTimeController != null)
         {
             maxCoolTime = coolTimeController.context.period;
         }
