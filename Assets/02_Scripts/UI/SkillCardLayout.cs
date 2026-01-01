@@ -1,14 +1,17 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-public enum EquipmentBadgeType
+public enum SkillBadgeType
 {
     None,
     New,
     Upgrade,
     Evolution
 }
+
 public class SkillCardLayout : MonoBehaviour
 {
     [SerializeField] private Image icon;
@@ -19,74 +22,57 @@ public class SkillCardLayout : MonoBehaviour
     [SerializeField] private GameObject evolutionBadge;
     [SerializeField] private Button button;
 
-    private EquipmentOption option;
-    private EquipmentService equipmentService;
-
-    public void Bind(EquipmentOption option, EquipmentService equipmentService, System.Action<EquipmentOption> onSelect)
+    public void Initialize(SkillDescriptor descriptor, int nextLevel, SkillManagementBehaviour smb, Action onClickCallbackFromExternal)
     {
-        var badgeType = GetBadgeType(option, equipmentService);
-        //ÀüºÎ ²ô±â
+        if (null == descriptor) throw new System.ArgumentNullException("Skill descriptor was null.");
+
         newBadge.SetActive(false);
         evolutionBadge.SetActive(false);
         levelText.gameObject.SetActive(false);
 
-        switch(badgeType)
+        switch(GetBadgeType(descriptor, nextLevel))
         {
-            case EquipmentBadgeType.New:
+            case SkillBadgeType.New:
                 newBadge.SetActive(true);
                 break;
 
-            case EquipmentBadgeType.Evolution:
+            case SkillBadgeType.Evolution:
                 evolutionBadge.SetActive(true);
                 break;
 
-            case EquipmentBadgeType.Upgrade:
+            case SkillBadgeType.Upgrade:
                 levelText.gameObject.SetActive(true);
-                levelText.text = $"Lv {equipmentService.GetCurrentLevel(option.equipment)} -> {equipmentService.GetCurrentLevel(option.equipment) + 1}";
+                levelText.text = $"Lv {nextLevel - 1} -> {nextLevel}";
                 break;
-
         }
-        this.option = option;
 
-        nameText.text = GetName(option);
-        icon.sprite = GetIcon(option);
+        nameText.text = descriptor.name;
+        icon.sprite = descriptor.SkillThumbnail;
+        descText.text = descriptor.SkillDescription;
 
-        descText.text = GetDescription(option, equipmentService);
+        int skillID = descriptor.SkillID;
 
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => onSelect(option));
+        button.onClick.AddListener(() => onClickCallbackFromExternal?.Invoke());
+        button.onClick.AddListener(
+            descriptor.SkillType switch
+            {
+                SkillDescriptor.Type.ActiveEvo => () => smb.EvolveActiveSkill(skillID),
+                SkillDescriptor.Type.Active => nextLevel == 1 ? () => smb.BindActiveSkill(skillID) : () => smb.LevelUpActiveSkill(skillID),
+                SkillDescriptor.Type.Passive => nextLevel == 1 ? () => smb.BindPassiveSkill(skillID) : () => smb.LevelUpPassiveSkill(skillID),
+                _ => throw new NotImplementedException(),
+            });
     }
 
-    private string GetName(EquipmentOption option)
+    private SkillBadgeType GetBadgeType(SkillDescriptor descriptor, int nextLevel)
     {
-        return option.type == EquipmentOptionType.Evolution
-            ? option.evolution.result.name
-            : option.equipment.name;
+        if (descriptor.SkillType == SkillDescriptor.Type.ActiveEvo) return SkillBadgeType.Evolution;
+        if (1 == nextLevel) return SkillBadgeType.New;
+        else return SkillBadgeType.Upgrade;
     }
-    private Sprite GetIcon(EquipmentOption option)
+
+    private void OnDisable()
     {
-        return option.type == EquipmentOptionType.Evolution
-            ? option.evolution.result.icon
-            : option.equipment.icon;
-    }
-    private EquipmentBadgeType GetBadgeType(EquipmentOption option, EquipmentService service)
-    {
-        if (option.type == EquipmentOptionType.Evolution)
-            return EquipmentBadgeType.Evolution;
-
-        int curLv = service.GetCurrentLevel(option.equipment);
-
-        if (curLv == 0)
-            return EquipmentBadgeType.New;
-
-            return EquipmentBadgeType.Upgrade;
-    }
-    public string GetDescription(EquipmentOption option, EquipmentService service)
-    {
-        if (option.type == EquipmentOptionType.Evolution)
-            return option.evolution.description;
-
-        int nextLv = service.GetCurrentLevel(option.equipment) + 1;
-        return option.equipment.levels[nextLv - 1].description;
+        button.onClick.RemoveAllListeners();
     }
 }

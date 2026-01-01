@@ -559,9 +559,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 862389336222794407}
-  optionPrefab: {fileID: 8744689957264166096, guid: cf656c46b0e1a3a4f94d8efa802bf6c3, type: 3}
+  skillCardPrefab: {fileID: 292039799071306759, guid: cf656c46b0e1a3a4f94d8efa802bf6c3, type: 3}
   optionRoot: {fileID: 6114501461732753430}
   skipButton: {fileID: 7807286069323273066}
+  buttonCount: 3
 --- !u!225 &862389336222794407
 CanvasGroup:
   m_ObjectHideFlags: 0
