@@ -43,9 +43,8 @@ public class _1014_LandMine_ProjectileLogic : ProjectileLogicBase
         //if (null != fuseRadius) GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(fuseRadius);
 
         // TODO: check possibility for pooling on vfx as it may be self-destroyed.
-        GameObject explosionEffect = GameManager.Instance.GetService<PoolingService>().GetOrCreateInactivatedGameObject(ExplosionFXPrefab);
+        GameObject explosionEffect = Instantiate(ExplosionFXPrefab);
         explosionEffect.transform.SetLocalPositionAndRotation(instanceData.obj.transform.position, Quaternion.identity);
-        explosionEffect.SetActive(true);
 
         LayerService ls = GameManager.Instance.GetService<LayerService>();
         int enemyLayer = ls.enemyLayer;
