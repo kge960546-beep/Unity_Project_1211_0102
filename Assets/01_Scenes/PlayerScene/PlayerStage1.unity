@@ -44476,14 +44476,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5379593493524740640, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}
-      propertyPath: skillDescriptorInputTable.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5379593493524740640, guid: fc67145f9f9c5d6469eec8af349ab521, type: 3}
-      propertyPath: skillDescriptorInputTable.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 871b7c60583b8c64d9830d9c13503e15, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
