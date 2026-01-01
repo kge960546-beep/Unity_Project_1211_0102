@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExperienceService : MonoBehaviour, IGameManagementService
 {
-    public int level;
-    public int exp;
+    public int level = 1;
+    public int exp = 0;
     public int nextLevelExp = 5;
 
     public event Action<int> OnLevelUp;
@@ -20,10 +21,23 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
             LevelUp();
         }
     }
+
     private void LevelUp()
     {
         level++;
         Debug.Log("LEVEL UP INVOKED");
         OnLevelUp?.Invoke(level);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += (_, _) => Reset();
+    }
+
+    private void Reset()
+    {
+        level = 1;
+        exp = 0;
+        nextLevelExp = 5;
     }
 }
