@@ -23,19 +23,19 @@
 //        if (enemySpawner == null)
 //            enemySpawner = FindObjectOfType<EnemySpawner>();
 //    }
-//    public IEnumerator SpawnBossWithBarricade(bossData bossData)
+//    public IEnumerator SpawnBossWithBarricade(bossDataList bossDataList)
 //    {
 //        Debug.Log("[BossSpawn] SpawnBossWithBarricade È£Ãâ");
 
-//        Vector3[] positions = bossData.spawnShape.GetSpawnPositions(bossData.context);
+//        Vector3[] positions = bossDataList.spawnShape.GetSpawnPositions(bossDataList.context);
 
 //        yield return StartCoroutine(countdownUI.ShowBossWarningRoutine(3));
     
-//        ActivateBarricade(bossData.barricadeCenter);
+//        ActivateBarricade(bossDataList.barricadeCenter);
 
 //        enemySpawner.SpawnBoss(bossPattern);
 
-//        yield return StartCoroutine(WaitBossDead(bossData));
+//        yield return StartCoroutine(WaitBossDead(bossDataList));
 
 //        DeactivateBarricade();
 //    }
@@ -58,11 +58,11 @@
 //        if (barricadeInstance != null)
 //            barricadeInstance.SetActive(false);
 //    }
-//    private IEnumerator WaitBossDead(bossData bossData)
+//    private IEnumerator WaitBossDead(bossDataList bossDataList)
 //    {
-//        int health = bossData.currentHp;
+//        int health = bossDataList.currentHp;
 
-//        while(bossData != null && health > 0)
+//        while(bossDataList != null && health > 0)
 //            yield return null;
 //    }
 //}

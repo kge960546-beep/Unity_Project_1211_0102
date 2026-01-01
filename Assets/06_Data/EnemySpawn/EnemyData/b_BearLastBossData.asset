@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1324e2e10f1c1954799b22cbc95a772e, type: 3}
-  m_Name: b_FlowerBossData
+  m_Name: b_BearLastBossData
   m_EditorClassIdentifier: 
   enemyType: 2
-  enemyPrefab: {fileID: 3016837256967601124, guid: 93d3d51108eeb004db6beaf23e34bc35, type: 3}
-  enemyID: 112
+  enemyPrefab: {fileID: 1521098891873663762, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
+  enemyID: 111
   poolCount: 1
-  maxHp: 4000
-  currentHp: 4000
-  attack: 20
-  speed: 3
-  barricadeCenter: {fileID: 6716617254171657511, guid: 93d3d51108eeb004db6beaf23e34bc35, type: 3}
+  maxHp: 10000
+  currentHp: 10000
+  attack: 200
+  speed: 100
+  barricadeCenter: {fileID: 7602689554644718250, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
   barricadePattern: {fileID: 11400000, guid: 5ac0b181aa776da46bfbf139968d572f, type: 2}

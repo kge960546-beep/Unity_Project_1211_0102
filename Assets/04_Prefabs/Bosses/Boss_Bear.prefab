@@ -209,7 +209,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   boxcol: {fileID: 0}
-  bbData: {fileID: 11400000, guid: a339ff8636c299949be5c170734de07a, type: 2}
+  bbData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
   isDead: 0
   maxHp: 0
   currentHp: 0
@@ -229,6 +229,5 @@ MonoBehaviour:
   enemyType: 2
   maxHp: 2000
   dropExp: 1
-  itemLayer: 0
-  itemLayers: 0
+  playerLayer: 0
   enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}

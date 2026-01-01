@@ -7,7 +7,7 @@ public class WaveWarningUI : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     [SerializeField] private GameObject bossWarningUI;
-    [SerializeField] private GameObject normalWarning;
+    //[SerializeField] private GameObject normalWarning;
 
     public float duration = 3f;
 
@@ -42,21 +42,21 @@ public class WaveWarningUI : MonoBehaviour
 
         canvasGroup.alpha = 0f;
     }
-    public IEnumerator ShowNormalWarningRoutine()
-    {
-        canvasGroup.alpha = 1f;
+    //public IEnumerator ShowNormalWarningRoutine()
+    //{
+        //canvasGroup.alpha = 1f;
 
-        float time = 0f;
+        //float time = 0f;
 
-        while (time < duration)
-        {
-            float ping = Mathf.PingPong(time * 2f, 1f);
-            canvasGroup.alpha = Mathf.Lerp(minAlpha, maxAlpha, ping);
+        //while (time < duration)
+        //{
+            //float ping = Mathf.PingPong(time * 2f, 1f);
+            //canvasGroup.alpha = Mathf.Lerp(minAlpha, maxAlpha, ping);
 
-            time += Time.unscaledDeltaTime;
-            yield return null;
-        }
+            //time += Time.unscaledDeltaTime;
+            //yield return null;
+        //}
 
-        canvasGroup.alpha = 0f;
-    }
+        //canvasGroup.alpha = 0f;
+    //}
 }
