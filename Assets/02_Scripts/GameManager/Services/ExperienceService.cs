@@ -29,7 +29,7 @@ public class ExperienceService : MonoBehaviour, IGameManagementService
         OnLevelUp?.Invoke(level);
     }
 
-    private void OnEnable()
+    private void Awake()
     {
         SceneManager.sceneLoaded += (_, _) => Reset();
     }

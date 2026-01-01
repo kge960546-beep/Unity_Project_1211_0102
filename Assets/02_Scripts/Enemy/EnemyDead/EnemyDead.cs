@@ -164,7 +164,10 @@ public class EnemyDead : MonoBehaviour
 
             Vector3 spawnPos = centerPos + (Vector3)offset;
 
-            Instantiate(prefab, spawnPos, Quaternion.identity);
+            GameObject obj = GameManager.Instance.GetService<PoolingService>().GetOrCreateInactivatedGameObject(prefab);
+            obj.transform.position = spawnPos;
+            obj.transform.rotation = Quaternion.identity;
+            obj.SetActive(true);
         }
     }
 }
