@@ -26,7 +26,7 @@ public class EquipmentInventory : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sortModeText;
 
 
-    [SerializeField] private List<SlotData> slots = new List<SlotData>();    
+    [SerializeField] private List<SlotData> slots = new List<SlotData>();
     [SerializeField] private RectTransform[] slotAnchors;
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private EquipmentInfoPanel infoPanel;

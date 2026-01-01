@@ -95,6 +95,7 @@ public class PlayerHp : MonoBehaviour, IDamageable
             onTakeDamageEvent?.Invoke(currentHp, maxHp);
         }
     }
+    // 실제 적용되는 데미지
     public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
         LayerService ls = GameManager.Instance.GetService<LayerService>();
@@ -104,7 +105,7 @@ public class PlayerHp : MonoBehaviour, IDamageable
         int finalDamage = Mathf.Max(damage, 0);
 
         currentHp = Mathf.Max(currentHp - finalDamage, 0);
-        // TODO: 히트 이펙트 있으면 여기서 재생
+        
         if (!bloodSplashVFX.activeSelf) bloodSplashVFX.SetActive(true);
 
         onTakeDamageEvent?.Invoke(currentHp, maxHp);

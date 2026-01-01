@@ -22,8 +22,6 @@ public class PlayerStatHandler : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log($"[PlayerStatHandler] Awake on {gameObject.scene.name} / {gameObject.name} / active={gameObject.activeInHierarchy}");
-
         if(playerHp == null) playerHp = GetComponent<PlayerHp>();
         
         if(maxHpStat == null || attackStat == null)
