@@ -11,7 +11,7 @@ public class BossFlower : MonoBehaviour
     [HideInInspector] public Animator anim;
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D boxcol;
-    public BossBaseDataSO bbData;
+    public BossData bossData;
 
     [Header("Status")]
     public bool isDead = false;
@@ -40,13 +40,13 @@ public class BossFlower : MonoBehaviour
     }
     private void OnEnable()
     {
-        if(bbData == null)
+        if(bossData == null)
         {
             Debug.Log("참조할 데이터가 없습니다");
             return;
         }
         isDead = false;
-        maxHp = bbData.bossHp;
+        maxHp = bossData.maxHp;
         currentHp = maxHp;
     }
     public void TakeDamage(int damage)

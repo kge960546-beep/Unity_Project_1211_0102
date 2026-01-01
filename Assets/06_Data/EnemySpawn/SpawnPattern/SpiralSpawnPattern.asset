@@ -15,9 +15,9 @@ MonoBehaviour:
   enemyData: {fileID: 11400000, guid: 408c601b09c7baf44adb5c412abd4f0f, type: 2}
   targetType: 1
   shape: {fileID: 11400000, guid: e1f19605334a959429d5aca0cf791bcf, type: 2}
-  startTime: 0
-  endTime: 60
-  tick: 1
-  radius: 14
+  startTime: 40
+  endTime: 50
+  tick: 5
+  radius: 16
   spawnCount: 12
   isAllowParallel: 1

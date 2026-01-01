@@ -229,6 +229,5 @@ MonoBehaviour:
   enemyType: 2
   maxHp: 0
   dropExp: 1
-  itemLayer: 0
-  itemLayers: 0
+  playerLayer: 0
   enemyData: {fileID: 0}

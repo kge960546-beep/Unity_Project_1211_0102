@@ -9,6 +9,7 @@ public class SpawnPatternController : MonoBehaviour
     [SerializeField] private StagePatternSO stagePattern;
     [SerializeField] private Transform player;
 
+    private List<Coroutine> runningPatterns = new();
     private bool isBossSpawned = false;
     private bool isStagePaused = false;
 
@@ -29,7 +30,10 @@ public class SpawnPatternController : MonoBehaviour
                 yield return null; 
 
             if (pattern.isAllowParallel)
-                StartCoroutine(RunSpawnPattern(pattern));
+            {
+                var routine = StartCoroutine(RunSpawnPattern(pattern));
+                runningPatterns.Add(routine);
+            }
             else
                 yield return StartCoroutine(RunSpawnPattern(pattern));      
         }
@@ -42,8 +46,9 @@ public class SpawnPatternController : MonoBehaviour
             yield return new WaitForSeconds(pattern.startTime);
 
         float timer = 0f;
+        float duration = pattern.endTime - pattern.startTime;
 
-        while(timer < pattern.endTime)
+        while(timer < duration)
         {
             //보스 페이즈 동안 정지
             while (isStagePaused)
@@ -51,12 +56,12 @@ public class SpawnPatternController : MonoBehaviour
 
             SpawnByPattern(pattern);
 
-            timer += pattern.tick;
-
-            if(pattern.tick > 0)
-                yield return new WaitForSeconds(pattern.tick);
+            if (pattern.tick > 0)
+                yield return new WaitForSeconds(pattern.tick);         
             else
                 yield return null;
+            
+            timer += pattern.tick;
         }
     }
     // 패턴에 의한 스폰 실행
@@ -75,7 +80,7 @@ public class SpawnPatternController : MonoBehaviour
 
             if (bossPattern == null || bossData == null)
             {
-                Debug.LogError("BossPatternSO 또는 bossData 캐스팅 실패");
+                Debug.LogError("BossPatternSO 또는 bossDataList 캐스팅 실패");
                 return;
             }
             //스테이지 패턴 정지
@@ -103,6 +108,8 @@ public class SpawnPatternController : MonoBehaviour
     //보스 페이지 실행
     private IEnumerator BossPhaseRoutine(BossPatternSO bossPattern, BossData bossData)
     {
+        Debug.Log("[SpawnPatternController] BossPhaseRoutine 실핼");
+
         //EmemySpawner가 실제 보스 생성 + 바리게이트 처리
         yield return StartCoroutine(enemySpawner.SpawnBossRoutine(bossPattern, bossData));
 
