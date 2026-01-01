@@ -432,7 +432,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265829882}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e096bfed6d7c2c74eaf31537111be04d, type: 3}
   m_Name: 
@@ -19420,7 +19420,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyDataList:
   - {fileID: 11400000, guid: 473ad9bde405d0a4abff4cb9c12143ed, type: 2}
-  poolCountPrefab: 250
 --- !u!114 &1047825314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19433,9 +19432,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2905853dd0bf8458c108fda24e8be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPool: {fileID: 1047825313}
+  testBossData: {fileID: 0}
+  cameraController: {fileID: 0}
+  enemyDataList: []
   spawnPos: {fileID: 0}
   playerRb: {fileID: 0}
+  barricadePrefab: {fileID: 0}
+  patternController: {fileID: 0}
+  bossWarningUI: {fileID: 0}
 --- !u!4 &1047825315
 Transform:
   m_ObjectHideFlags: 0
@@ -19496,8 +19500,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b067736ff09994aa37eec37b28d159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stagePattern: {fileID: 11400000, guid: 6c5c8ad9b9f953d4f9e0d4cbd7ff2faf, type: 2}
   enemySpawner: {fileID: 1047825314}
+  stagePattern: {fileID: 11400000, guid: 6c5c8ad9b9f953d4f9e0d4cbd7ff2faf, type: 2}
+  player: {fileID: 0}
 --- !u!1 &1048972166
 GameObject:
   m_ObjectHideFlags: 0

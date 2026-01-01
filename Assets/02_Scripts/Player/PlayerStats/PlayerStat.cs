@@ -30,13 +30,13 @@ public class StatModifier
         Source = source;
     }
 }
-public class PlayerStat : MonoBehaviour, IGameManagementService
+public class PlayerStat : MonoBehaviour
 {
     private event Action<float> OnValueChanged;
 
     public float baseValue; //캐릭터 기본 스탯
-    public bool isRecalculate = true;    
-    public float value { get; protected set; }
+    public bool isRecalculate = true;
+    [field: SerializeField] public float CalculatedValue { get; protected set; }
     [SerializeField] private PlayerStatType statType;
     public PlayerStatType StatType => statType;
 
@@ -110,12 +110,12 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
 
         float newValue = (baseValue + flatSum) * (1f + percentAddSum) * percentMult;
         
-        int previousValue = Mathf.RoundToInt(value);
+        int previousValue = Mathf.RoundToInt(CalculatedValue);
         int currentValue = Mathf.RoundToInt(newValue);
-        value = currentValue;
+        CalculatedValue = currentValue;
 
         if (previousValue != currentValue)
-            OnValueChanged?.Invoke(value);
+            OnValueChanged?.Invoke(CalculatedValue);
     }
 }
 

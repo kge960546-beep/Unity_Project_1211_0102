@@ -61,6 +61,11 @@ public class SkillManagementBehaviour : MonoBehaviour
 
         playerProjectileLayer = GameManager.Instance.GetService<LayerService>().playerProjectileLayer;
         dss = GameManager.Instance.GetService<DamageStatisticsService>();
+
+        BindActiveSkill(1); // 0001-Kunai-Skill, need to change according to inventory data
+        PlayerCoolTimeSlider cooldownSlider = FindFirstObjectByType<PlayerCoolTimeSlider>();
+        if (null != cooldownSlider) cooldownSlider.OnDefaultSkillBound(activeSkills[0]);
+        activeSkills[0].isDefaultSkill = true;
     }
 
     public List<(SkillDescriptor descriptor, int nextLevel)> ListUpUpgradableAndBindableSkills()
