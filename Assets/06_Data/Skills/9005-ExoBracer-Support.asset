@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51000c13d29dd04e98b5a39290396c2, type: 3}
+  m_Name: 9005-ExoBracer-Support
+  m_EditorClassIdentifier: 
+  <SkillID>k__BackingField: 9005
+  <SkillType>k__BackingField: 2
+  <SkillName>k__BackingField: "\uC678\uACE8\uACA9 \uAC11\uC637"
+  <SkillThumbnail>k__BackingField: {fileID: 21300000, guid: 77d5d67bb725ec547bc6e2971b3bdb82, type: 3}
+  skillDescription: "\uD6A8\uACFC \uC9C0\uC18D\uC2DC\uAC04 \uC99D\uAC00"
+  <AffectedStat>k__BackingField: 10
+  <LeveledMultiplierTable>k__BackingField: 0a0000000f000000190000001e00000028000000
