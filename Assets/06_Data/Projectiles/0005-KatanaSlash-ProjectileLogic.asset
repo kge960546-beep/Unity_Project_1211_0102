@@ -13,18 +13,23 @@ MonoBehaviour:
   m_Name: 0005-KatanaSlash-ProjectileLogic
   m_EditorClassIdentifier: 
   <AnimationController>k__BackingField: {fileID: 9100000, guid: 2ea0c61944b744242bd70199f4150287, type: 2}
-  <DefaultSpeed>k__BackingField: 4
+  <DefaultSpeed>k__BackingField: 0
   <DefaultSearchDistance>k__BackingField: 0
-  <DefaultColliderRadius>k__BackingField: 0
-  <LifeTime>k__BackingField: 2
+  <DefaultColliderRadius>k__BackingField: 0.6
+  <LifeTime>k__BackingField: 0.6
   <KnockBackForce>k__BackingField: 0
   <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
   <IsInflictingDamageOnTriggerStay>k__BackingField: 0
-  <CriticalRate>k__BackingField: 0
-  damageVariationRatio: 0
-  <OrdinaryDamageCoefficientTable>k__BackingField: []
-  <CriticalDamageMultiplier>k__BackingField: 0
-  <DefaultExpansionTime>k__BackingField: 0.5
-  <DefaultExpandedDisplacementMagnitude>k__BackingField: 1.5
-  <SharedCommonProjectilePrefab>k__BackingField: {fileID: 0}
-  <CatanaAuraLogic>k__BackingField: {fileID: 0}
+  <CriticalRate>k__BackingField: 0.6
+  damageVariationRatio: 0.2
+  <OrdinaryDamageCoefficientTable>k__BackingField:
+  - 2.5
+  - 3
+  - 3.5
+  - 4
+  - 5
+  <CriticalDamageMultiplier>k__BackingField: 2
+  <DefaultExpansionTime>k__BackingField: 0.4
+  <DefaultExpandedDisplacementMagnitude>k__BackingField: 1.3
+  <SharedCommonProjectilePrefab>k__BackingField: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
+  <CatanaAuraLogic>k__BackingField: {fileID: 11400000, guid: 70c0ed4f4e0196c4a88aa28cc75e56a0, type: 2}

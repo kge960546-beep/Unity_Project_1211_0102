@@ -405,6 +405,7 @@ MonoBehaviour:
   skillDescriptorInputTable:
   - {fileID: 11400000, guid: 7bc9292d68e561246975cc7d3a6f69dd, type: 2}
   - {fileID: 11400000, guid: c4d18a1ac253247429f5f8d306a5acaa, type: 2}
+  - {fileID: 11400000, guid: 45ff3feb015bda74883139e773281407, type: 2}
   - {fileID: 11400000, guid: 871b7c60583b8c64d9830d9c13503e15, type: 2}
   - {fileID: 11400000, guid: 1222865cc8854ec42bc145fa3bbddd60, type: 2}
   - {fileID: 11400000, guid: 2eb805598efd82f4a937a9238c03f6f0, type: 2}

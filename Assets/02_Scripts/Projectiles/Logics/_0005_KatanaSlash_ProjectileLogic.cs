@@ -17,8 +17,10 @@ public class _0005_KatanaSlash_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
+        bool isReverse = 0 != initData.sequenceNumber % 2;
+
         instanceData.rb.position = initData.currentProjectorPosition;
-        instanceData.rb.rotation = initData.initialProjectorAzimuthSnapshot;
+        instanceData.rb.rotation = initData.initialProjectorAzimuthSnapshot + (isReverse ? 180f : 0f);
         ProjectileSpawnUtility.Spawn(SharedCommonProjectilePrefab, CatanaAuraLogic, initData);
     }
 

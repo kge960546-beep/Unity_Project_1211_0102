@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: 0005-KatanaAura-ProjectileLogic
   m_EditorClassIdentifier: 
   <AnimationController>k__BackingField: {fileID: 9100000, guid: f99088b078dabc0488d05598659659a5, type: 2}
-  <DefaultSpeed>k__BackingField: 15
+  <DefaultSpeed>k__BackingField: 10
   <DefaultSearchDistance>k__BackingField: 0
-  <DefaultColliderRadius>k__BackingField: 0
-  <LifeTime>k__BackingField: 2
+  <DefaultColliderRadius>k__BackingField: 0.8
+  <LifeTime>k__BackingField: 0.9
   <KnockBackForce>k__BackingField: 0
   <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
   <IsInflictingDamageOnTriggerStay>k__BackingField: 0
-  <CriticalRate>k__BackingField: 0
-  damageVariationRatio: 0
-  <OrdinaryDamageCoefficientTable>k__BackingField: []
-  <CriticalDamageMultiplier>k__BackingField: 0
-  <DefaultPreDestructionAnimationDuration>k__BackingField: 0
+  <CriticalRate>k__BackingField: 0.4
+  damageVariationRatio: 0.2
+  <OrdinaryDamageCoefficientTable>k__BackingField:
+  - 1.25
+  - 1.5
+  - 1.75
+  - 2
+  - 2.5
+  <CriticalDamageMultiplier>k__BackingField: 2
+  <DefaultPreDestructionAnimationDuration>k__BackingField: 0.2
