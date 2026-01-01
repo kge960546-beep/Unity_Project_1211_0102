@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a831ea52d727ce45852b08aaff70bf9, type: 3}
   m_Name: 1105-Defender-ProjectileLogic
   m_EditorClassIdentifier: 
-  <AnimationController>k__BackingField: {fileID: 0}
+  <AnimationController>k__BackingField: {fileID: 9100000, guid: 72b207d1548dc1e4a95affef3c9ba8f7, type: 2}
   <DefaultSpeed>k__BackingField: -16
   <DefaultSearchDistance>k__BackingField: 0
   <DefaultColliderRadius>k__BackingField: 0.4

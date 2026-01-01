@@ -14,9 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillID>k__BackingField: 2
   <SkillType>k__BackingField: 0
-  <SkillName>k__BackingField: 
-  <SkillThumbnail>k__BackingField: {fileID: 0}
-  skillDescription: 
-  <ProjectileLogic>k__BackingField: {fileID: 0}
-  <LeveledProjectionTimingTables>k__BackingField: []
-  <DefaultCooldown>k__BackingField: 0
+  <SkillName>k__BackingField: "\uB9AC\uBCFC\uBC84"
+  <SkillThumbnail>k__BackingField: {fileID: 21300000, guid: 73b04782b912e2545bd5ca671984d11d, type: 3}
+  skillDescription: "\uC885\uB9D0\uC758 \uC2DC\uB300\uC5D0 \uC548\uC804\uC744 \uBCF4\uC7A5\uD558\uB294
+    \uBA87 \uC548\uB418\uB294 \uBB34\uAE30 \uC911 \uD558\uB098"
+  <ProjectileLogic>k__BackingField: {fileID: 11400000, guid: 3fb2e1d840b40cb438eb90a8d1ab1f3a, type: 2}
+  <LeveledProjectionTimingTables>k__BackingField:
+  - <RequiredLevel>k__BackingField: 1
+    <ProjectionTimingTable>k__BackingField:
+    - 0
+    - 0.2
+    - 0.4
+    - 0.6
+    - 0.8
+  <DefaultCooldown>k__BackingField: 2

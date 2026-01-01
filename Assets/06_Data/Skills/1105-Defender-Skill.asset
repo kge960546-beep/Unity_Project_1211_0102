@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 1105-Defender-Skill
   m_EditorClassIdentifier: 
   <SkillID>k__BackingField: 1105
-  <SkillType>k__BackingField: 0
+  <SkillType>k__BackingField: 1
   <SkillName>k__BackingField: "\uC218\uBE44\uC218"
   <SkillThumbnail>k__BackingField: {fileID: 21300000, guid: 32d1162b430e259458310cd967ae9573, type: 3}
   skillDescription: "\uC8FD\uC74C\uC758 \uC218\uB808\uBC14\uD034"
