@@ -160,6 +160,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10bd7b82f90ad1943aaeaaa0787b1e6e, type: 2}
   - {fileID: 11400000, guid: 38afe9052bfc0e146b38715cf511beb8, type: 2}
   - {fileID: 11400000, guid: bf8d245f08bbbf04b880070824dd4256, type: 2}
+  - {fileID: 11400000, guid: 6d2d1d815ce05b84abf3e415df5dc429, type: 2}
   gradWeights: 460000001400000008000000020000000000000000000000
   totalWeight: 0
   drawPrice: 1000
@@ -1235,6 +1236,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10bd7b82f90ad1943aaeaaa0787b1e6e, type: 2}
   - {fileID: 11400000, guid: 38afe9052bfc0e146b38715cf511beb8, type: 2}
   - {fileID: 11400000, guid: bf8d245f08bbbf04b880070824dd4256, type: 2}
+  - {fileID: 11400000, guid: 6d2d1d815ce05b84abf3e415df5dc429, type: 2}
   gradWeights: 320000001e0000000a000000050000000500000000000000
   totalWeight: 0
   drawPrice: 2000
@@ -1814,6 +1816,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10bd7b82f90ad1943aaeaaa0787b1e6e, type: 2}
   - {fileID: 11400000, guid: 38afe9052bfc0e146b38715cf511beb8, type: 2}
   - {fileID: 11400000, guid: bf8d245f08bbbf04b880070824dd4256, type: 2}
+  - {fileID: 11400000, guid: 6d2d1d815ce05b84abf3e415df5dc429, type: 2}
   gradWeights: 460000001400000008000000020000000000000000000000
   totalWeight: 0
   drawPrice: 900
@@ -1948,7 +1951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2338807107591151044
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3295,6 +3298,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10bd7b82f90ad1943aaeaaa0787b1e6e, type: 2}
   - {fileID: 11400000, guid: 38afe9052bfc0e146b38715cf511beb8, type: 2}
   - {fileID: 11400000, guid: bf8d245f08bbbf04b880070824dd4256, type: 2}
+  - {fileID: 11400000, guid: 6d2d1d815ce05b84abf3e415df5dc429, type: 2}
   gradWeights: 320000001e0000000a000000050000000500000000000000
   totalWeight: 0
   drawPrice: 1900
