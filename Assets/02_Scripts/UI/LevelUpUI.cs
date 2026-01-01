@@ -25,7 +25,6 @@ public class LevelUpUI : MonoBehaviour
 
     public void Open(List<EquipmentOption> options)
     {
-        Debug.Log("[LevelUpUI] Open »£√‚µ ");
         Show();
 
         foreach(Transform child in optionRoot)
