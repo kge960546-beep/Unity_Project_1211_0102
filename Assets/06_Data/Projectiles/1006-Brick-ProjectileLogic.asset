@@ -18,6 +18,7 @@ MonoBehaviour:
   <DefaultColliderRadius>k__BackingField: 1
   <LifeTime>k__BackingField: 2
   <KnockBackForce>k__BackingField: 0
+  <IsInflictingDamageOnTriggerEnter>k__BackingField: 1
   <IsInflictingDamageOnTriggerStay>k__BackingField: 0
   <CriticalRate>k__BackingField: 0.5
   damageVariationRatio: 0.1

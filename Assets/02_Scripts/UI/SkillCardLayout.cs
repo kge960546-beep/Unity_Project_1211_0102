@@ -46,7 +46,7 @@ public class SkillCardLayout : MonoBehaviour
                 break;
         }
 
-        nameText.text = descriptor.name;
+        nameText.text = descriptor.SkillName;
         icon.sprite = descriptor.SkillThumbnail;
         descText.text = descriptor.SkillDescription;
 

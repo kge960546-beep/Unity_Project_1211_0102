@@ -25,7 +25,6 @@ public class LevelUpUI : MonoBehaviour
 
     public void Open(List<EquipmentOption> options)
     {
-        Debug.Log("[LevelUpUI] Open »£√‚µ ");
         Show();
 
         foreach(Transform child in optionRoot)
@@ -40,7 +39,6 @@ public class LevelUpUI : MonoBehaviour
         int evoPickCount = Mathf.Min(buttonCount, candidatesOfEvo.Count);
         int nonEvoPickCount = Mathf.Min(buttonCount, Mathf.Max(0, buttonCount - evoPickCount));
 
-        Debug.Log($"evoPickCount {evoPickCount}, nonEvoPickCount {nonEvoPickCount}");
         var pickedSkillDescriptors = ShuffleUtility.FisherYatesShuffle(candidatesOfEvo, evoPickCount);
         pickedSkillDescriptors.AddRange(ShuffleUtility.FisherYatesShuffle(candidatesOfNonEvo, nonEvoPickCount));
         #endregion

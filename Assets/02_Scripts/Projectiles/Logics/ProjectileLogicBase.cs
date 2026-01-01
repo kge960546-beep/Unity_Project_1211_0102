@@ -24,6 +24,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
     [field: SerializeField] protected float LifeTime { get; private set; }
     [field: SerializeField] protected float KnockBackForce { get; private set; }
 
+    [field: SerializeField] protected bool IsInflictingDamageOnTriggerEnter { set; get; }
     [field: SerializeField] protected bool IsInflictingDamageOnTriggerStay { set; get; }
     [field: SerializeField] protected float CriticalRate { set; get; }
     [Tooltip("Random value with uniform distribution from (1 - ratio) to (1 + ratio)")][SerializeField] protected float damageVariationRatio;
@@ -54,6 +55,7 @@ public abstract class ProjectileLogicBase : ScriptableObject
 
         if (context.obj.TryGetComponent(out ProjectileCollisionDamageBehaviour pcdb))
         {
+            pcdb.IsInflictingDamageOnTriggerEnter = IsInflictingDamageOnTriggerEnter;
             pcdb.IsInflictingDamageOnTriggerStay = IsInflictingDamageOnTriggerStay;
             pcdb.CriticalRate = CriticalRate;
             pcdb.DamageVariationRatio = damageVariationRatio;

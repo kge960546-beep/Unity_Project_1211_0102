@@ -13,13 +13,17 @@ public class _0005_KatanaAura_ProjectileLogic : ProjectileLogicBase
 
     protected override void CallbackAtOnEnableInternal(ref ProjectileInstanceContext instanceData, ProjectileInstanceInitializationData initData)
     {
+        bool isReverse = 0 != initData.sequenceNumber % 2;
         Unity.Mathematics.math.sincos(initData.initialProjectorAzimuthSnapshot * Mathf.Deg2Rad, out float sin, out float cos);
 
         Vector2 direction = new Vector2(cos, sin);
 
-        instanceData.rb.position = initData.initialProjectorPositionSnapshot;
-        instanceData.rb.velocity = direction * DefaultSpeed;
-        instanceData.rb.rotation = initData.initialProjectorAzimuthSnapshot;
+        PlayerFeedService pfs = GameManager.Instance.GetService<PlayerFeedService>();
+        Vector2 playerPosition = pfs.playerPosition;
+
+        instanceData.rb.position = playerPosition;
+        instanceData.rb.velocity = direction * (isReverse ? -DefaultSpeed : DefaultSpeed);
+        instanceData.rb.rotation = initData.initialProjectorAzimuthSnapshot + (isReverse ? 180f : 0f);
 
         instanceData.anim.speed = 0f;
     }

@@ -175,6 +175,8 @@ GameObject:
   - component: {fileID: 7073849704538818789}
   - component: {fileID: 4425041058524200579}
   - component: {fileID: 511023738940783883}
+  - component: {fileID: 4864115550659083207}
+  - component: {fileID: 9085076545127561542}
   - component: {fileID: 5379593493524740640}
   m_Layer: 8
   m_Name: Player
@@ -381,14 +383,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8826bb762dcbd04d8181ac9172864c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerBaseDataSO: {fileID: 11400000, guid: 7e3d131fea68ce34da411e6d6616d6e2, type: 2}
   playerHp: {fileID: 4425041058524200579}
   isLobby: 0
   eqInventory: {fileID: 0}
   inventoryManager: {fileID: 0}
   finalAtkText: {fileID: 0}
   finalHpText: {fileID: 0}
-  maxHpStat: {fileID: 0}
-  attackStat: {fileID: 0}
+  maxHpStat: {fileID: 4864115550659083207}
+  attackStat: {fileID: 9085076545127561542}
+--- !u!114 &4864115550659083207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585711465689959475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e79abeaad8ccb4bb385006526de4d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseValue: 250
+  isRecalculate: 1
+  statType: 0
+--- !u!114 &9085076545127561542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585711465689959475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e79abeaad8ccb4bb385006526de4d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseValue: 100
+  isRecalculate: 1
+  statType: 1
 --- !u!114 &5379593493524740640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,9 +437,14 @@ MonoBehaviour:
   skillDescriptorInputTable:
   - {fileID: 11400000, guid: 7bc9292d68e561246975cc7d3a6f69dd, type: 2}
   - {fileID: 11400000, guid: c4d18a1ac253247429f5f8d306a5acaa, type: 2}
+  - {fileID: 11400000, guid: 45ff3feb015bda74883139e773281407, type: 2}
   - {fileID: 11400000, guid: 871b7c60583b8c64d9830d9c13503e15, type: 2}
   - {fileID: 11400000, guid: 1222865cc8854ec42bc145fa3bbddd60, type: 2}
+  - {fileID: 11400000, guid: 2eb805598efd82f4a937a9238c03f6f0, type: 2}
   - {fileID: 11400000, guid: 669020026deb9f244b9a0d9f7780f049, type: 2}
+  - {fileID: 11400000, guid: 1b0c8c6ef1e6c39409e05179fc9919cb, type: 2}
+  - {fileID: 11400000, guid: 4378dc1e25550b54b92bc863668a404e, type: 2}
+  - {fileID: 11400000, guid: 4f2703858d9adac4187c134de681a418, type: 2}
   evoRouteInputTable: []
   SharedCommonProjectilePrefab: {fileID: 8726357458666604857, guid: a3099001ac0af5c489c9ef1d2a4360dd, type: 3}
   maxSkillLevel: 5
