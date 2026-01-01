@@ -29,6 +29,7 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
             // TODO: change to get latest direction instead of velocity which may be zero.
             context.cachedInitData.sequenceCount = targetTable.Count;
             context.cachedInitData.layer = context.layer;
+            context.cachedInitData.level = context.level;
         }
 
         context.cachedInitData.currentProjectorPosition = (null == rb) ? Vector2.zero : rb.position;
@@ -60,7 +61,7 @@ public sealed class ActiveSkillProjectingState : ActiveSkillStateBase
     {
         return tables
             .Where(t => t.RequiredLevel <= currentLevel)
-            .Aggregate((tLeft, tRight) => tLeft.RequiredLevel < tRight.RequiredLevel ? tLeft : tRight)
+            .Aggregate((tLeft, tRight) => tLeft.RequiredLevel < tRight.RequiredLevel ? tRight : tLeft)
             .ProjectionTimingTable;
     }
 }

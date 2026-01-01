@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "1002-Boomerang-ProjectileLogic", menuName = "Game/Projectile/1002 Boomerang Projectile Logic")]
 public class _1002_Boomerang_ProjectileLogic : ProjectileLogicBase
 {
     // TODO: apply player stat in the calculation

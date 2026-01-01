@@ -54,6 +54,7 @@ MonoBehaviour:
   - name: PoolingService
   - name: EquipmentService
   - name: DamageManagementService
+  - name: DamageStatisticsService
   - name: RandomService
   - name: EnemyDamageVFXControllerService
   - name: PlayerFeedService

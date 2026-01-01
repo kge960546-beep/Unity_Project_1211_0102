@@ -52,15 +52,15 @@ public class EquipmentSuffleManager : MonoBehaviour
     }
     private void HandleLevelUp(int level)
     {
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         if (equipmentService == null || levelUpUI == null)
         {
             Debug.LogError("[HandleLevelUp] Missing reference");
             return;
         }
-
         Debug.Log($"[LevelUpService] HandleLevelUp {level}");
-#endif
+        #endif
+
         levelUpQueue.Enqueue(level);
 
         TryProcessNextLevelUp();

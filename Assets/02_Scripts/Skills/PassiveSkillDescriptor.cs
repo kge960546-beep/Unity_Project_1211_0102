@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "9000-Skill", menuName = "Game/Skill/Passive Skill Descriptor")]
 public sealed class PassiveSkillDescriptor : SkillDescriptor
 {
-    public enum Type : byte
+    public enum ModifiableStat : byte
     {
         HealthPoint,
         HealthPointRegen,       // Need HP regeneration feature in PlayerHP
@@ -20,6 +20,8 @@ public sealed class PassiveSkillDescriptor : SkillDescriptor
         EffectDuration,
     }
 
-    [field: SerializeField] public Type SkillType { get; private set; }
+    [field: SerializeField] public ModifiableStat AffectedStat { get; private set; }
     [field: SerializeField] public int[] LeveledMultiplierTable { get; private set; }
+
+    // TODO: apply stat data into actual player data
 }
