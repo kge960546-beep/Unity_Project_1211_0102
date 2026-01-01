@@ -57,16 +57,43 @@ public class PlayerHp : MonoBehaviour, IDamageable
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-    }
-    private void Start()
-    {
-        if(playerBaseData == null)
+
+        if (playerBaseData == null)
         {
             Debug.Log("참조할 데이터가 없습니다");
             return;
         }
         maxHp = playerBaseData.playerMaxHp;
         currentHp = maxHp;
+
+        onTakeDamageEvent?.Invoke(currentHp, maxHp);
+    } 
+
+    /// <summary>
+    /// 현재체력을 최대체력이 변했을시 반영시키는 메서드
+    /// </summary>
+    /// <param name="newMaxHp"></param>
+    /// <param name="isMaintainProportion"></param>
+    /// <param name="isnotify"></param>
+    public void ReflectMaxHp(int newMaxHp, bool isMaintainProportion = true, bool isnotify = true)
+    {
+        newMaxHp = Mathf.Max(1, newMaxHp);
+
+        if(isMaintainProportion && maxHp > 0)
+        {
+            float ratio = (float)currentHp / maxHp;
+            maxHp = newMaxHp;
+            currentHp = Mathf.Clamp(Mathf.RoundToInt(maxHp * ratio), 1, maxHp);
+        }
+        else
+        {
+            maxHp = newMaxHp;
+            currentHp = Mathf.Min(currentHp, maxHp);            
+        }
+        if(isnotify)
+        {
+            onTakeDamageEvent?.Invoke(currentHp, maxHp);
+        }
     }
     public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
@@ -87,9 +114,9 @@ public class PlayerHp : MonoBehaviour, IDamageable
     public void Heal()
     {       
         int healAmount = Mathf.RoundToInt(maxHp * 0.3f);
-        currentHp += healAmount;
-
         onTakeDamageEvent?.Invoke(currentHp, maxHp);
+
+        currentHp += healAmount;
 
         if (currentHp > maxHp)
         {

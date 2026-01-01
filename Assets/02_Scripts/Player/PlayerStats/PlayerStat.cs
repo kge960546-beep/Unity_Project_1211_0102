@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-
+public enum PlayerStatType
+{
+    Hp,
+    Attack
+}
 public enum StatModType
 {
     Flat,
@@ -9,16 +13,15 @@ public enum StatModType
     PercentMult
 }
 /// <summary>
-/// 보정값
-/// Value: 보정값
-/// Type: 보정 방식
+/// Value: 보정값,
+/// Type: 보정 방식,
 /// Source : 보정 출처 일괄처리용(지금은 안쓸듯)
 /// </summary>
 public class StatModifier
 {
     public float Value;
     public StatModType Type;
-    public object Source;
+    public object Source;    
 
     public StatModifier(float value, StatModType type, object source = null)
     {
@@ -29,17 +32,32 @@ public class StatModifier
 }
 public class PlayerStat : MonoBehaviour, IGameManagementService
 {
+    private event Action<float> OnValueChanged;
+
     public float baseValue; //캐릭터 기본 스탯
-    public float Value { get; protected set; }
+    public bool isRecalculate = true;    
+    public float value { get; protected set; }
+    [SerializeField] private PlayerStatType statType;
+    public PlayerStatType StatType => statType;
 
     private readonly List<StatModifier> statModifiers = new List<StatModifier>();
+    public void SubscribeOnValueChanged(Action<float> action)
+    {
+        OnValueChanged += action;
+    }
+    public void UnsubscribeOnValueChanged(Action<float> action)
+    {
+        OnValueChanged -= action;
+    }
 
     //보정 1개 추가 후 재계산
     public void AddModifier(StatModifier mod)
     {
         if (mod == null) return;
         statModifiers.Add(mod);
-        UpdateStats();
+
+        if(isRecalculate)
+            UpdateStats();
     }
 
     //보정 1개 제거후 재계산
@@ -47,7 +65,8 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
     {
         if (mod == null) return;
         statModifiers.Remove(mod);
-        UpdateStats();
+        if (isRecalculate)
+            UpdateStats();
     }
 
     //모든 보정 출처 제거후 재계산
@@ -55,7 +74,9 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
     {
         if (source == null) return;
         statModifiers.RemoveAll(m => Equals( m.Source, source));
-        UpdateStats();
+
+        if (isRecalculate)
+            UpdateStats();
     }
 
     //현재 최종 Value 계산
@@ -63,7 +84,7 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
     {
         float flatSum = 0f;
         float percentAddSum = 0f;
-        float percentMult = 1f;
+        float percentMult = 1f;        
 
         for (int i = 0; i < statModifiers.Count; i++)
         {
@@ -85,11 +106,16 @@ public class PlayerStat : MonoBehaviour, IGameManagementService
                     percentMult *= (1f + mod.Value);
                     break;
             }
-        }
+        }       
 
-        Value = (baseValue + flatSum) * (1f + percentAddSum) * percentMult;
-
+        float newValue = (baseValue + flatSum) * (1f + percentAddSum) * percentMult;
         
+        int previousValue = Mathf.RoundToInt(value);
+        int currentValue = Mathf.RoundToInt(newValue);
+        value = currentValue;
+
+        if (previousValue != currentValue)
+            OnValueChanged?.Invoke(value);
     }
 }
 
