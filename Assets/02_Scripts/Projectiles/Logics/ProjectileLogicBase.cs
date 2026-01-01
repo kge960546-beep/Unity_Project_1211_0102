@@ -29,8 +29,8 @@ public abstract class ProjectileLogicBase : ScriptableObject
     [field: SerializeField] protected int CriticalDamage { set; private get; }
 
     // TODO: add more common values
-    // TODO: consider storing implementation-specific data and do not require context data store
-    //         - store data in packed form, like dots system?
+    // TODO: consider storing implementation-specific stagePattern and do not require context stagePattern store
+    //         - store stagePattern in packed form, like dots system?
 
     public void CallbackOnDrawGizmos(ref ProjectileInstanceContext context)
     {

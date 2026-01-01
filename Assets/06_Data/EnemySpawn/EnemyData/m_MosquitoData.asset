@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_MosquitoData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 3761015971480345439, guid: 18406a4395aa9f64284411dac15ab2af, type: 3}
-  enemyName: Mosquito
+  enemyID: 3
   poolCount: 0
   maxHp: 0
   attack: 0

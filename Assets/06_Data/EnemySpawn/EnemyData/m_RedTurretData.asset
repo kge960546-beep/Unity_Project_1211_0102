@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_RedTurretData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1184567861060167009, guid: 971e29ad2ec39e448a9946d4d1dd03b1, type: 3}
-  enemyName: RedTurret
+  enemyID: 4
   poolCount: 0
   maxHp: 0
   attack: 0

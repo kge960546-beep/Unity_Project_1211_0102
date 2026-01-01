@@ -21,8 +21,8 @@ public class BatSwarmShapeSO : SpawnShapeSO
         Vector3[] result = new Vector3[context.spawnCount];
 
         Vector3 forward = 
-            context.playerVelocity.sqrMagnitude > 0.01f
-            ? context.playerVelocity.normalized
+            context.playerMoveDir.sqrMagnitude > 0.01f
+            ? context.playerMoveDir.normalized
             : Random.insideUnitCircle.normalized;
 
         float halfAngle = angleRange * 0.5f;

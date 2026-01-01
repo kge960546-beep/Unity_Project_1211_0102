@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: m_ZombieSoldierData
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 2028454113572988096, guid: 9e946a8d68ebd2440a1fd2616ad7e401, type: 3}
-  enemyName: ZombieSoldier
+  enemyID: 7
   poolCount: 250
   maxHp: 100
   attack: 0

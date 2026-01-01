@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b37e4bd580a8cf4180eba8b415aa6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterData: {fileID: 11400000, guid: c9f3c4387abdb8944a34a497e664181b, type: 2}
+  enemyData: {fileID: 0}
   player: {fileID: 0}
   bulletPrefab: {fileID: 0}
   firePoint: {fileID: 2520162189324866426}
