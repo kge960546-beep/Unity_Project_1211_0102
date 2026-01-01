@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This is for only one global timer.
@@ -15,6 +16,11 @@ public class TimeService : MonoBehaviour, IGameManagementService
     private bool isResetRequestedForAccumulatedDeltaTime = false;
 
     private bool isTimePaused = false;
+
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += (_, _) => ResetTime();
+    }
 
     private void FixedUpdate()
     {
