@@ -7,6 +7,7 @@ public class ExpObj : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10.0f;
     [SerializeField] private Transform target;
+    [SerializeField] private int expAmount = 10;
     private bool isMagnetOn = false;    
 
     private CircleCollider2D circleCollider;
@@ -57,10 +58,12 @@ public class ExpObj : MonoBehaviour
     {
         if(!collision.CompareTag("Player")) return;
 
-        es.GetExp(10);
+        es.GetExp(expAmount);
         //TODO: 경험치 획득 로직 추가
         //TODO: 풀링할시 SetActive(false)로 변경
         //ExperienceService GetExt(int)
-        Destroy(gameObject);        
+
+        // pooling service based pooling
+        GameManager.Instance.GetService<PoolingService>().ReturnOrDestroyGameObject(gameObject);
     }
 }
