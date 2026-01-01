@@ -203,9 +203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8fcf927b2d87a49a15e27e3a9785c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 1
   maxHp: 0
   dropExp: 1
-  itemLayer: 0
-  itemLayers: 0
+  playerLayer: 0
   enemyData: {fileID: 0}
