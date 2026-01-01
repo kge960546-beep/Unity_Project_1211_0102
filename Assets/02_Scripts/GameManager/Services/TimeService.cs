@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,11 +13,14 @@ public class TimeService : MonoBehaviour, IGameManagementService
     private bool isResetRequestedForAccumulatedFixedDeltaTime = false;
     private bool isResetRequestedForAccumulatedDeltaTime = false;
 
-    private bool isTimePaused = false;
+    private int stageTimerPauseRequestCount;
+    private int gamePauseRequestCount;
 
     private void Awake()
     {
         SceneManager.sceneLoaded += (_, _) => ResetTime();
+        stageTimerPauseRequestCount = 0;
+        gamePauseRequestCount = 0;
     }
 
     private void FixedUpdate()
@@ -30,6 +31,8 @@ public class TimeService : MonoBehaviour, IGameManagementService
             isResetRequestedForAccumulatedFixedDeltaTime = false;
             return;
         }
+
+        // why this do not consider pause?
         accumulatedFixedDeltaTime += Time.fixedDeltaTime;
     }
 
@@ -39,38 +42,40 @@ public class TimeService : MonoBehaviour, IGameManagementService
         {
             accumulatedDeltaTime = 0;
             isResetRequestedForAccumulatedDeltaTime = false;
-            isTimePaused = false;
             return;
         }
 
-        if(!isTimePaused)
+        if (0 == stageTimerPauseRequestCount)
         {
             accumulatedDeltaTime += Time.deltaTime;
-        }        
+        }
     }
 
     public void ResetTime()
     {
         isResetRequestedForAccumulatedFixedDeltaTime = true;
         isResetRequestedForAccumulatedDeltaTime = true;
+        stageTimerPauseRequestCount = 0;
     }
 
     public void PauseStageTimer()
     {
-        isTimePaused = true;
+        stageTimerPauseRequestCount++;
     }
     public void ResumeStageTimer()
     {
-        isTimePaused = false;
+        stageTimerPauseRequestCount = Mathf.Max(0, stageTimerPauseRequestCount - 1);
     }
 
     public void PauseGame()
-    {        
-        Time.timeScale = 0;
+    {
+        if (0 == gamePauseRequestCount) Time.timeScale = 0;
+        gamePauseRequestCount++;
     }
 
     public void ResumeGame()
-    {        
-        Time.timeScale = 1;
+    {
+        gamePauseRequestCount = Mathf.Max(0, gamePauseRequestCount - 1);
+        if (0 == gamePauseRequestCount) Time.timeScale = 1;
     }
 }

@@ -15,12 +15,15 @@ public class LevelUpUI : MonoBehaviour
     
     private SkillManagementBehaviour smb;
 
+    private TimeService ts;
+
     public event Action OnClosed;
 
     private void Awake()
     {
         HideInstant();
         smb = FindAnyObjectByType<SkillManagementBehaviour>(FindObjectsInactive.Include);
+        ts = GameManager.Instance.GetService<TimeService>();
     }
 
     public void Open(List<EquipmentOption> options)
@@ -81,7 +84,7 @@ public class LevelUpUI : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
 
         //Todo: timeScale 추후 수정 바람
-        Time.timeScale = 0f;
+        ts.PauseGame();
     }
 
     private void Hide()
@@ -91,7 +94,7 @@ public class LevelUpUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
 
         //Todo: timeScale 추후 수정 바람
-        Time.timeScale = 1f;
+        ts.ResumeGame();
     }
 
     private void HideInstant()
