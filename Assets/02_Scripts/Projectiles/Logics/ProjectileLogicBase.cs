@@ -59,7 +59,15 @@ public abstract class ProjectileLogicBase : ScriptableObject
             pcdb.IsInflictingDamageOnTriggerStay = IsInflictingDamageOnTriggerStay;
             pcdb.CriticalRate = CriticalRate;
             pcdb.DamageVariationRatio = damageVariationRatio;
-            int baseDamage = 100; // TODO: calculate damage from context.obj.{STAT_RELATED_COMPONENT}
+            float baseDamage = 100f; // TODO: calculate damage from context.obj.{STAT_RELATED_COMPONENT}
+            foreach (PlayerStat stat in context.obj.GetComponents<PlayerStat>()) // not good but we don't have enough time to cache this...
+            {
+                if (PlayerStatType.Attack ==  stat.StatType)
+                {
+                    baseDamage = stat.CalculatedValue;
+                    break;
+                }
+            }
             int ordinaryDamage = (int)(baseDamage * OrdinaryDamageCoefficientTable[context.level - 1]);
             pcdb.OrdinaryDamage = ordinaryDamage;
             pcdb.CriticalDamage = (int)(ordinaryDamage * CriticalDamageMultiplier);
