@@ -16,9 +16,10 @@ MonoBehaviour:
   enemyPrefab: {fileID: 1521098891873663762, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
   enemyID: 111
   poolCount: 1
-  maxHp: 2000
-  currentHp: 2000
+  maxHp: 1000
+  currentHp: 1000
   attack: 100
   speed: 100
+  bossName: "\uACF0"
   barricadeCenter: {fileID: 7602689554644718250, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
   barricadePattern: {fileID: 11400000, guid: 5ac0b181aa776da46bfbf139968d572f, type: 2}

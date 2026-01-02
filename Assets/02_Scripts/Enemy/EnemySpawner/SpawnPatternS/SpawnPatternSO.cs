@@ -11,7 +11,7 @@ public enum SpawnTargetType
 public class SpawnPatternSO : ScriptableObject
 {
     [Header("Spawn Type")]
-    public EnemyData enemyData;
+    public bossData enemyData;
     public SpawnTargetType targetType;
     public SpawnShapeSO shape;
 

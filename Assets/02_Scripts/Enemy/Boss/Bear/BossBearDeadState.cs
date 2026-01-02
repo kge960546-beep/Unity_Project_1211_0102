@@ -20,6 +20,8 @@ public class BossBearDeadState : IBossBearState
 
         Collider2D col = boss.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
+
+
     }
 
     public void UpdateState(BossBear boss) { }

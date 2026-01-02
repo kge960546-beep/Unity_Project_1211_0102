@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class MonsterController : MonoBehaviour
 {
     [Header("Monster Data (SO)")]
-    public EnemyData enemyData;
+    public bossData enemyData;
 
     [Header("Target")]
     public Transform player;
@@ -167,9 +167,9 @@ public class MonsterController : MonoBehaviour
     void Flip(float targetX)
     {
         if (targetX > transform.position.x)
-            transform.localScale = new Vector3(1, 1, 1);
+            sr.flipX = false;
         else
-            transform.localScale = new Vector3(-1, 1, 1);
+            sr.flipX = true;
     }
 
     // TODO:플레이어와 닿았을때 플레이어의 체력을 감소 시키는 임시 로직

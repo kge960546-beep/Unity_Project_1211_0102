@@ -20,5 +20,6 @@ MonoBehaviour:
   currentHp: 4000
   attack: 20
   speed: 3
+  bossName: "\uAF43"
   barricadeCenter: {fileID: 6716617254171657511, guid: 93d3d51108eeb004db6beaf23e34bc35, type: 3}
   barricadePattern: {fileID: 11400000, guid: 5ac0b181aa776da46bfbf139968d572f, type: 2}

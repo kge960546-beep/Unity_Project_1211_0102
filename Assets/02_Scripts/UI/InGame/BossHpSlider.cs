@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class BossHpSlider : MonoBehaviour
 {
-    [Header("PlayerHP")]
-    public int BossMaxHp;
-    public int BossCurrentHp;
-
     [SerializeField] private EnemyHp bossHp;
     [SerializeField] private Slider bossHpSlider;
-    [SerializeField] private EnemyData bossDataSo;
+    [SerializeField] private BossData bossData;
     [SerializeField] private TextMeshProUGUI bossName;
+
+
+    int maxHp;
+    int currentHp;
 
     private void Awake()
     {
@@ -22,11 +23,11 @@ public class BossHpSlider : MonoBehaviour
             bossHpSlider = GetComponent<Slider>();
         }
 
-        if(bossDataSo != null)
+        if(bossData != null)
         {
-            BossMaxHp = bossDataSo.maxHp;
-            BossCurrentHp = BossMaxHp;
-            UpdateBossHp(BossCurrentHp, bossDataSo.maxHp);            
+            maxHp = bossData.maxHp;
+            currentHp = maxHp;
+            UpdateBossHp(currentHp, maxHp);            
         }
     }
     private void OnEnable()
@@ -44,7 +45,7 @@ public class BossHpSlider : MonoBehaviour
         if(bossHp != null)
             bossHp.UnsubscribeEnemyTakeDamageEvent(UpdateBossHp);
 
-        bossHp = hp;
+        bossHp= hp;
 
         if (bossHp != null)
             bossHp.SubscribeEnemyTakeDamageEvent(UpdateBossHp);
@@ -53,17 +54,17 @@ public class BossHpSlider : MonoBehaviour
             bossHpSlider.value = 1f;
 
         if (bossName != null)
-            bossName.text = "°õ";
+            bossName.text = bossData.bossName;
     }
-    public void UpdateBossHp(int currentHp, int maxHp)
+    public void UpdateBossHp(int bossCurrentHp, int bossMaxHp)
     {
         if (bossHpSlider == null) return;
-        if (maxHp <= 0) return;
+        if (bossMaxHp <= 0) return;
 
-        BossMaxHp = maxHp;
-        BossCurrentHp = currentHp;
-
-        float targetSliderValue = (float)currentHp / maxHp;
+        float targetSliderValue = (float)bossCurrentHp / bossMaxHp;
         bossHpSlider.value = Mathf.Clamp01(targetSliderValue);
+
+        if(bossCurrentHp <=0)
+            gameObject.SetActive(false);
     }
 }

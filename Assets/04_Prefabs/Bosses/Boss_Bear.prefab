@@ -166,7 +166,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.022820711, y: -0.062757134}
@@ -209,10 +209,11 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   boxcol: {fileID: 0}
-  bbData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
+  enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
   isDead: 0
-  maxHp: 0
-  currentHp: 0
+  maxHp: 1000
+  currentHp: 1000
+  damageInterval: 1
   moveDirection: {x: 0, y: 0}
 --- !u!114 &484990831893885618
 MonoBehaviour:
@@ -227,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  maxHp: 2000
+  maxHp: 1000
   dropExp: 1
   playerLayer: 0
   enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}

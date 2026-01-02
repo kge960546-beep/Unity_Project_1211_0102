@@ -7,7 +7,7 @@ using UnityEngine;
 public class TurretController : MonoBehaviour
 {
     [Header("Turret Data (SO)")]
-    public EnemyData enemyData;
+    public bossData enemyData;
 
     [Header("Target (Range Check Only)")]
     public Transform player; // 사거리 체크용

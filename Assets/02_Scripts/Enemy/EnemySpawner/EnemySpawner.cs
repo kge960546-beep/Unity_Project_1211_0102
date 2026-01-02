@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("EnemyDataList")]
     public List<BossData> bossDataList;
-    [SerializeField] private List<EnemyData> enemyDataList;
+    [SerializeField] private List<bossData> enemyDataList;
     //[SerializeField] private CameraController cameraController;
 
     [Header("Spawn Setting")]
@@ -15,7 +15,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Rigidbody2D playerRb; //ToDo: 플레이어 좌표를 따주는 코드가 있으면 바꿔줄 것 
     [SerializeField] private GameObject barricadePrefab;
     [SerializeField] private SpawnPatternController patternController;
+
+    [Header("UI Setting")]
     [SerializeField] private WaveWarningUI bossWarningUI;
+    [SerializeField] private BossHPUI bossHPUI;
+    [SerializeField] private BossHpSlider slider;
 
     private Dictionary<int, GameObject> enemyDataPrefab;
     //실행 중인 패턴 코루틴 관리
@@ -25,10 +29,12 @@ public class EnemySpawner : MonoBehaviour
     private BossData currentBoss;
 
     PoolingService ps;
+    TimeService ts;
 
     void Awake()
     {
         ps = GameManager.Instance.GetService<PoolingService>();
+        ts = GameManager.Instance.GetService<TimeService>();
         enemyDataPrefab = new();
         
         //if(cameraController == null )
@@ -65,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
 #endif
     }
     // 일반 & 엘리트 스폰
-    public GameObject SpawnEnemy(EnemyData data, Vector3 position)
+    public GameObject SpawnEnemy(bossData data, Vector3 position)
     {
         GameObject enemy = EnemyPool.instance.Get(data);
        
@@ -88,6 +94,8 @@ public class EnemySpawner : MonoBehaviour
 
         bossWarningUI.ShowBossWarning();
 
+        ts.PauseStageTimer();
+
         //cameraController.ZoomOutForBoss();
 
         if (bossPattern.isLockedArena)
@@ -97,12 +105,20 @@ public class EnemySpawner : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
+        if (bossHPUI != null)
+            bossHPUI.Bind(bossData);
+
+        if (slider != null)
+            slider.BindingBoss();
+
         GameObject boss = SpawnEnemy(bossData, bossPattern.spawnPoint);
 
         while (bossData.currentHp > 0)
             yield return null;
 
         //cameraController.ResetZoom();
+
+        ts.ResumeStageTimer();
 
         DeactivateBarricade();
     }
