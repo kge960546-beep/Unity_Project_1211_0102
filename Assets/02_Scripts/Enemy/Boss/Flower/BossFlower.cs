@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossFlower : MonoBehaviour
+public class BossFlower : MonoBehaviour, IDamageable
 {
     [HideInInspector] public IBossFlowerState currentState;
 
@@ -49,7 +49,7 @@ public class BossFlower : MonoBehaviour
         maxHp = bossData.maxHp;
         currentHp = maxHp;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
         if(isDead) return;
 

@@ -48,7 +48,7 @@ public class ProjectileCollisionDamageBehaviour : MonoBehaviour
         float randomRatio = GameManager.Instance.GetService<RandomService>().random.NextFloat(1f - DamageVariationRatio, 1f + DamageVariationRatio);
         int damage = isCritical ? CriticalDamage : OrdinaryDamage;
         damage = (int)(damage * randomRatio);
-        Debug.Log(randomRatio);
+        //Debug.Log(randomRatio);
         GameManager.Instance.GetService<DamageManagementService>().QueueDamage(damage, gameObject, target, isCritical);
     }
 }

@@ -32,7 +32,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
     private bool isDead = false;
 
     private Animator anim;
-    public EnemyData enemyData;
+    public bossData enemyData;
     private MonsterController mController;
     private KillCount kill;
     private PlayerHp playerHp;
@@ -112,7 +112,7 @@ public class EnemyHp : MonoBehaviour, IDamageable
         onEnemyDeadEvent = null;
         onEnemyTakeDamageEvent = null;
     }
-    public void Init(EnemyData data, EnemyType type, int exp)
+    public void Init(bossData data, EnemyType type, int exp)
     {
         enemyData = data;
         enemyType = type;

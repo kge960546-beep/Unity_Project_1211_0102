@@ -9,7 +9,9 @@ public class PushbackZone : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(!other.CompareTag("Player")) return;
+        LayerService ls = GameManager.Instance.GetService<LayerService>();
+
+        if (other.gameObject.layer != ls.playerLayer && other.gameObject.layer != ls.bossLayer) return;
 
         Rigidbody2D rb = other.attachedRigidbody;
         if(rb == null) return;

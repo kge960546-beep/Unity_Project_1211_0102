@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -166,10 +166,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.022820711, y: -0.062757134}
+  m_Offset: {x: -0.0044717193, y: -0.0820224}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -180,7 +180,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.84025526, y: 0.6919205}
+  m_Size: {x: 0.34577966, y: 0.27450615}
   m_EdgeRadius: 0
 --- !u!114 &6879329426859426955
 MonoBehaviour:
@@ -195,13 +195,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  walkSpeed: 4
-  chaseSpeed: 5
+  walkSpeed: 2
+  chaseSpeed: 2.5
   chaseRange: 25
   closeFlipStopRange: 1.3
   rushSpeed: 13
-  rushDuration: 5
-  rushRange: 20
+  rushDuration: 2.5
+  rushRange: 15
   rushCooldown: 8
   rushDelay: 5
   lastRushTime: -99
@@ -209,10 +209,11 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   boxcol: {fileID: 0}
-  bbData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
+  enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
   isDead: 0
-  maxHp: 0
-  currentHp: 0
+  maxHp: 1000
+  currentHp: 1000
+  damageInterval: 1
   moveDirection: {x: 0, y: 0}
 --- !u!114 &484990831893885618
 MonoBehaviour:
@@ -227,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  maxHp: 2000
+  maxHp: 10000
   dropExp: 1
   playerLayer: 0
   enemyData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}

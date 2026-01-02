@@ -12,6 +12,12 @@ public class BossHPUI : MonoBehaviour
     }
     public void Bind(BossData data)
     {
+        if (data == null)
+        {
+            Debug.LogError("BossHPUI.Bind() : BossData is NULL");
+            return;
+        }
+
         bossData = data;
         slider.maxValue = bossData.maxHp;
         slider.value = bossData.currentHp;

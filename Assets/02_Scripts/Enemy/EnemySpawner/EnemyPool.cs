@@ -10,9 +10,9 @@ public class EnemyPool : MonoBehaviour
 {
     public static EnemyPool instance;
 
-    [SerializeField] private List<EnemyData> enemyDataList;
+    [SerializeField] private List<bossData> enemyDataList;
 
-    public Dictionary<EnemyData, GameObject> prefabMap;
+    public Dictionary<bossData, GameObject> prefabMap;
 
     PoolingService ps;
 
@@ -39,7 +39,7 @@ public class EnemyPool : MonoBehaviour
 
             if (data == null || data.enemyPrefab == null)
             {
-                Debug.LogError($"EnemyData 설정 오류 : {data}");
+                Debug.LogError($"bossData 설정 오류 : {data}");
                 continue;
             }
 
@@ -48,13 +48,13 @@ public class EnemyPool : MonoBehaviour
         Debug.Log($"[EnemyPool] enemyPrefab 등록 개수 : {prefabMap.Count}");
     }
     
-    public GameObject Get(EnemyData data)
+    public GameObject Get(bossData data)
     {
         Debug.Log($"[EnemyPool] Get 요청 : {data?.name}");
 
         if(!prefabMap.TryGetValue(data, out var prefab))
         {
-            Debug.LogError($"EnemyData 매핑 없음 : {data}");
+            Debug.LogError($"bossData 매핑 없음 : {data}");
             return null;
         }
         Debug.Log($"[EnemyPool] prefab 확인 : {prefab.name}");
@@ -65,7 +65,7 @@ public class EnemyPool : MonoBehaviour
 
         return ep;
     }
-    public void Return(EnemyData data, GameObject enemy)
+    public void Return(bossData data, GameObject enemy)
     {
         ps.ReturnOrDestroyGameObject(enemy);
     }
@@ -88,7 +88,7 @@ public class EnemyPool : MonoBehaviour
     //    foreach(var pair in enemyID)
     //    {
     //        int id = pair.Key;
-    //        EnemyData stagePattern = pair.Value;
+    //        bossData stagePattern = pair.Value;
     //
     //        Queue<GameObject> que = new Queue<GameObject>();
     //
@@ -129,13 +129,13 @@ public class EnemyPool : MonoBehaviour
     //    }
     //    else
     //    {
-    //        EnemyData stagePattern = GetMonsterData(enemyID);
+    //        bossData stagePattern = GetMonsterData(enemyID);
     //        GameObject newEnemy = Instantiate(stagePattern.enemyPrefab);
 
     //        return newEnemy;
     //    }
     //}
-    //private EnemyData GetMonsterData(int enemyID)
+    //private bossData GetMonsterData(int enemyID)
     //{
     //    foreach(var stagePattern in enemyDataList)
     //    {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossWolf : MonoBehaviour
+public class BossWolf : MonoBehaviour, IDamageable
 {
     [HideInInspector] public IBossWolfState currentState;
 
@@ -75,7 +75,7 @@ public class BossWolf : MonoBehaviour
         maxHp = bbData.bossHp;
         currentHp = maxHp;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject source, bool isCritical)
     {
         if (isDead) return;
 

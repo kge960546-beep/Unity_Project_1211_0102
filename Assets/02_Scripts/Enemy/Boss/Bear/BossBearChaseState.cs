@@ -37,7 +37,8 @@ public class BossBearChaseState : IBossBearState
         //ÁÂ¿ì ¹ÝÀü
         if (Mathf.Abs(boss.moveDirection.x) > 0.05f && dist > boss.closeFlipStopRange)
         {
-            boss.transform.localScale = new Vector3(boss.moveDirection.x > 0 ? 1 : -1, 1, 1);
+            if (boss.TryGetComponent(out SpriteRenderer sr))
+                sr.flipX = boss.moveDirection.x > 0 ? false : true;
         }
     }
     public void ExitState(BossBear boss)
