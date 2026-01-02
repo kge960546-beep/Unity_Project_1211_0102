@@ -108,10 +108,11 @@ public class EnemySpawner : MonoBehaviour
         if (bossHPUI != null)
             bossHPUI.Bind(bossData);
 
-        if (slider != null)
-            slider.BindingBoss();
 
         GameObject boss = SpawnEnemy(bossData, bossPattern.spawnPoint);
+
+        if (slider != null)
+            slider.BindingBoss(boss.GetComponent<EnemyHp>());
 
         while (bossData.currentHp > 0)
             yield return null;
