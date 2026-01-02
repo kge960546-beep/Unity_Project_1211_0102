@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed052a63045fe14795c711ce1d2fa93, type: 3}
   m_Name: m_BlueTurretData
   m_EditorClassIdentifier: 
+  enemyType: 2
   enemyPrefab: {fileID: 943061139239816333, guid: 86986dabfffb5c64e830125ac98a3770, type: 3}
   enemyID: 1
   poolCount: 0
   maxHp: 0
+  currentHp: 0
   attack: 0
   speed: 0

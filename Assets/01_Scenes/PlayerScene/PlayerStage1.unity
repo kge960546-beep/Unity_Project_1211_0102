@@ -219,12 +219,12 @@ RectTransform:
   m_Children:
   - {fileID: 1442458927}
   - {fileID: 1024422267}
-  - {fileID: 1904379020133104682}
-  - {fileID: 1449855137}
-  - {fileID: 1013100259}
-  - {fileID: 2116441471}
   - {fileID: 635370130}
   - {fileID: 856925279}
+  - {fileID: 1013100259}
+  - {fileID: 2116441471}
+  - {fileID: 1904379020133104682}
+  - {fileID: 1449855137}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9911,6 +9911,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfe2f70bdba4e2440ab4323f5799164d, type: 3}
+--- !u!114 &422006015 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6350010920917793715, guid: dfe2f70bdba4e2440ab4323f5799164d, type: 3}
+  m_PrefabInstance: {fileID: 422006014}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30dcf5ed99c8af64186b5c3c1a44e2b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &459118010
 GameObject:
   m_ObjectHideFlags: 0
@@ -19125,7 +19136,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 422006014}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43ff75815ceaec0468fc062ceab86ee2, type: 3}
   m_Name: 
@@ -19645,6 +19656,7 @@ MonoBehaviour:
   patternController: {fileID: 1047825317}
   bossWarningUI: {fileID: 856925280}
   bossHPUI: {fileID: 635370133}
+  slider: {fileID: 422006015}
 --- !u!4 &1047825315
 Transform:
   m_ObjectHideFlags: 0

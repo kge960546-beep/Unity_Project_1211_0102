@@ -105,9 +105,8 @@ public class EnemySpawner : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        if (bossHPUI != null)
-            bossHPUI.Bind(bossData);
-
+   
+        slider.gameObject.SetActive(true);
 
         GameObject boss = SpawnEnemy(bossData, bossPattern.spawnPoint);
 

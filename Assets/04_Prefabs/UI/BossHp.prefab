@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossHp: {fileID: 484990831893885618, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}
-  bossHpSlider: {fileID: 9053152609196420237}
+  bossHpSlider: {fileID: 494773191047239995}
   bossData: {fileID: 11400000, guid: 4918edf0c62db0a4e9d15592e2ef3a4b, type: 2}
   bossName: {fileID: 940819442437054248}
 --- !u!114 &747989610543225562
@@ -266,7 +266,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3015437113421283946}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43ff75815ceaec0468fc062ceab86ee2, type: 3}
   m_Name: 

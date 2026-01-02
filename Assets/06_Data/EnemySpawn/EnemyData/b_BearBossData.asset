@@ -18,7 +18,7 @@ MonoBehaviour:
   poolCount: 1
   maxHp: 1000
   currentHp: 1000
-  attack: 100
+  attack: 10
   speed: 100
   bossName: "\uACF0"
   barricadeCenter: {fileID: 7602689554644718250, guid: 3c42895136d5c6e46a0363b82c59fff3, type: 3}

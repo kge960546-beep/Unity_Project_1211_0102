@@ -105,7 +105,7 @@ public class _1014_LandMine_ProjectileLogic : ProjectileLogicBase
         float damageCeofficient = OrdinaryDamageCoefficientTable[instanceData.level - 1] * (isCritical ? CriticalDamageMultiplier : 1f);
         // TODO: get player attack value
         int damage = (int)(/*PLAYERATTACK*/ 100 * damageCeofficient * randomRatio);
-        Debug.Log(randomRatio);
+        //Debug.Log(randomRatio);
         GameManager.Instance.GetService<DamageManagementService>().QueueDamage(damage, instanceData.obj, target, isCritical);
     }
 }
